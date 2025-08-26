@@ -1,7 +1,7 @@
 # Varechecker – Bachelorprojekt
 
-> **Bachelorprojekt i samarbejde med \[Amero]**
-> En mobil app til både **kunder** og **medarbejdere** til scanning af varer, pris- og lageropslag, samt simple butiksopgaver.
+**Bachelorprojekt i samarbejde med Amero**
+En mobil app til både **kunder** og **medarbejdere** til scanning af varer, pris- og lageropslag, samt simple butiksopgaver.
 
 ## Baggrund
 
