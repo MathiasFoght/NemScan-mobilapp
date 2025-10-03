@@ -2,7 +2,7 @@ import React, {type ComponentProps} from "react";
 import {MaterialIcons} from "@expo/vector-icons";
 import {StyleProp, TextStyle, ViewStyle} from "react-native";
 
-type ButtonVariant = "primary" | "back" | "outline";
+type ButtonVariant = "primary" | "simple" | "outline";
 
 type IconPosition = "left" | "right";
 

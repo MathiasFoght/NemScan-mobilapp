@@ -17,7 +17,7 @@ export default StyleSheet.create({
         shadowRadius: 4,
         elevation: 3,
     },
-    backButton: {
+    simpleButton: {
         backgroundColor: "transparent",
         paddingVertical: 0,
         paddingHorizontal: 0,
@@ -50,10 +50,9 @@ export default StyleSheet.create({
         fontSize: 17,
         fontWeight: "600",
     },
-    backButtonText: {
+    simpleButtonText: {
         color: "#000",
         fontSize: 17,
-        marginLeft: 6,
     },
     outlineButtonText: {
         color: colors.primary,
@@ -66,10 +65,10 @@ export default StyleSheet.create({
     iconRight: {
         marginLeft: 8,
     },
-    iconLeftBack: {
+    iconLeftSimple: {
         marginRight: 0,
     },
-    iconRightBack: {
+    iconRightSimple: {
         marginLeft: 4,
     },
 });

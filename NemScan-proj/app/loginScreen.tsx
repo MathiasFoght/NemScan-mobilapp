@@ -51,7 +51,7 @@ export default function LoginScreen() {
                             title="Tilbage"
                             onPress={() => router.back()}
                             icon={<MaterialIcons name="arrow-back-ios-new" size={24} color="#000" />}
-                            variant="back"
+                            variant="simple"
                             iconPosition="left"
                         />
                     </View>

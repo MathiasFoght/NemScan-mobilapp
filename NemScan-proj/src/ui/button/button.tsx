@@ -1,3 +1,4 @@
+// button.tsx
 import React from "react";
 import {
     Pressable,
@@ -22,8 +23,8 @@ export default function Button({
 }: ButtonProps) {
     const getButtonStyle = () => {
         switch (variant) {
-            case "back":
-                return [styles.backButton, style];
+            case "simple":
+                return [styles.simpleButton, style];
             case "outline":
                 return [
                     styles.outlineButton,
@@ -41,8 +42,8 @@ export default function Button({
 
     const getTextStyle = () => {
         switch (variant) {
-            case "back":
-                return [styles.backButtonText, textStyle];
+            case "simple":
+                return [styles.simpleButtonText, textStyle];
             case "outline":
                 return [styles.outlineButtonText, textStyle];
             default:
@@ -63,11 +64,11 @@ export default function Button({
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                     {icon && iconPosition === "left" && (
                         <View
-                            style={[
-                                variant === "back"
-                                    ? styles.iconLeftBack
-                                    : styles.iconLeft,
-                            ]}
+                            style={
+                                variant === "simple"
+                                    ? styles.iconLeftSimple
+                                    : styles.iconLeft
+                            }
                         >
                             {icon}
                         </View>
@@ -75,11 +76,11 @@ export default function Button({
                     <Text style={getTextStyle()}>{title}</Text>
                     {icon && iconPosition === "right" && (
                         <View
-                            style={[
-                                variant === "back"
-                                    ? styles.iconRightBack
-                                    : styles.iconRight,
-                            ]}
+                            style={
+                                variant === "simple"
+                                    ? styles.iconRightSimple
+                                    : styles.iconRight
+                            }
                         >
                             {icon}
                         </View>
@@ -89,4 +90,3 @@ export default function Button({
         </Pressable>
     );
 }
-
