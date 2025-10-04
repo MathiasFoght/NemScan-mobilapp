@@ -1,8 +1,12 @@
 import { Tabs } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors } from "@/src/shared/global/colors";
+import '@/i18n/i18n.config';
+import { useTranslation } from "react-i18next";
 
 export default function TabLayout() {
+    const { t } = useTranslation();
+
     return (
         <Tabs
             screenOptions={({ route }) => ({
@@ -23,10 +27,10 @@ export default function TabLayout() {
                 },
             })}
         >
-            <Tabs.Screen name="index" options={{ title: "Hjem" }} />
-            <Tabs.Screen name="statisticsScreen" options={{ title: "Statistik" }} />
-            <Tabs.Screen name="graphicsScreen" options={{ title: "Indsigt" }} />
-            <Tabs.Screen name="settingsScreen" options={{ title: "Indstillinger" }} />
+            <Tabs.Screen name="index" options={{ title: t('tabs.homeScreen') }} />
+            <Tabs.Screen name="statisticsScreen" options={{ title: t('tabs.statisticsScreen') }} />
+            <Tabs.Screen name="graphicsScreen" options={{ title: t('tabs.graphicsScreen') }} />
+            <Tabs.Screen name="settingsScreen" options={{ title: t('tabs.settingsScreen') }} />
         </Tabs>
     );
 }

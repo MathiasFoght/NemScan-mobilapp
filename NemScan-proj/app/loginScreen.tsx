@@ -16,24 +16,22 @@ import { colors } from "@/src/shared/global/colors";
 import styles from "@/src/styles/loginScreen.styles";
 import Button from "@/src/ui/button/button";
 import Logo from "@/src/ui/logo/logo";
+import '@/i18n/i18n.config';
+import { useTranslation } from "react-i18next";
 
 export default function LoginScreen() {
     const { login } = useAuth();
     const [employeeNumber, setEmployeeNumber] = useState("");
     const [loading, setLoading] = useState(false);
+    const {t} = useTranslation();
 
     const handleLogin = async () => {
-        if (!employeeNumber.trim()) {
-            Alert.alert("Fejl", "Indtast venligst dit medarbejdernummer");
-            return;
-        }
-
         try {
             setLoading(true);
             await login(employeeNumber);
             router.replace("/(tabs)");
         } catch (e: any) {
-            Alert.alert("Der skete en fejl", "Medarbejdernummer ikke genkendt.");
+            Alert.alert(t('errors.loginAlertTitle'), t('errors.loginAlertMessage'));
         } finally {
             setLoading(false);
         }
@@ -48,7 +46,7 @@ export default function LoginScreen() {
                 <View style={styles.container}>
                     <View style={styles.header}>
                         <Button
-                            title="Tilbage"
+                            title={t('common.back')}
                             onPress={() => router.back()}
                             icon={<MaterialIcons name="arrow-back-ios-new" size={24} color="#000" />}
                             variant="simple"
@@ -58,8 +56,8 @@ export default function LoginScreen() {
 
                     <View style={styles.logoSection}>
                         <Logo />
-                        <Text style={styles.appName}>NemScan</Text>
-                        <Text style={styles.subtitle}>Medarbejder Login</Text>
+                        <Text style={styles.appName}>{t('common.appName')}</Text>
+                        <Text style={styles.subtitle}>{t('login.subtitle')}</Text>
                     </View>
 
                     <View style={styles.inputSection}>
@@ -72,7 +70,7 @@ export default function LoginScreen() {
                             />
                             <TextInput
                                 style={styles.input}
-                                placeholder="Medarbejdernummer"
+                                placeholder={t('login.employeeNumberPlaceholder')}
                                 placeholderTextColor={colors.inactive}
                                 value={employeeNumber}
                                 onChangeText={setEmployeeNumber}
@@ -81,7 +79,7 @@ export default function LoginScreen() {
                         </View>
 
                         <Button
-                            title="Log ind"
+                            title={t('login.button')}
                             onPress={handleLogin}
                             loading={loading}
                             disabled={!employeeNumber.trim() || loading}
@@ -97,10 +95,10 @@ export default function LoginScreen() {
                                     size={20}
                                     color={colors.primary}
                                 />
-                                <Text style={styles.helpTitle}>Hjælp til login</Text>
+                                <Text style={styles.helpTitle}>{t('loginHelper.title')}</Text>
                             </View>
                             <Text style={styles.helpText}>
-                                Brug dit 3-cifrede medarbejdernummer, som du har modtaget fra din leder.
+                                {t('loginHelper.content')}
                             </Text>
                         </View>
                     </View>

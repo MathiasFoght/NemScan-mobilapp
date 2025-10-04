@@ -1,0 +1,36 @@
+{
+  "common": {
+    "appName": "NemScan",
+    "cancel": "Annuller",
+    "back": "Tilbage",
+    "yes": "Ja",
+    "no": "Nej"
+  },
+  "errors": {
+    "loginAlertTitle": "Der skete en fejl",
+    "loginAlertMessage": "Medarbejdernummer ikke genkendt.",
+  },
+  "login": {
+    "subtitle": "Medarbejder Login",
+    "employeeLogin": "Er du medarbejder? Log ind her",
+    "employeeNumberPlaceholder": "Medarbejdernummer",
+    "button": "Log ind"
+  },
+  "loginHelper": {
+    "title": "Hjælp til login",
+    "content": "Brug dit 3-cifrede medarbejdernummer, som du har modtaget fra din leder."
+  },
+  "permission": {
+    "title": "Kameraadgang",
+    "message": "For at scanne varer har vi brug for adgang til dit kamera.",
+    "grantPermission": "Tillad",
+    "denyPermission": "Spring over",
+    "deniedByUser": "Kamera adgang ikke givet. Gå til indstillinger for at aktivere."
+  },
+  "tabs": {
+    "homeScreen": "Hjem",
+    "statisticsScreen": "Statistik",
+    "graphicsScreen": "Indsigt",
+    "settingsScreen": "Indstillinger"
+  }
+}

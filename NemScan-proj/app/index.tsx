@@ -7,8 +7,11 @@ import {MaterialIcons} from "@expo/vector-icons";
 import Button from "@/src/ui/button/button";
 import styles from "@/src/styles/scanScreen.styles"
 import {colors} from "@/src/shared/global/colors";
+import '@/i18n/i18n.config';
+import { useTranslation} from "react-i18next";
 
 export default function Index() {
+    const { t } = useTranslation();
     const { userType } = useAuth();
 
     useEffect(() => {
@@ -28,7 +31,7 @@ export default function Index() {
             <View style={styles.footer}>
                 <Button
                     onPress={handleEmployeeLogin}
-                    title={'Er du medarbejder? Log ind her'}
+                    title={t('login.employeeLogin')}
                     variant="simple"
                     icon={<MaterialIcons name="person-outline" size={16} color={colors.primary} />}
                     iconPosition="left"
