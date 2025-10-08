@@ -3,8 +3,7 @@
     "appName": "NemScan",
     "cancel": "Cancel",
     "back": "Back",
-    "yes": "Yes",
-    "no": "No"
+    "loading": "Loading..."
   },
   "errors": {
     "login": {
@@ -50,12 +49,13 @@
         "role": "Not found",
         "position": "Not found",
         "storeNumber": "Not found"
+      },
+      "errors": {
+        "errorFetchingEmployee": "Could not fetch employee"
       }
     },
     "settings": {
       "title": "Settings",
-      "noEmployeeFound": "No employee found",
-      "errorFetchingEmployee": "Could not fetch employee",
       "account": {
         "title": "Account",
         "profileTitle": "Your profile",
@@ -73,8 +73,6 @@
     },
     "myProfile": {
       "title": "My Profile",
-      "errorFetchingEmployee": "Could not fetch employee information",
-      "noEmployeeFound": "No employee found",
       "employeeInfo": "Employee Information",
       "storeInfo": "Store Information",
       "fields": {

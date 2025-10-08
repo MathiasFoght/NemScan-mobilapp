@@ -1,6 +1,8 @@
 import { API_URL } from '@/enviroment/config'
 import {getToken} from "@/src/services/auth/storageService";
 
+console.log('API URL', API_URL);
+
 export const apiClient = async <T>(
     endpoint: string,
     options: RequestInit = {},

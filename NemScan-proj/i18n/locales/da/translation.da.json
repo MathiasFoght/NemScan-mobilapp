@@ -3,8 +3,7 @@
     "appName": "NemScan",
     "cancel": "Annuller",
     "back": "Tilbage",
-    "yes": "Ja",
-    "no": "Nej"
+    "loading": "Henter..."
   },
   "errors": {
     "login": {
@@ -50,12 +49,13 @@
       "role": "Ingen data",
       "position": "Ingen data",
       "storeNumber": "Ingen data"
+    },
+    "errors": {
+      "errorFetchingEmployee": "Kunne ikke hente medarbejderoplysninger"
     }
   },
   "settings": {
     "title": "Indstillinger",
-    "noEmployeeFound": "Ingen medarbejder fundet",
-    "errorFetchingEmployee": "Kunne ikke hente medarbejder",
     "account": {
       "title": "Konto",
       "profileTitle": "Din profil",
@@ -73,8 +73,6 @@
   },
   "myProfile": {
     "title": "Min profil",
-    "errorFetchingEmployee": "Kunne ikke hente medarbejderoplysninger",
-    "noEmployeeFound": "Ingen medarbejder fundet",
     "employeeInfo": "Medarbejderoplysninger",
     "storeInfo": "Butiksoplysninger",
     "fields": {

@@ -5,13 +5,13 @@ import i18n from "i18next";
 import Button from "@/src/ui/button/button";
 import { Avatar } from "@/src/ui/avatar/avatar";
 import { colors } from "@/src/shared/global/colors";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { MaterialIcons } from '@expo/vector-icons';
 import { getEmployeeProfile } from '@/src/services/employee/employeeService';
-import {LoadingErrorState} from "@/src/components/states/loadingErrorState";
-import {router} from "expo-router";
+import { Toast } from '@/src/components/toast/toast';
+import { router } from "expo-router";
 import styles from '@/src/styles/screens/settingsScreen.styles';
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 export default function SettingsScreen() {
     const { logout } = useAuth();
@@ -26,26 +26,15 @@ export default function SettingsScreen() {
             try {
                 const profile = await getEmployeeProfile();
                 setEmployee(profile);
+                setError(null);
             } catch (err: any) {
-                setError(t('settings.errorFetchingEmployee'));
+                setError(t('employeeProfile.errors.errorFetchingEmployee'));
             } finally {
                 setLoading(false);
             }
         };
         fetchProfile();
-    }, []);
-
-    if (loading || error) {
-        return <LoadingErrorState loading={loading} error={error} />;
-    }
-
-    if (!employee) {
-        return (
-            <View style={[styles.container, styles.center]}>
-                <Text>{t('settings.noEmployeeFound')}</Text>
-            </View>
-        );
-    }
+    }, [t]);
 
     const toggleLanguage = (value: boolean) => {
         const newLang = value ? 'da' : 'en';
@@ -60,42 +49,49 @@ export default function SettingsScreen() {
 
     return (
         <View style={styles.container}>
+            <Toast type="loading" message={t('common.loading')} visible={loading} />
+            <Toast type="error" message={error || ''} visible={!!error} />
+
             <ScrollView
                 style={styles.scrollView}
                 contentContainerStyle={styles.scrollContent}
                 showsVerticalScrollIndicator={false}
             >
-                <View style={styles.header}>
-                    <View style={styles.headerContent}>
-                        <Avatar
-                            name={employee.name}
-                            imageUrl={employee.profileImageUrl ?? undefined}
-                        />
-                        <View style={styles.headerTextContainer}>
-                            <Text style={styles.userName}>{employee.name}</Text>
-                        </View>
-                    </View>
-                </View>
-
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t('settings.account.title')}</Text>
-
-                    <Pressable
-                        style={styles.settingsItem}
-                        onPress={navigateToProfile}
-                    >
-                        <View style={styles.settingsItemLeft}>
-                            <View style={styles.iconContainer}>
-                                <MaterialIcons name="person" size={22} color={colors.primary} />
-                            </View>
-                            <View>
-                                <Text style={styles.settingsItemTitle}>{t('settings.account.profileTitle')}</Text>
-                                <Text style={styles.settingsItemSubtitle}>{t('settings.account.profileSubtitle')}</Text>
+                {employee && (
+                    <>
+                        <View style={styles.header}>
+                            <View style={styles.headerContent}>
+                                <Avatar
+                                    name={employee.name}
+                                    imageUrl={employee.profileImageUrl ?? undefined}
+                                />
+                                <View style={styles.headerTextContainer}>
+                                    <Text style={styles.userName}>{employee.name}</Text>
+                                </View>
                             </View>
                         </View>
-                        <MaterialIcons name="chevron-right" size={24} color={colors.inactive} />
-                    </Pressable>
-                </View>
+
+                        <View style={styles.section}>
+                            <Text style={styles.sectionTitle}>{t('settings.account.title')}</Text>
+
+                            <Pressable
+                                style={styles.settingsItem}
+                                onPress={navigateToProfile}
+                            >
+                                <View style={styles.settingsItemLeft}>
+                                    <View style={styles.iconContainer}>
+                                        <MaterialIcons name="person" size={22} color={colors.primary} />
+                                    </View>
+                                    <View>
+                                        <Text style={styles.settingsItemTitle}>{t('settings.account.profileTitle')}</Text>
+                                        <Text style={styles.settingsItemSubtitle}>{t('settings.account.profileSubtitle')}</Text>
+                                    </View>
+                                </View>
+                                <MaterialIcons name="chevron-right" size={24} color={colors.inactive} />
+                            </Pressable>
+                        </View>
+                    </>
+                )}
 
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>{t('settings.preferences.title')}</Text>
