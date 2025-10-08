@@ -13,7 +13,7 @@ import { router } from "expo-router";
 import { useState } from "react";
 import { useAuth } from "@/src/contexts/authContext";
 import { colors } from "@/src/shared/global/colors";
-import styles from "@/src/styles/loginScreen.styles";
+import styles from "@/src/styles/screens/loginScreen.styles";
 import Button from "@/src/ui/button/button";
 import Logo from "@/src/ui/logo/logo";
 import '@/i18n/i18n.config';
@@ -31,7 +31,7 @@ export default function LoginScreen() {
             await login(employeeNumber);
             router.replace("/(tabs)");
         } catch (e: any) {
-            Alert.alert(t('errors.loginAlertTitle'), t('errors.loginAlertMessage'));
+            Alert.alert(t('errors.login.loginAlertTitle'), t('errors.login.loginAlertMessage'));
         } finally {
             setLoading(false);
         }
@@ -95,10 +95,10 @@ export default function LoginScreen() {
                                     size={20}
                                     color={colors.primary}
                                 />
-                                <Text style={styles.helpTitle}>{t('loginHelper.title')}</Text>
+                                <Text style={styles.helpTitle}>{t('login.loginHelper.title')}</Text>
                             </View>
                             <Text style={styles.helpText}>
-                                {t('loginHelper.content')}
+                                {t('login.loginHelper.content')}
                             </Text>
                         </View>
                     </View>

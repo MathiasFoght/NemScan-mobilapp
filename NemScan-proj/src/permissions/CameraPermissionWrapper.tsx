@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { View, Text } from "react-native";
 import CameraPermissionScreen from "./cameraPermissionScreen";
 import { useCameraPermission } from "@/src/hooks/useCameraPermission";
-import { Props } from "./interfaces";
+import { CameraPermissionWrapperProps } from "./interfaces";
 import "@/i18n/i18n.config";
 import { useTranslation } from "react-i18next";
 
-export default function CameraPermissionWrapper({ children }: Props) {
+export default function CameraPermissionWrapper({ children }: CameraPermissionWrapperProps) {
     const { t } = useTranslation();
     const { status, requestPermission } = useCameraPermission();
     const [skipped, setSkipped] = useState(false);

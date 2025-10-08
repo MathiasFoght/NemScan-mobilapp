@@ -5,6 +5,6 @@ export interface CameraPermissionProps {
     onSkip: () => void;
 }
 
-export interface Props {
+export interface CameraPermissionWrapperProps {
     children: React.ReactNode;
 }

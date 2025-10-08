@@ -5,7 +5,7 @@ import { useAuth } from "@/src/contexts/authContext";
 import CameraPermissionWrapper from "@/src/permissions/CameraPermissionWrapper";
 import {MaterialIcons} from "@expo/vector-icons";
 import Button from "@/src/ui/button/button";
-import styles from "@/src/styles/scanScreen.styles"
+import styles from "@/src/styles/screens/scanScreen.styles"
 import {colors} from "@/src/shared/global/colors";
 import '@/i18n/i18n.config';
 import { useTranslation} from "react-i18next";

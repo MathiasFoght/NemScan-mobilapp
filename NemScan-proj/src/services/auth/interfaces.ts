@@ -1,16 +1,18 @@
-export interface User {
+export interface Employee {
     employeeNumber: string;
     name: string;
     role: string;
+    position: string;
+    storeNumber: string;
 }
 
 export interface LoginResponse {
-    user: User;
+    employee: Employee;
     token: string;
 }
 
 export interface AuthContextType {
-    user: User | null;
+    user: Employee | null;
     token: string | null;
     isLoading: boolean;
     userType: 'employee' | 'customer' | null;
