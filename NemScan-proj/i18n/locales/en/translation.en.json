@@ -79,6 +79,9 @@
         "employeeNumber": "Employee Number",
         "position": "Role",
         "storeNumber": "Store"
+      },
+      "fallbacks": {
+        "noEmployeeFound": "No employee information"
       }
     }
 }

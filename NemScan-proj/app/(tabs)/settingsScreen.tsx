@@ -57,41 +57,37 @@ export default function SettingsScreen() {
                 contentContainerStyle={styles.scrollContent}
                 showsVerticalScrollIndicator={false}
             >
-                {employee && (
-                    <>
-                        <View style={styles.header}>
-                            <View style={styles.headerContent}>
-                                <Avatar
-                                    name={employee.name}
-                                    imageUrl={employee.profileImageUrl ?? undefined}
-                                />
-                                <View style={styles.headerTextContainer}>
-                                    <Text style={styles.userName}>{employee.name}</Text>
-                                </View>
+                <View style={styles.header}>
+                    <View style={styles.headerContent}>
+                        <Avatar
+                            name={employee?.name || t('employeeProfile.fallbacks.name') }
+                            imageUrl={employee?.profileImageUrl ?? undefined}
+                        />
+                        <View style={styles.headerTextContainer}>
+                            <Text style={styles.userName}>{employee?.name || t('employeeProfile.fallbacks.name')}</Text>
+                        </View>
+                    </View>
+                </View>
+
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>{t('settings.account.title')}</Text>
+
+                    <Pressable
+                        style={styles.settingsItem}
+                        onPress={navigateToProfile}
+                    >
+                        <View style={styles.settingsItemLeft}>
+                            <View style={styles.iconContainer}>
+                                <MaterialIcons name="person" size={22} color={colors.primary} />
+                            </View>
+                            <View>
+                                <Text style={styles.settingsItemTitle}>{t('settings.account.profileTitle')}</Text>
+                                <Text style={styles.settingsItemSubtitle}>{t('settings.account.profileSubtitle')}</Text>
                             </View>
                         </View>
-
-                        <View style={styles.section}>
-                            <Text style={styles.sectionTitle}>{t('settings.account.title')}</Text>
-
-                            <Pressable
-                                style={styles.settingsItem}
-                                onPress={navigateToProfile}
-                            >
-                                <View style={styles.settingsItemLeft}>
-                                    <View style={styles.iconContainer}>
-                                        <MaterialIcons name="person" size={22} color={colors.primary} />
-                                    </View>
-                                    <View>
-                                        <Text style={styles.settingsItemTitle}>{t('settings.account.profileTitle')}</Text>
-                                        <Text style={styles.settingsItemSubtitle}>{t('settings.account.profileSubtitle')}</Text>
-                                    </View>
-                                </View>
-                                <MaterialIcons name="chevron-right" size={24} color={colors.inactive} />
-                            </Pressable>
-                        </View>
-                    </>
-                )}
+                        <MaterialIcons name="chevron-right" size={24} color={colors.inactive} />
+                    </Pressable>
+                </View>
 
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>{t('settings.preferences.title')}</Text>

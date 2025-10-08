@@ -14,8 +14,6 @@ export default StyleSheet.create({
         paddingTop: 60,
         paddingBottom: 16,
         backgroundColor: colors.white,
-        borderBottomLeftRadius: 24,
-        borderBottomRightRadius: 24,
         shadowColor: colors.black,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.05,

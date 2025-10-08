@@ -79,6 +79,9 @@
       "employeeNumber": "Medarbejdernummer",
       "position": "Stilling",
       "storeNumber": "Butiksnummer"
+    },
+    "fallbacks": {
+      "noEmployeeFound": "Ingen medarbejderinformation"
     }
   }
 }

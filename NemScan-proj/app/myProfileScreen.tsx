@@ -54,7 +54,7 @@ export default function MyProfileScreen() {
             {!loading && !employee ? (
                 <View style={styles.center}>
                     <MaterialIcons name="person-off" size={64} color={colors.inactive} />
-                    <Text style={styles.emptyText}>{t('myProfile.noEmployeeFound')}</Text>
+                    <Text style={styles.emptyText}>{t('myProfile.fallbacks.noEmployeeFound')}</Text>
                 </View>
             ) : employee ? (
                 <ScrollView
