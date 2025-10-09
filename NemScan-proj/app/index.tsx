@@ -23,6 +23,7 @@ export default function Index() {
     }
 
     return (
+
         <CameraPermissionWrapper>
             <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                 <Text>Scan Screen</Text>
