@@ -3,22 +3,23 @@
     "appName": "NemScan",
     "cancel": "Cancel",
     "back": "Back",
-    "yes": "Yes",
-    "no": "No"
+    "loading": "Loading..."
   },
   "errors": {
-    "loginAlertTitle": "Login failed",
-    "loginAlertMessage": "Invalid employee number."
+    "login": {
+      "loginAlertTitle": "Login failed",
+      "loginAlertMessage": "Invalid employee number."
+    }
   },
   "login": {
     "subtitle": "Employee Login",
     "employeeLogin": "Employee? Login",
     "employeeNumberPlaceholder": "Employee Number",
-    "button": "Login"
-  },
-  "loginHelper": {
-    "title": "Login Help",
-    "content": "Use your 3-digit employee number provided by your manager."
+    "button": "Login",
+    "loginHelper": {
+      "title": "Login Help",
+      "content": "Use your 3-digit employee number provided by your manager."
+    }
   },
   "permission": {
     "title": "Camera Access",
@@ -32,5 +33,55 @@
         "statisticsScreen": "Statistics",
         "graphicsScreen": "Insights",
         "settingsScreen": "Settings"
+    },
+    "employeeProfile": {
+      "positions": {
+        "ServiceAssistant": "Service Assistant",
+        "StoreManager": "Store Manager"
+      },
+      "details": {
+        "employeeNumber": "Employee ID",
+        "storeNumber": "Store"
+      },
+      "fallbacks": {
+        "employeeNumber": "Not found",
+        "name": "Name",
+        "role": "Not found",
+        "position": "Not found",
+        "storeNumber": "Not found"
+      },
+      "errors": {
+        "errorFetchingEmployee": "Could not fetch employee"
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "account": {
+        "title": "Account",
+        "profileTitle": "Your profile",
+        "profileSubtitle": "View employee information"
+      },
+      "preferences": {
+        "title": "Preferences",
+        "languageTitle": "English",
+        "languageSubtitleDa": "Switch to English",
+        "languageSubtitleEn": "Switch to Danish"
+      },
+      "logout": {
+        "button": "Logout"
+      }
+    },
+    "myProfile": {
+      "title": "My Profile",
+      "employeeInfo": "Employee Information",
+      "storeInfo": "Store Information",
+      "fields": {
+        "employeeNumber": "Employee Number",
+        "position": "Role",
+        "storeNumber": "Store"
+      },
+      "fallbacks": {
+        "noEmployeeFound": "No employee information"
+      }
     }
 }

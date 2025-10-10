@@ -13,6 +13,8 @@ export default function TabLayout() {
                 headerShown: false,
                 tabBarActiveTintColor: colors.primary,
                 tabBarInactiveTintColor: colors.inactive,
+                animation: 'none',
+                gestureEnabled: false,
                 tabBarIcon: ({ color, size }) => {
                     if (route.name === "index") {
                         return <MaterialIcons name="home" size={size} color={color} />;

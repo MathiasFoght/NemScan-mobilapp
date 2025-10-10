@@ -2,7 +2,6 @@ import {
     View,
     Text,
     TextInput,
-    Alert,
     KeyboardAvoidingView,
     TouchableWithoutFeedback,
     Keyboard,
@@ -13,9 +12,10 @@ import { router } from "expo-router";
 import { useState } from "react";
 import { useAuth } from "@/src/contexts/authContext";
 import { colors } from "@/src/shared/global/colors";
-import styles from "@/src/styles/loginScreen.styles";
+import styles from "@/src/styles/screens/loginScreen.styles";
 import Button from "@/src/ui/button/button";
 import Logo from "@/src/ui/logo/logo";
+import { Toast } from "@/src/components/toast/toast";
 import '@/i18n/i18n.config';
 import { useTranslation } from "react-i18next";
 
@@ -23,15 +23,18 @@ export default function LoginScreen() {
     const { login } = useAuth();
     const [employeeNumber, setEmployeeNumber] = useState("");
     const [loading, setLoading] = useState(false);
-    const {t} = useTranslation();
+    const [error, setError] = useState<string | null>(null);
+    const { t } = useTranslation();
 
     const handleLogin = async () => {
         try {
             setLoading(true);
+            setError(null);
             await login(employeeNumber);
             router.replace("/(tabs)");
         } catch (e: any) {
-            Alert.alert(t('errors.loginAlertTitle'), t('errors.loginAlertMessage'));
+            setError(t('errors.login.loginAlertMessage'));
+            setTimeout(() => setError(null), 5000);
         } finally {
             setLoading(false);
         }
@@ -44,6 +47,8 @@ export default function LoginScreen() {
         >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.container}>
+                    <Toast type="error" message={error || ''} visible={!!error} />
+
                     <View style={styles.header}>
                         <Button
                             title={t('common.back')}
@@ -95,10 +100,10 @@ export default function LoginScreen() {
                                     size={20}
                                     color={colors.primary}
                                 />
-                                <Text style={styles.helpTitle}>{t('loginHelper.title')}</Text>
+                                <Text style={styles.helpTitle}>{t('login.loginHelper.title')}</Text>
                             </View>
                             <Text style={styles.helpText}>
-                                {t('loginHelper.content')}
+                                {t('login.loginHelper.content')}
                             </Text>
                         </View>
                     </View>

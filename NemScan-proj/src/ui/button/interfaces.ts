@@ -8,7 +8,7 @@ type IconPosition = "left" | "right";
 
 export interface ButtonProps {
     onPress: () => void;
-    title: string;
+    title?: string;
     loading?: boolean;
     disabled?: boolean;
     icon?: React.ReactElement<ComponentProps<typeof MaterialIcons>>;

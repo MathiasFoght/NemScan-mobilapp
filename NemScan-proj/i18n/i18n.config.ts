@@ -9,12 +9,12 @@ const resources = {
 };
 
 const deviceLocales = Localization.getLocales();
-const languageCode = deviceLocales.length > 0 ? deviceLocales[0].languageCode : 'da';
+const languageCode = deviceLocales.length > 0 ? deviceLocales[0].languageCode : 'en';
 
 const options: InitOptions = {
     resources,
-    lng: languageCode || 'da',
-    fallbackLng: 'da',
+    lng: languageCode || 'en',
+    fallbackLng: 'en',
     debug: true,
     interpolation: { escapeValue: false },
 };

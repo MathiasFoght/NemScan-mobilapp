@@ -1,6 +1,6 @@
 import * as Application from 'expo-application';
 import { Platform } from 'react-native';
-import { getData, saveData } from '../auth/storageService';
+import { getData, saveData } from '@/src/services/auth/storageService';
 
 export const getDeviceId = async (): Promise<string> => {
     const storedDeviceId = await getData('deviceId');

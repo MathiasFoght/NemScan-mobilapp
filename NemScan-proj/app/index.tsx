@@ -3,13 +3,12 @@ import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/src/contexts/authContext";
 import CameraPermissionWrapper from "@/src/permissions/CameraPermissionWrapper";
-import { MaterialIcons } from "@expo/vector-icons";
+import {MaterialIcons} from "@expo/vector-icons";
 import Button from "@/src/ui/button/button";
-import styles from "@/src/styles/scanScreen.styles";
-import { colors } from "@/src/shared/global/colors";
-import "@/i18n/i18n.config";
-import { useTranslation } from "react-i18next";
-
+import styles from "@/src/styles/screens/scanScreen.styles"
+import {colors} from "@/src/shared/global/colors";
+import '@/i18n/i18n.config';
+import { useTranslation} from "react-i18next";
 import { CameraView, useCameraPermissions, BarcodeScanningResult } from "expo-camera";
 
 export default function Index() {
