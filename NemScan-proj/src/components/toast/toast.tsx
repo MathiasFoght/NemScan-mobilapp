@@ -23,7 +23,7 @@ export const Toast = ({ type, message, visible }: ToastProps) => {
                 useNativeDriver: true,
             }).start();
         }
-    }, [visible]);
+    }, [slideAnim, visible]);
 
     const getToastConfig = () => {
         switch (type) {
