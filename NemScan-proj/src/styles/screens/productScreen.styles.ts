@@ -3,13 +3,6 @@ import { colors } from "@/src/shared/global/colors";
 
 const { width, height } = Dimensions.get("window");
 
-const hexToRgba = (hex: string, alpha: number) => {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-};
-
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -17,31 +10,33 @@ export const styles = StyleSheet.create({
     },
     topSection: {
         height: height * 0.45,
-        backgroundColor: hexToRgba(colors.white, 1),
+        backgroundColor: colors.secondary,
         alignItems: "center",
         justifyContent: "center",
     },
     image: {
-        width: width * 0.7,
-        height: height * 0.3,
-        borderRadius: 10,
+        width: 250,
+        height: 250,
+        borderRadius: 125, // halvdelen af width/height for perfekt rund
+        borderWidth: 2,
+        borderColor: colors.white,
     },
     bottomSection: {
         flex: 1,
-        backgroundColor: hexToRgba(colors.secondary, 0.8),
-        marginTop: -40, // overlapper toppen
+        backgroundColor: colors.white,
+        marginTop: -40, // overlapper topSection halvdelen af billedets højde
         borderTopLeftRadius: 40,
         borderTopRightRadius: 40,
-        paddingTop: 30, // plads til at billedet overlapper
+        paddingTop: 30, // plads til billedet
         paddingHorizontal: 30,
-        alignItems: "flex-start",
+        alignItems: "stretch",
     },
     title: {
-        fontSize: 26,
-        fontWeight: "600",
+        fontSize: 28,
+        fontWeight: "500",
         color: colors.black,
-        textAlign: "left",
-        marginBottom: 10,
+        textAlign: "center",
+        marginBottom: 16,
     },
     text: {
         fontSize: 18,
@@ -50,11 +45,11 @@ export const styles = StyleSheet.create({
         marginBottom: 6,
     },
     label: {
-        fontWeight: "bold",
+        fontWeight: "600",
         color: colors.black,
     },
     value: {
-        fontWeight: "normal",
+        fontWeight: "300",
         color: colors.black,
     },
     loader: {

@@ -20,7 +20,7 @@ export default function ProductScreen() {
                 const img: string = await getProductImage(barcode);
 
                 setProduct(prod);
-                setProductImageUrl(img); // brug det rigtige felt fra Product_Image
+                setProductImageUrl(img); // URL fra API
             } catch (err) {
                 console.error(err);
                 setError("Kunne ikke hente produktdata");
@@ -58,15 +58,15 @@ export default function ProductScreen() {
                     <Text style={styles.value}>{product.number}</Text>
                 </Text>
 
-                {/*<Text style={styles.text}>*/}
-                {/*    <Text style={styles.label}>UID: </Text>*/}
-                {/*    <Text style={styles.value}>{product.uid}</Text>*/}
-                {/*</Text>*/}
+                <Text style={styles.text}>
+                    <Text style={styles.label}>UID: </Text>
+                    <Text style={styles.value}>{product.uid}</Text>
+                </Text>
 
-                {/*<Text style={styles.text}>*/}
-                {/*    <Text style={styles.label}>Client UID: </Text>*/}
-                {/*    <Text style={styles.value}>{product.clientUid}</Text>*/}
-                {/*</Text>*/}
+                <Text style={styles.text}>
+                    <Text style={styles.label}>Client UID: </Text>
+                    <Text style={styles.value}>{product.clientUid}</Text>
+                </Text>
             </View>
         </View>
     );
