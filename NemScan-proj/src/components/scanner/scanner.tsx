@@ -1,19 +1,23 @@
+import { useRef } from "react";
 import { View, StyleSheet } from "react-native";
-import { useState } from "react";
 import { CameraView, BarcodeScanningResult } from "expo-camera";
+import { ScannerProps } from "@/src/components/scanner/interfaces";
 import { localStyles } from "./scanner.styles";
-import {ScannerProps} from "@/src/components/scanner/interfaces";
 
-export default function Scanner({ onScanned }: ScannerProps) {
-    const [scanned, setScanned] = useState(false);
+export default function Scanner({ onScanned, paused }: ScannerProps) {
+    const lastScanned = useRef<string | null>(null);
 
     const handleBarCodeScanned = (result: BarcodeScanningResult) => {
-        if (!scanned) {
-            setScanned(true);
-            onScanned(result.data);
-            // Du kan evt. lave en reset via timeout
-            setTimeout(() => setScanned(false), 2000);
-        }
+        if (paused) return; // hvis parent har paused scanner
+        if (lastScanned.current === result.data) return; // ignore duplikater
+
+        lastScanned.current = result.data;
+        onScanned(result.data);
+
+        // reset efter 1 sekund så man kan scanne samme kode igen senere
+        setTimeout(() => {
+            lastScanned.current = null;
+        }, 1000);
     };
 
     return (
@@ -21,7 +25,7 @@ export default function Scanner({ onScanned }: ScannerProps) {
             <View style={localStyles.cameraBox}>
                 <CameraView
                     style={StyleSheet.absoluteFill}
-                    onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+                    onBarcodeScanned={handleBarCodeScanned}
                     barcodeScannerSettings={{
                         barcodeTypes: ["qr", "ean13", "ean8", "code128"],
                     }}

@@ -1,31 +1,37 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Modal } from "react-native";
+import { useEffect, useState, useCallback } from "react";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
 import { useAuth } from "@/src/contexts/authContext";
 import CameraPermissionWrapper from "@/src/permissions/CameraPermissionWrapper";
 import { MaterialIcons } from "@expo/vector-icons";
 import Button from "@/src/ui/button/button";
 import styles from "@/src/styles/screens/scanScreen.styles";
 import { colors } from "@/src/shared/global/colors";
-import "@/i18n/i18n.config";
 import { useTranslation } from "react-i18next";
-
 import { useCameraPermissions } from "expo-camera";
-import Scanner from "@/src/components/scanner/scanner"; // ✅ importér din nye komponent
+import Scanner from "@/src/components/scanner/scanner";
+import { getProductCustomer} from "@/src/services/product/productService";
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function Index() {
     const { t } = useTranslation();
     const { userType } = useAuth();
 
-    const [scannedData, setScannedData] = useState<string | null>(null);
+    const [scanning, setScanning] = useState(false);
     const [permission, requestPermission] = useCameraPermissions();
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    // Redirect hvis medarbejder
+    // Reset scanning når skærmen får fokus
+    useFocusEffect(
+        useCallback(() => {
+            setScanning(false);
+        }, [])
+    );
+
     useEffect(() => {
         if (userType === "employee") router.replace("/(tabs)");
     }, [userType]);
 
-    // Kamera tilladelse
     useEffect(() => {
         if (!permission) requestPermission();
     }, [permission]);
@@ -34,42 +40,62 @@ export default function Index() {
         router.push("/loginScreen");
     };
 
-    const handleScanned = (data: string) => {
-        console.log("Scannet:", data);
-        setScannedData(data);
-        // fx: router.push(`/product/${data}`);
+    const handleScanned = async (barcode: string) => {
+        if (scanning) return;
+        setScanning(true);
+
+        try {
+            const product = await getProductCustomer(barcode);
+
+            if (product) {
+                router.push({
+                    pathname: "/productScreen",
+                    params: { barcode },
+                });
+            } else {
+                setErrorMessage("Produktet findes ikke i systemet.");
+            }
+        } catch (error) {
+            console.error("Fejl under scanning:", error);
+            setErrorMessage("Kunne ikke kontakte serveren.");
+        }
     };
 
-    if (!permission) {
-        return <Text>Anmoder om kamera adgang...</Text>;
-    }
+    const handleClosePopup = () => {
+        setErrorMessage(null);
+        setScanning(false); // tillad scanning igen
+    };
 
-    if (!permission.granted) {
-        return <Text>Ingen adgang til kameraet</Text>;
-    }
+    if (!permission) return <Text>Anmoder om kamera adgang...</Text>;
+    if (!permission.granted) return <Text>Ingen adgang til kameraet</Text>;
 
     return (
         <CameraPermissionWrapper>
             <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                {/* ✅ Scanner komponent */}
-                <Scanner onScanned={handleScanned} />
+                {/* Scanner */}
+                <Scanner onScanned={handleScanned} paused={scanning} />
 
-                {/* ✅ Scannet resultat */}
-                {scannedData && (
-                    <View style={localStyles.resultBox}>
-                        <Text style={localStyles.resultText}>
-                            {t("scan.result")}: {scannedData}
-                        </Text>
-                        <Button
-                            onPress={() => setScannedData(null)}
-                            title={t("scan.scanAgain")}
-                            variant="simple"
-                        />
+                {/* Popup modal */}
+                <Modal
+                    transparent
+                    animationType="fade"
+                    visible={!!errorMessage}
+                    onRequestClose={handleClosePopup}
+                >
+                    <View style={localStyles.modalBackground}>
+                        <View style={localStyles.modalBox}>
+                            <Text style={localStyles.modalText}>{errorMessage}</Text>
+                            <Button
+                                onPress={handleClosePopup}
+                                title="Luk"
+                                variant="simple"
+                            />
+                        </View>
                     </View>
-                )}
+                </Modal>
             </View>
 
-            {/* ✅ Footer bevares */}
+            {/* Footer */}
             <View style={styles.footer}>
                 <Button
                     onPress={handleEmployeeLogin}
@@ -86,17 +112,22 @@ export default function Index() {
 }
 
 const localStyles = StyleSheet.create({
-    resultBox: {
-        position: "absolute",
-        bottom: 180,
-        alignSelf: "center",
-        backgroundColor: "rgba(0,0,0,0.7)",
-        padding: 16,
-        borderRadius: 10,
+    modalBackground: {
+        flex: 1,
+        backgroundColor: "rgba(0,0,0,0.5)",
+        justifyContent: "center",
+        alignItems: "center",
     },
-    resultText: {
-        color: "white",
-        marginBottom: 8,
+    modalBox: {
+        width: "80%",
+        backgroundColor: "white",
+        padding: 20,
+        borderRadius: 10,
+        alignItems: "center",
+    },
+    modalText: {
+        marginBottom: 16,
+        fontSize: 16,
         textAlign: "center",
     },
 });
