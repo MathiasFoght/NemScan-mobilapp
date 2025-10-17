@@ -1,6 +1,7 @@
 {
   "common": {
     "appName": "NemScan",
+    "confirm": "Confirm",
     "cancel": "Cancel",
     "back": "Back",
     "loading": "Loading..."
@@ -65,7 +66,19 @@
         "title": "Preferences",
         "languageTitle": "English",
         "languageSubtitleDa": "Switch to English",
-        "languageSubtitleEn": "Switch to Danish"
+        "languageSubtitleEn": "Switch to Danish",
+        "changeProfileImageTitle": "Change image",
+        "changeProfileImageSubtitle": "Upload or reset",
+        "resetConfirmTitle": "Reset profile picture",
+        "resetConfirmMessage": "Are you sure you want to reset your profile picture?"
+      },
+      "toastStates": {
+        "uploading": "Uploading...",
+        "uploadSuccess": "Profile picture updated",
+        "errorUploadingImage": "Could not update profile picture",
+        "deletingImage": "Deleting...",
+        "imageDeletedSuccess": "Profile picture removed",
+        "errorDeletingImage": "Couldn't remove profile picture"
       },
       "logout": {
         "button": "Logout"

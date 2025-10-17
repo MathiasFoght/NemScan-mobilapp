@@ -1,6 +1,7 @@
 {
   "common": {
     "appName": "NemScan",
+    "confirm": "Bekræft",
     "cancel": "Annuller",
     "back": "Tilbage",
     "loading": "Henter..."
@@ -55,7 +56,6 @@
     }
   },
   "settings": {
-    "title": "Indstillinger",
     "account": {
       "title": "Konto",
       "profileTitle": "Din profil",
@@ -65,7 +65,19 @@
       "title": "Præferencer",
       "languageTitle": "Dansk",
       "languageSubtitleDa": "Skift til engelsk",
-      "languageSubtitleEn": "Switch to English"
+      "languageSubtitleEn": "Switch to English",
+      "changeProfileImageTitle": "Skift profilbillede",
+      "changeProfileImageSubtitle": "Upload eller nulstil",
+      "resetConfirmTitle": "Nulstil profilbillede",
+      "resetConfirmMessage": "Er du sikker på, at du vil nulstille dit profilbillede?"
+    },
+    "toastStates": {
+      "uploading": "Uploader...",
+      "uploadSuccess": "Profilbillede opdateret",
+      "errorUploadingImage": "Kunne ikke opdatere profilbillede",
+      "deletingImage": "Fjerner...",
+      "imageDeletedSuccess": "Profilbillede fjernet",
+      "errorDeletingImage": "Kunne ikke fjerne profilbillede"
     },
     "logout": {
       "button": "Log ud"

@@ -1,17 +1,19 @@
-import { Text, View, Pressable, ScrollView, Switch } from "react-native";
+import { Text, View, Pressable, ScrollView, Switch, Alert } from "react-native";
 import { useAuth } from "@/src/contexts/authContext";
 import '@/i18n/i18n.config';
 import i18n from "i18next";
 import Button from "@/src/ui/button/button";
 import { Avatar } from "@/src/ui/avatar/avatar";
 import { colors } from "@/src/shared/global/colors";
-import { useEffect, useState } from "react";
-import { MaterialIcons } from '@expo/vector-icons';
-import { getEmployeeProfile } from '@/src/services/employee/employeeService';
-import { Toast } from '@/src/components/toast/toast';
-import { router } from "expo-router";
-import styles from '@/src/styles/screens/settingsScreen.styles';
+import {useCallback, useState} from "react";
+import { MaterialIcons } from "@expo/vector-icons";
+import { getEmployeeProfile } from "@/src/services/employee/employeeService";
+import { Toast } from "@/src/components/toast/toast";
+import {router, useFocusEffect} from "expo-router";
+import styles from "@/src/styles/screens/settingsScreen.styles";
 import { useTranslation } from "react-i18next";
+import { useProfileImageActions } from "@/src/hooks/useProfileImageActions";
+
 
 export default function SettingsScreen() {
     const { logout } = useAuth();
@@ -20,37 +22,45 @@ export default function SettingsScreen() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const { t } = useTranslation();
+    const [toast, setToast] = useState<{ type: 'success' | 'error' | 'loading' | 'info' | null; message?: string }>({
+        type: null,
+        message: "",
+    });
+    const { handleProfileImageUpload, handleResetProfileImage } = useProfileImageActions(setEmployee, setToast);
 
-    useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const profile = await getEmployeeProfile();
-                setEmployee(profile);
-                setError(null);
-            } catch (err: any) {
-                setError(t('employeeProfile.errors.errorFetchingEmployee'));
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProfile();
-    }, [t]);
+
+    useFocusEffect(
+        useCallback(() => {
+            const fetchProfile = async () => {
+                try {
+                    const profile = await getEmployeeProfile();
+                    setEmployee(profile);
+                    setError(null);
+                } catch (err: any) {
+                    setError(t("employeeProfile.errors.errorFetchingEmployee"));
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchProfile();
+        }, [t])
+    );
 
     const toggleLanguage = (value: boolean) => {
-        const newLang = value ? 'da' : 'en';
-        console.log('Changing language to:', newLang);
+        const newLang = value ? "da" : "en";
         i18n.changeLanguage(newLang);
         setCurrentLanguage(newLang);
     };
 
     const navigateToProfile = () => {
-        router.push('/myProfileScreen');
+        router.push("/myProfileScreen");
     };
 
     return (
         <View style={styles.container}>
-            <Toast type="loading" message={t('common.loading')} visible={loading} />
-            <Toast type="error" message={error || ''} visible={!!error} />
+            <Toast type="loading" message={t("common.loading")} visible={loading} />
+            <Toast type="error" message={error || ""} visible={!!error} />
+            {toast.type && <Toast type={toast.type} message={toast.message || ""} visible={!!toast.type} />}
 
             <ScrollView
                 style={styles.scrollView}
@@ -60,29 +70,28 @@ export default function SettingsScreen() {
                 <View style={styles.header}>
                     <View style={styles.headerContent}>
                         <Avatar
-                            name={employee?.name || t('employeeProfile.fallbacks.name') }
+                            name={employee?.name || t("employeeProfile.fallbacks.name")}
                             imageUrl={employee?.profileImageUrl ?? undefined}
                         />
                         <View style={styles.headerTextContainer}>
-                            <Text style={styles.userName}>{employee?.name || t('employeeProfile.fallbacks.name')}</Text>
+                            <Text style={styles.userName}>
+                                {employee?.name || t("employeeProfile.fallbacks.name")}
+                            </Text>
                         </View>
                     </View>
                 </View>
 
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t('settings.account.title')}</Text>
+                    <Text style={styles.sectionTitle}>{t("settings.account.title")}</Text>
 
-                    <Pressable
-                        style={styles.settingsItem}
-                        onPress={navigateToProfile}
-                    >
+                    <Pressable style={styles.settingsItem} onPress={navigateToProfile}>
                         <View style={styles.settingsItemLeft}>
                             <View style={styles.iconContainer}>
                                 <MaterialIcons name="person" size={22} color={colors.primary} />
                             </View>
                             <View>
-                                <Text style={styles.settingsItemTitle}>{t('settings.account.profileTitle')}</Text>
-                                <Text style={styles.settingsItemSubtitle}>{t('settings.account.profileSubtitle')}</Text>
+                                <Text style={styles.settingsItemTitle}>{t("settings.account.profileTitle")}</Text>
+                                <Text style={styles.settingsItemSubtitle}>{t("settings.account.profileSubtitle")}</Text>
                             </View>
                         </View>
                         <MaterialIcons name="chevron-right" size={24} color={colors.inactive} />
@@ -90,7 +99,7 @@ export default function SettingsScreen() {
                 </View>
 
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t('settings.preferences.title')}</Text>
+                    <Text style={styles.sectionTitle}>{t("settings.preferences.title")}</Text>
 
                     <View style={styles.settingsItem}>
                         <View style={styles.settingsItemLeft}>
@@ -98,29 +107,67 @@ export default function SettingsScreen() {
                                 <MaterialIcons name="language" size={22} color={colors.primary} />
                             </View>
                             <View>
-                                <Text style={styles.settingsItemTitle}>{t('settings.preferences.languageTitle')}</Text>
+                                <Text style={styles.settingsItemTitle}>{t("settings.preferences.languageTitle")}</Text>
                                 <Text style={styles.settingsItemSubtitle}>
-                                    {currentLanguage === 'da'
-                                        ? t('settings.preferences.languageSubtitleDa')
-                                        : t('settings.preferences.languageSubtitleEn')}
+                                    {currentLanguage === "da"
+                                        ? t("settings.preferences.languageSubtitleDa")
+                                        : t("settings.preferences.languageSubtitleEn")}
                                 </Text>
                             </View>
                         </View>
                         <Switch
-                            value={currentLanguage === 'da'}
+                            value={currentLanguage === "da"}
                             onValueChange={toggleLanguage}
-                            trackColor={{ false: '#D1D5DB', true: colors.secondary }}
+                            trackColor={{ false: "#D1D5DB", true: colors.secondary }}
                             thumbColor={colors.white}
                             ios_backgroundColor="#D1D5DB"
                         />
                     </View>
+
+                    <View style={styles.settingsItem}>
+                        <View style={styles.settingsItemLeft}>
+                            <View style={styles.iconContainer}>
+                                <MaterialIcons name="face" size={22} color={colors.primary} />
+                            </View>
+                            <View>
+                                <Text style={styles.settingsItemTitle}>{t('settings.preferences.changeProfileImageTitle')}</Text>
+                                <Text style={styles.settingsItemSubtitle}>
+                                    {t("settings.preferences.changeProfileImageSubtitle")}
+                                </Text>
+                            </View>
+                        </View>
+
+                        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                            <Pressable
+                                onPress={handleProfileImageUpload}
+                                style={{
+                                    padding: 6,
+                                }}
+                            >
+                                <MaterialIcons name="file-upload" size={22} color={colors.primary} />
+                            </Pressable>
+
+                            <Pressable
+                                onPress={handleResetProfileImage}
+                                disabled={!employee?.profileImageUrl}
+                                style={{
+                                    padding: 6,
+                                    opacity: employee?.profileImageUrl ? 1 : 0.3,
+                                }}
+                            >
+                                <MaterialIcons name="delete-forever" size={22} color={employee?.profileImageUrl ? colors.important : colors.inactive} />
+                            </Pressable>
+                        </View>
+                    </View>
+
                 </View>
+
                 <View style={styles.spacer} />
             </ScrollView>
 
             <View style={styles.logoutContainer}>
                 <Button
-                    title={t('settings.logout.button')}
+                    title={t("settings.logout.button")}
                     onPress={logout}
                     variant="outline"
                     style={styles.logoutButton}
