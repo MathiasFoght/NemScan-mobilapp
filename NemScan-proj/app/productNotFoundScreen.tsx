@@ -1,6 +1,6 @@
-import {View, Text, TextInput} from "react-native";
+import {View, Text, TextInput, ScrollView, TouchableOpacity} from "react-native";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "@/src/contexts/authContext";
 import {MaterialIcons} from "@expo/vector-icons";
 import Button from "@/src/ui/button/button";
@@ -8,8 +8,34 @@ import styles from "@/src/styles/screens/productNotFoundScreen.styles";
 import {colors} from "@/src/shared/global/colors";
 import '@/i18n/i18n.config';
 
+// Hardcoded array til test - erstat senere med API call
+const MOCK_PRODUCTS = [
+    { id: 1, name: "Coca Cola 330ml" },
+    { id: 2, name: "Pepsi Max 500ml" },
+    { id: 3, name: "Fanta Orange 330ml" },
+    { id: 4, name: "Sprite 500ml" },
+    { id: 5, name: "Red Bull Energy Drink" },
+    { id: 6, name: "Monster Energy" },
+    { id: 7, name: "7UP 330ml" },
+    { id: 8, name: "Mountain Dew" },
+    { id: 9, name: "Dr Pepper 330ml" },
+    { id: 10, name: "Mirinda Orange" },
+];
+
 export default function productNotFoundScreen() {
     const [searchQuery, setSearchQuery] = useState("");
+    const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
+
+    // Filtrer produkter baseret på søgning
+    const filteredProducts = MOCK_PRODUCTS.filter(product =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const handleSelectProduct = (productId: number) => {
+        setSelectedProduct(productId);
+        // Her kan du senere tilføje logik til at gemme det valgte produkt
+        console.log("Selected product:", MOCK_PRODUCTS.find(p => p.id === productId));
+    };
 
     return (
           <View style={styles.container}>
@@ -49,10 +75,46 @@ export default function productNotFoundScreen() {
                     )}
                 </View>
 
-                <View style={styles.content}>
-                    <Text style={styles.messageText}>Product not found</Text>
-                    <Text style={styles.subText}>Try searching for the product above</Text>
-                </View>
+                <ScrollView 
+                    style={styles.productList}
+                    contentContainerStyle={styles.productListContent}
+                >
+                    {filteredProducts.length > 0 ? (
+                        filteredProducts.map((item) => (
+                            <TouchableOpacity
+                                key={item.id}
+                                style={[
+                                    styles.productItem,
+                                    selectedProduct === item.id && styles.productItemSelected
+                                ]}
+                                onPress={() => handleSelectProduct(item.id)}
+                            >
+                                <Text style={[
+                                    styles.productName,
+                                    selectedProduct === item.id && styles.productNameSelected
+                                ]}>
+                                    {item.name}
+                                </Text>
+                                {selectedProduct === item.id && (
+                                    <MaterialIcons 
+                                        name="check-circle" 
+                                        size={24} 
+                                        color={colors.white} 
+                                    />
+                                )}
+                            </TouchableOpacity>
+                        ))
+                    ) : (
+                        <View style={styles.emptyState}>
+                            <MaterialIcons 
+                                name="search-off" 
+                                size={48} 
+                                color={colors.inactive} 
+                            />
+                            <Text style={styles.emptyText}>No products found</Text>
+                        </View>
+                    )}
+                </ScrollView>
         </View>
     );
 }
