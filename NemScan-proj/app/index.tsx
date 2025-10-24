@@ -87,7 +87,6 @@ export default function Index() {
 
     if (!permission) return <Text>Anmoder om kamera adgang...</Text>;
     if (!permission.granted) return <Text>Ingen adgang til kameraet</Text>;
-
     return (
         <CameraPermissionWrapper>
             <View style={styles.container}>
