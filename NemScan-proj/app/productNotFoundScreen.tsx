@@ -33,8 +33,15 @@ export default function productNotFoundScreen() {
 
     const handleSelectProduct = (productId: number) => {
         setSelectedProduct(productId);
-        // Her kan du senere tilføje logik til at gemme det valgte produkt
         console.log("Selected product:", MOCK_PRODUCTS.find(p => p.id === productId));
+    };
+
+    const handleSendProduct = () => {
+        const product = MOCK_PRODUCTS.find(p => p.id === selectedProduct);
+        if (product) {
+            console.log("Sending product:", product.name);
+            router.back();
+        }
     };
 
     return (
@@ -115,6 +122,19 @@ export default function productNotFoundScreen() {
                         </View>
                     )}
                 </ScrollView>
+
+                <View style={styles.buttonContainer}>
+                    <Button
+                        onPress={handleSendProduct}
+                        title="Send Product"
+                        variant="primary"
+                        disabled={selectedProduct === null}
+                        style={[
+                            styles.sendButton,
+                            selectedProduct === null && styles.sendButtonDisabled
+                        ]}
+                    />
+                </View>
         </View>
     );
 }

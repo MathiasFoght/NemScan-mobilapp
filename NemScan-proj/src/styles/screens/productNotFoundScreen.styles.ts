@@ -124,4 +124,17 @@ export default StyleSheet.create({
         color: colors.inactive,
         marginTop: 16,
     },
+    buttonContainer: {
+        padding: 20,
+        paddingBottom: 40,
+        backgroundColor: colors.white,
+        borderTopWidth: 1,
+        borderTopColor: '#E5E7EB',
+    },
+    sendButton: {
+        width: '100%',
+    },
+    sendButtonDisabled: {
+        opacity: 0.5,
+    },
 });
