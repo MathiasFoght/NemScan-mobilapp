@@ -28,6 +28,14 @@ export default StyleSheet.create({
     placeholder: {
         width: 40,
     },
+    infoText: {
+        marginTop: 12,
+        fontSize: 15,
+        color: "#6c757d",
+        textAlign: "center",
+        lineHeight: 22,
+        paddingHorizontal: 16,
+    },
     searchContainer: {
         flexDirection: 'row',
         alignItems: 'center',

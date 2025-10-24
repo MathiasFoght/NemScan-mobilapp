@@ -61,7 +61,9 @@ export default function productNotFoundScreen() {
                     <Text style={styles.headerTitle}>Product Not Found</Text>
                     <View style={styles.placeholder} />
                 </View>
-                
+                <Text style={styles.infoText}>
+                    Search and select the product from the list below.
+                </Text>
                 <View style={styles.searchContainer}>
                     <MaterialIcons 
                         name="search" 
