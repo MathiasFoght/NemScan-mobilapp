@@ -1,0 +1,208 @@
+import { StyleSheet, Dimensions } from "react-native";
+import { colors } from "@/src/shared/global/colors";
+
+const { width, height } = Dimensions.get("window");
+
+export const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: colors.white,
+    },
+    topSection: {
+        flexDirection: "row", // Arrange button and image side by side
+        alignItems: "stretch", // Vertically center the button and image
+        justifyContent: "flex-start", // Align to the left
+        height: height * 0.35, // Reduced height for better balance
+        backgroundColor: colors.primary,
+        paddingHorizontal: 20, // Add padding for spacing
+        paddingVertical: 70, // Add vertical padding
+        position: "relative",
+    },
+    buttonContainer: {
+        marginRight: 65, // Space between button and image
+    },
+    gradientOverlay: {
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 100,
+        opacity: 0.3,
+    },
+    imageContainer: {
+        width: width * 0.4, // Adjust image container size
+        height: width * 0.4,
+        borderRadius: 20,
+        backgroundColor: colors.white,
+        padding: 15,
+        shadowColor: colors.black,
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.15,
+        shadowRadius: 16,
+        elevation: 8,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    image: {
+        width: "100%",
+        height: "100%",
+        borderRadius: 12,
+    },
+    bottomSection: {
+        flex: 1,
+        backgroundColor: colors.white,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        marginTop: -30,
+        paddingTop: 24,
+        paddingHorizontal: 24,
+    },
+    title: {
+        fontSize: 26,
+        fontWeight: "700",
+        color: colors.black,
+        marginBottom: 24,
+        lineHeight: 32,
+    },
+    infoCard: {
+        backgroundColor: "#f8f9fa",
+        borderRadius: 16,
+        padding: 20,
+        marginBottom: 16,
+        borderWidth: 1,
+        borderColor: "#e9ecef",
+    },
+    priceCard: {
+        backgroundColor: colors.primary,
+        borderRadius: 16,
+        padding: 20,
+        marginBottom: 16,
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+        elevation: 4,
+    },
+    priceLabel: {
+        fontSize: 14,
+        fontWeight: "600",
+        color: "rgba(255, 255, 255, 0.8)",
+        marginBottom: 4,
+        letterSpacing: 0.5,
+        textTransform: "uppercase",
+    },
+    priceValue: {
+        fontSize: 36,
+        fontWeight: "800",
+        color: colors.white,
+        letterSpacing: -1,
+    },
+    infoRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 12,
+    },
+    infoLabel: {
+        fontSize: 15,
+        fontWeight: "600",
+        color: "#6c757d",
+        flex: 1,
+    },
+    infoValue: {
+        fontSize: 15,
+        fontWeight: "500",
+        color: colors.black,
+        flex: 1,
+        textAlign: "right",
+    },
+    campaignBadge: {
+        backgroundColor: colors.important,
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 12,
+        alignSelf: "flex-start",
+        marginTop: 8,
+    },
+    campaignText: {
+        fontSize: 13,
+        fontWeight: "700",
+        color: colors.white,
+        letterSpacing: 0.3,
+    },
+    campaignCard: {
+        backgroundColor: colors.campaign_background,
+        borderRadius: 16,
+        padding: 20,
+        marginBottom: 16,
+        borderWidth: 2,
+        borderColor: colors.campaign,
+    },
+    campaignHeader: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 16,
+    },
+    campaignName: {
+        fontSize: 18,
+        fontWeight: "700",
+        color: colors.black,
+        flex: 1,
+        marginRight: 12,
+    },
+    discountBadge: {
+        backgroundColor: colors.campaign,
+        paddingHorizontal: 14,
+        paddingVertical: 8,
+        borderRadius: 12,
+    },
+    discountText: {
+        fontSize: 16,
+        fontWeight: "800",
+        color: colors.white,
+        letterSpacing: 0.5,
+    },
+    campaignDetails: {
+        gap: 10,
+    },
+    campaignRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    campaignLabel: {
+        fontSize: 14,
+        fontWeight: "600",
+        color: "#6c757d",
+    },
+    campaignValue: {
+        fontSize: 14,
+        fontWeight: "600",
+        color: colors.black,
+    },
+    divider: {
+        height: 1,
+        backgroundColor: "#e9ecef",
+        marginVertical: 12,
+    },
+    loader: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: colors.white,
+    },
+    errorContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingHorizontal: 40,
+        backgroundColor: colors.white,
+    },
+    error: {
+        color: colors.important,
+        textAlign: "center",
+        fontSize: 16,
+        fontWeight: "500",
+    },
+});
