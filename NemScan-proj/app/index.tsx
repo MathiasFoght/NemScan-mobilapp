@@ -47,7 +47,7 @@ export default function Index() {
         try {
             const product = await getProductCustomer(barcode);
             if (product) {
-                router.push({ pathname: "/productScreen", params: { barcode } });
+                router.push({ pathname: "/productScreen" as any, params: { barcode } });
                 return true;
             } else {
                 setErrorMessage("Produktet findes ikke i systemet.");
