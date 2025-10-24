@@ -125,7 +125,7 @@ export default function Index() {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={[styles.modalButton, styles.reportButton]}
-                                    onPress={navigateToProductNotFound}
+                                    onPress={() => navigateToProductNotFound()}
                                 >
                                     <Text style={styles.modalButtonText}>Rapportér</Text>
                                 </TouchableOpacity>
