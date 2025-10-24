@@ -5,6 +5,8 @@ export const ENDPOINTS = {
     },
     EMPLOYEE: {
         PROFILE: '/api/employee/profile',
+        UPLOAD: '/api/employee/upload-profile-image',
+        DELETE: '/api/employee/profile-image'
     },
     PRODUCT: {
         CUSTOMER_PRODUCT: '/api/Product/customer/by-barcode/{barcode}',
