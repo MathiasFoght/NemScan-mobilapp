@@ -26,20 +26,24 @@ export default function productNotFoundScreen() {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
 
-    // Filtrer produkter baseret på søgning
     const filteredProducts = MOCK_PRODUCTS.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const handleSelectProduct = (productId: number) => {
-        setSelectedProduct(productId);
-        console.log("Selected product:", MOCK_PRODUCTS.find(p => p.id === productId));
+        if (selectedProduct === productId) {
+            setSelectedProduct(null);
+            console.log("Product deselected");
+        } else {
+            setSelectedProduct(productId);
+            console.log("Selected product:", MOCK_PRODUCTS.find(p => p.id === productId));
+        }
     };
 
     const handleSendProduct = () => {
         const product = MOCK_PRODUCTS.find(p => p.id === selectedProduct);
         if (product) {
-            console.log("Sending product:", product.name);
+            console.log("Sending product:", product.name, "id:", product.id);
             router.back();
         }
     };
