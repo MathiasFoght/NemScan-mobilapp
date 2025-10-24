@@ -6,6 +6,21 @@ export const ENDPOINTS = {
     EMPLOYEE: {
         PROFILE: '/api/employee/profile',
         UPLOAD: '/api/employee/upload-profile-image',
-        DELETE: '/api/employee/profile-image'
+        DELETE: '/api/employee/profile-image',
+    },
+    STATISTICS: {
+        SCANS: {
+            WEEKLY_HEATMAP: '/api/statistics/scans/weekly-heatmap',
+            PERFORMANCE: '/api/statistics/scans/performance',
+            PRODUCTGROUP_DISTRIBUTION: '/api/statistics/scans/product-group-distribution',
+            LOW_STOCK_PRODUCTS: '/api/statistics/products/low-stock',
+            INCREASING_ERROR_RATE: '/api/statistics/errors/increasing-error-rate',
+            TOP_SCANNED_PRODUCT: '/api/statistics/scans/top-product-today',
+        },
+    },
+    REPORT: {
+        TOP_FAILED: '/api/report/top-3-most-failed-products',
+        ERROR_PATTERNS: '/api/report/error-patterns',
+        TODAY_COUNT: '/api/report/reports/count-today',
     },
 };

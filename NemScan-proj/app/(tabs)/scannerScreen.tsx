@@ -1,9 +1,9 @@
 import { Text, View } from "react-native";
 
-export default function GraphicsScreen() {
+export default function ScannerScreen() {
     return (
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-            <Text>Graphics screen</Text>
+            <Text>Scan screen</Text>
         </View>
     );
 }

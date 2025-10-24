@@ -26,7 +26,7 @@ export default function MyProfileScreen() {
                 setEmployee(data);
                 setError(null);
             } catch (err: any) {
-                setError(t('employeeProfile.errors.errorFetchingEmployee'));
+                setError(t('toastErrors.errorFetching'));
             } finally {
                 setLoading(false);
             }

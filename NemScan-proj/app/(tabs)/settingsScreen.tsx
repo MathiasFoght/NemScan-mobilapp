@@ -1,19 +1,18 @@
-import { Text, View, Pressable, ScrollView, Switch, Alert } from "react-native";
+import { Text, View, Pressable, ScrollView, Switch } from "react-native";
 import { useAuth } from "@/src/contexts/authContext";
-import '@/i18n/i18n.config';
+import "@/i18n/i18n.config";
 import i18n from "i18next";
 import Button from "@/src/ui/button/button";
 import { Avatar } from "@/src/ui/avatar/avatar";
 import { colors } from "@/src/shared/global/colors";
-import {useCallback, useState} from "react";
+import { useCallback, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { getEmployeeProfile } from "@/src/services/employee/employeeService";
 import { Toast } from "@/src/components/toast/toast";
-import {router, useFocusEffect} from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import styles from "@/src/styles/screens/settingsScreen.styles";
 import { useTranslation } from "react-i18next";
 import { useProfileImageActions } from "@/src/hooks/useProfileImageActions";
-
 
 export default function SettingsScreen() {
     const { logout } = useAuth();
@@ -28,7 +27,6 @@ export default function SettingsScreen() {
     });
     const { handleProfileImageUpload, handleResetProfileImage } = useProfileImageActions(setEmployee, setToast);
 
-
     useFocusEffect(
         useCallback(() => {
             const fetchProfile = async () => {
@@ -37,7 +35,7 @@ export default function SettingsScreen() {
                     setEmployee(profile);
                     setError(null);
                 } catch (err: any) {
-                    setError(t("employeeProfile.errors.errorFetchingEmployee"));
+                    setError(t("toastErrors.errorFetching"));
                 } finally {
                     setLoading(false);
                 }
@@ -62,25 +60,25 @@ export default function SettingsScreen() {
             <Toast type="error" message={error || ""} visible={!!error} />
             {toast.type && <Toast type={toast.type} message={toast.message || ""} visible={!!toast.type} />}
 
+            <View style={styles.header}>
+                <View style={styles.headerContent}>
+                    <Avatar
+                        name={employee?.name || t("employeeProfile.fallbacks.name")}
+                        imageUrl={employee?.profileImageUrl ?? undefined}
+                    />
+                    <View style={styles.headerTextContainer}>
+                        <Text style={styles.userName}>
+                            {employee?.name || t("employeeProfile.fallbacks.name")}
+                        </Text>
+                    </View>
+                </View>
+            </View>
+
             <ScrollView
                 style={styles.scrollView}
                 contentContainerStyle={styles.scrollContent}
                 showsVerticalScrollIndicator={false}
             >
-                <View style={styles.header}>
-                    <View style={styles.headerContent}>
-                        <Avatar
-                            name={employee?.name || t("employeeProfile.fallbacks.name")}
-                            imageUrl={employee?.profileImageUrl ?? undefined}
-                        />
-                        <View style={styles.headerTextContainer}>
-                            <Text style={styles.userName}>
-                                {employee?.name || t("employeeProfile.fallbacks.name")}
-                            </Text>
-                        </View>
-                    </View>
-                </View>
-
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>{t("settings.account.title")}</Text>
 
@@ -130,7 +128,9 @@ export default function SettingsScreen() {
                                 <MaterialIcons name="face" size={22} color={colors.primary} />
                             </View>
                             <View>
-                                <Text style={styles.settingsItemTitle}>{t('settings.preferences.changeProfileImageTitle')}</Text>
+                                <Text style={styles.settingsItemTitle}>
+                                    {t("settings.preferences.changeProfileImageTitle")}
+                                </Text>
                                 <Text style={styles.settingsItemSubtitle}>
                                     {t("settings.preferences.changeProfileImageSubtitle")}
                                 </Text>
@@ -138,12 +138,7 @@ export default function SettingsScreen() {
                         </View>
 
                         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-                            <Pressable
-                                onPress={handleProfileImageUpload}
-                                style={{
-                                    padding: 6,
-                                }}
-                            >
+                            <Pressable onPress={handleProfileImageUpload} style={{ padding: 6 }}>
                                 <MaterialIcons name="file-upload" size={22} color={colors.primary} />
                             </Pressable>
 
@@ -155,13 +150,17 @@ export default function SettingsScreen() {
                                     opacity: employee?.profileImageUrl ? 1 : 0.3,
                                 }}
                             >
-                                <MaterialIcons name="delete-forever" size={22} color={employee?.profileImageUrl ? colors.important : colors.inactive} />
+                                <MaterialIcons
+                                    name="delete-forever"
+                                    size={22}
+                                    color={
+                                        employee?.profileImageUrl ? colors.important : colors.inactive
+                                    }
+                                />
                             </Pressable>
                         </View>
                     </View>
-
                 </View>
-
                 <View style={styles.spacer} />
             </ScrollView>
 
