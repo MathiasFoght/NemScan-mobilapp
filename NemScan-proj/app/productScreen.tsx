@@ -1,10 +1,12 @@
-import { View, Text, ActivityIndicator, Image } from "react-native";
-import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
+import { View, Text, ActivityIndicator, Image, ScrollView } from "react-native";
+import {router, useLocalSearchParams} from "expo-router";
+import React, { useEffect, useState } from "react";
 import { getProductCustomer, getProductImage } from "@/src/services/product/productService";
 import { Product_Customer } from "@/src/services/product/interfaces";
 import { styles } from "@/src/styles/screens/productScreen.styles";
 import { colors } from "@/src/shared/global/colors";
+import {MaterialIcons} from "@expo/vector-icons";
+import Button from "@/src/ui/button/button";
 
 export default function ProductScreen() {
     const { barcode } = useLocalSearchParams<{ barcode: string }>();
@@ -16,13 +18,19 @@ export default function ProductScreen() {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const prod: Product_Customer = await getProductCustomer(barcode);
-                const img: string = await getProductImage(barcode);
+                const response: any = await getProductCustomer(barcode);
 
+                const prod: Product_Customer = response.product || response;
                 setProduct(prod);
-                setProductImageUrl(img); // URL fra API
-            } catch (err) {
-                console.error(err);
+
+                try {
+                    const img: string = await getProductImage(barcode);
+                    setProductImageUrl(img);
+                } catch {
+                    setProductImageUrl(null); // fallback mode
+                }
+
+            } catch {
                 setError("Kunne ikke hente produktdata");
             } finally {
                 setLoading(false);
@@ -32,42 +40,143 @@ export default function ProductScreen() {
         if (barcode) fetchProduct();
     }, [barcode]);
 
-    if (loading) return <ActivityIndicator style={styles.loader} size="large" color={colors.primary} />;
-    if (error) return <Text style={styles.error}>{error}</Text>;
-    if (!product) return <Text style={styles.error}>Ingen produktdata fundet</Text>;
+    if (loading) {
+        return (
+            <View style={styles.loader}>
+                <ActivityIndicator size="large" color={colors.primary} />
+            </View>
+        );
+    }
+
+    if (error) {
+        return (
+            <View style={styles.errorContainer}>
+                <Text style={styles.error}>{error}</Text>
+            </View>
+        );
+    }
+
+    if (!product) {
+        return (
+            <View style={styles.errorContainer}>
+                <Text style={styles.error}>Ingen produktdata fundet</Text>
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>
-            {/* Top section med baggrund og billede */}
+
             <View style={styles.topSection}>
-                {productImageUrl && (
-                    <Image
-                        source={{ uri: productImageUrl }}
-                        style={styles.image}
-                        resizeMode="contain"
+                <View style={styles.buttonContainer}>
+                    <Button
+                        onPress={router.back}
+                        icon={<MaterialIcons name="arrow-back-ios-new" size={24} color="#ffff" />}
+                        iconPosition="left"
+                        variant="simple"
+                        style={{ height: 40 }}
                     />
+                </View>
+                <View style={styles.imageContainer}>
+                    {/* 💡 fallback-image */}
+                    {productImageUrl ? (
+                        <Image
+                            source={{ uri: productImageUrl }}
+                            style={styles.image}
+                            resizeMode="contain"
+                        />
+                    ) : (
+                        <MaterialIcons
+                            name="question-mark"
+                            size={60}
+                            color="#bbb"
+                        />
+                    )}
+                </View>
+            </View>
+
+            {/* Bottom section med produktinfo */}
+            <ScrollView
+                style={styles.bottomSection}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 40 }}
+            >
+                <Text style={styles.title}>{product.productName}</Text>
+
+                {/* Price Card - highlighted */}
+                <View style={styles.priceCard}>
+                    <Text style={styles.priceLabel}>Pris</Text>
+                    <Text style={styles.priceValue}>{product.currentSalesPrice} kr</Text>
+                </View>
+
+                {/* Additional Info Card */}
+                <View style={styles.infoCard}>
+                    <View style={styles.infoRow}>
+                        <Text style={styles.infoLabel}>Kategori</Text>
+                        <Text style={styles.infoValue}>{product.productGroup}</Text>
+
+                    </View>
+
+                    {product.productGroup && (
+                        <>
+                            <View style={styles.divider} />
+                            <View style={styles.infoRow}>
+                                <Text style={styles.infoLabel}>Stregkode</Text>
+                                <Text style={styles.infoValue}>{barcode}</Text>
+                            </View>
+                        </>
+                    )}
+                </View>
+
+                {/* Campaigns Section */}
+                {product.campaigns && product.campaigns.length > 0 && (
+                    <>
+                        {product.campaigns.map((campaign, index) => (
+                            <View key={campaign.uid || index} style={styles.campaignCard}>
+                                <View style={styles.campaignHeader}>
+                                    <Text style={styles.campaignName}>{campaign.name}</Text>
+                                    <View style={styles.discountBadge}>
+                                        <Text style={styles.discountText}>-{campaign.discountInPercentage}%</Text>
+                                    </View>
+                                </View>
+
+                                <View style={styles.campaignDetails}>
+                                    <View style={styles.campaignRow}>
+                                        <Text style={styles.campaignLabel}>Start</Text>
+                                        <Text style={styles.campaignValue}>
+                                            {new Date(campaign.fromDate).toLocaleDateString('da-DK', {
+                                                day: 'numeric',
+                                                month: 'short',
+                                                year: 'numeric'
+                                            })}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.campaignRow}>
+                                        <Text style={styles.campaignLabel}>Slut</Text>
+                                        <Text style={styles.campaignValue}>
+                                            {new Date(campaign.toDate).toLocaleDateString('da-DK', {
+                                                day: 'numeric',
+                                                month: 'short',
+                                                year: 'numeric'
+                                            })}
+                                        </Text>
+                                    </View>
+                                    {campaign.activateAtQuantity > 1 && (
+                                        <View style={styles.campaignRow}>
+                                            <Text style={styles.campaignLabel}>Kræver</Text>
+                                            <Text style={styles.campaignValue}>
+                                                {campaign.activateAtQuantity} stk.
+                                            </Text>
+                                        </View>
+                                    )}
+                                </View>
+                            </View>
+                        ))}
+                    </>
                 )}
-            </View>
 
-            {/* Bottom section med tekst */}
-            <View style={styles.bottomSection}>
-                <Text style={styles.title}>{product.name}</Text>
-
-                <Text style={styles.text}>
-                    <Text style={styles.label}>Produktnummer: </Text>
-                    <Text style={styles.value}>{product.number}</Text>
-                </Text>
-
-                <Text style={styles.text}>
-                    <Text style={styles.label}>UID: </Text>
-                    <Text style={styles.value}>{product.uid}</Text>
-                </Text>
-
-                <Text style={styles.text}>
-                    <Text style={styles.label}>Client UID: </Text>
-                    <Text style={styles.value}>{product.clientUid}</Text>
-                </Text>
-            </View>
+                {/* You can add more info cards here for other product details */}
+            </ScrollView>
         </View>
     );
 }

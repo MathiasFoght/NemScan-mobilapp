@@ -36,7 +36,7 @@ export const localStyles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        height: 25,
+        height: 25.2,
         backgroundColor: "rgba(0,0,0,0.3)",
         borderBottomLeftRadius: 32,
         borderBottomRightRadius: 32,

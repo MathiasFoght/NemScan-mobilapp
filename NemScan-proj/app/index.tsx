@@ -1,17 +1,16 @@
-import { View, Text, StyleSheet, Modal } from "react-native";
+import { View, Text, Modal, TouchableOpacity, TextInput } from "react-native";
 import { useEffect, useState, useCallback } from "react";
 import { router } from "expo-router";
 import { useAuth } from "@/src/contexts/authContext";
 import CameraPermissionWrapper from "@/src/permissions/CameraPermissionWrapper";
 import { MaterialIcons } from "@expo/vector-icons";
-import Button from "@/src/ui/button/button";
 import styles from "@/src/styles/screens/scanScreen.styles";
 import { colors } from "@/src/shared/global/colors";
 import { useTranslation } from "react-i18next";
 import { useCameraPermissions } from "expo-camera";
 import Scanner from "@/src/components/scanner/scanner";
-import { getProductCustomer} from "@/src/services/product/productService";
-import { useFocusEffect } from '@react-navigation/native';
+import { getProductCustomer } from "@/src/services/product/productService";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Index() {
     const { t } = useTranslation();
@@ -20,8 +19,9 @@ export default function Index() {
     const [scanning, setScanning] = useState(false);
     const [permission, requestPermission] = useCameraPermissions();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [manualEntryModalVisible, setManualEntryModalVisible] = useState(false);
+    const [manualBarcode, setManualBarcode] = useState("");
 
-    // Reset scanning når skærmen får fokus
     useFocusEffect(
         useCallback(() => {
             setScanning(false);
@@ -41,29 +41,48 @@ export default function Index() {
     };
 
     const handleScanned = async (barcode: string) => {
-        if (scanning) return;
+        if (scanning) return false;
         setScanning(true);
 
         try {
             const product = await getProductCustomer(barcode);
-
             if (product) {
-                router.push({
-                    pathname: "/productScreen",
-                    params: { barcode },
-                });
+                router.push({ pathname: "/productScreen", params: { barcode } });
+                return true;
             } else {
                 setErrorMessage("Produktet findes ikke i systemet.");
+                return false;
             }
-        } catch (error) {
-            console.error("Fejl under scanning:", error);
+        } catch (err) {
+            console.error(err);
             setErrorMessage("Kunne ikke kontakte serveren.");
+            return false;
+        } finally {
         }
     };
 
     const handleClosePopup = () => {
         setErrorMessage(null);
-        setScanning(false); // tillad scanning igen
+        setScanning(false);
+    };
+
+    const handleOpenManualEntry = () => {
+        setManualBarcode("");
+        setManualEntryModalVisible(true);
+    };
+
+    const handleCloseManualEntry = () => {
+        setManualEntryModalVisible(false);
+        setManualBarcode("");
+    };
+
+    const handleSubmitManualBarcode = () => {
+        if (manualBarcode.trim()) {
+            handleScanned(manualBarcode);
+            setManualEntryModalVisible(false);
+        } else {
+            setErrorMessage("Indtast venligst en gyldig stregkode.");
+        }
     };
 
     if (!permission) return <Text>Anmoder om kamera adgang...</Text>;
@@ -71,63 +90,124 @@ export default function Index() {
 
     return (
         <CameraPermissionWrapper>
-            <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                {/* Scanner */}
-                <Scanner onScanned={handleScanned} paused={scanning} />
+            <View style={styles.container}>
+                {/* Scanner with overlay */}
+                <View style={styles.scannerContainer}>
+                    <Scanner onScanned={handleScanned} paused={scanning} />
+                </View>
 
-                {/* Popup modal */}
+                {/* Enhanced Error Modal */}
                 <Modal
                     transparent
                     animationType="fade"
                     visible={!!errorMessage}
                     onRequestClose={handleClosePopup}
                 >
-                    <View style={localStyles.modalBackground}>
-                        <View style={localStyles.modalBox}>
-                            <Text style={localStyles.modalText}>{errorMessage}</Text>
-                            <Button
-                                onPress={handleClosePopup}
-                                title="Luk"
-                                variant="simple"
+                    <View style={styles.modalBackground}>
+                        <View style={styles.modalBox}>
+                            <MaterialIcons
+                                name="error-outline"
+                                size={56}
+                                color={colors.important}
+                                style={styles.modalIcon}
                             />
+                            <Text style={styles.modalTitle}>Kunne ikke finde produkt</Text>
+                            <Text style={styles.modalText}>{errorMessage}</Text>
+                            <TouchableOpacity
+                                style={styles.modalButton}
+                                onPress={handleClosePopup}
+                            >
+                                <Text style={styles.modalButtonText}>Prøv igen</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>
-            </View>
 
-            {/* Footer */}
-            <View style={styles.footer}>
-                <Button
-                    onPress={handleEmployeeLogin}
-                    title={t("login.employeeLogin")}
-                    variant="simple"
-                    icon={<MaterialIcons name="person-outline" size={16} color={colors.primary} />}
-                    iconPosition="left"
-                    textStyle={styles.employeeText}
-                    style={styles.employeeButton}
-                />
+                {/* Manual Entry Modal */}
+                <Modal
+                    transparent
+                    animationType="fade"
+                    visible={manualEntryModalVisible}
+                    onRequestClose={handleCloseManualEntry}
+                >
+                    <View style={styles.modalBackground}>
+                        <View style={styles.modalBox}>
+                            <Text style={styles.modalTitle}>Indtast stregkode</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Indtast stregkode"
+                                placeholderTextColor="#6c757d"
+                                value={manualBarcode}
+                                onChangeText={setManualBarcode}
+                                keyboardType="numeric"
+                                autoFocus
+                            />
+                            <View style={styles.modalButtonContainer}>
+                                <TouchableOpacity
+                                    style={[styles.modalButton, styles.cancelButton]}
+                                    onPress={handleCloseManualEntry}
+                                >
+                                    <Text style={styles.modalButtonText}>Annuller</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.modalButton}
+                                    onPress={handleSubmitManualBarcode}
+                                >
+                                    <Text style={styles.modalButtonText}>Udfør</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
+                <View style={styles.manualEntryContainer}>
+                    <TouchableOpacity
+                        style={styles.manualEntryButton}
+                        onPress={handleOpenManualEntry}
+                    >
+                        <MaterialIcons
+                            name="edit"
+                            size={20}
+                            color={colors.primary}
+                        />
+                        <Text style={styles.manualEntryText}>Indtast manuelt</Text>
+                    </TouchableOpacity>
+                </View>
+
+                {/* Instructions with Manual Entry Button */}
+                <View style={styles.instructionContainer}>
+
+                    <View style={styles.instructionBox}>
+                        <MaterialIcons
+                            name="barcode-reader"
+                            size={80}
+                            color={colors.primary}
+                            style={styles.instructionIcon}
+                        />
+                        <Text style={styles.instructionTitle}>Scan stregkode</Text>
+                        <Text style={styles.instructionText}>
+                            Placer stregkoden inden for rammen.
+                        </Text>
+                    </View>
+                </View>
+
+                {/* Footer with employee button */}
+                <View style={styles.footer}>
+                    <TouchableOpacity
+                        style={styles.employeeButton}
+                        onPress={handleEmployeeLogin}
+                    >
+                        <MaterialIcons
+                            name="person-outline"
+                            size={20}
+                            color={colors.primary}
+                        />
+                        <Text style={styles.employeeText}>
+                            {t("login.employeeLogin")}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </CameraPermissionWrapper>
     );
 }
-
-const localStyles = StyleSheet.create({
-    modalBackground: {
-        flex: 1,
-        backgroundColor: "rgba(0,0,0,0.5)",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    modalBox: {
-        width: "80%",
-        backgroundColor: "white",
-        padding: 20,
-        borderRadius: 10,
-        alignItems: "center",
-    },
-    modalText: {
-        marginBottom: 16,
-        fontSize: 16,
-        textAlign: "center",
-    },
-});
