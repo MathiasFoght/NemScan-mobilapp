@@ -36,7 +36,7 @@ export const Top3ProductsWithReportsCard: React.FC = () => {
                     <View style={styles.iconWrapper}>
                         <AlertCircle size={20} color="#fff" strokeWidth={2.5} />
                     </View>
-                    <Text style={styles.title}>Rapporterings{'\n'}varer</Text>
+                    <Text style={styles.title}>Mest{'\n'}rapporteret</Text>
                 </View>
 
                 {loading ? (

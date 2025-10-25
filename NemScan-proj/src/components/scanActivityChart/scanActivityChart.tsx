@@ -33,7 +33,6 @@ export const ScanActivityChart: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [periodType, setPeriodType] = useState<'week' | 'month'>('week');
 
-
     const opacityAnim = useRef(new Animated.Value(1)).current;
     const scaleAnim = useRef(new Animated.Value(1)).current;
 
@@ -144,7 +143,6 @@ export const ScanActivityChart: React.FC = () => {
 
             const peak = Math.max(...values, 1);
             const peakIndex = values.indexOf(peak);
-
             const avg = values.reduce((a, b) => a + b, 0) / values.length;
             const ratio = peak / (avg || 1);
 
@@ -163,21 +161,41 @@ export const ScanActivityChart: React.FC = () => {
 
             setMaxValue(Math.ceil(roundedMax * scaleBoost));
 
-            // Forbedret x-akse labels - vis kun hver 3. dag
-            const showEveryNth = Math.max(1, Math.floor(trendData.length / 7));
+            const showEveryNth = Math.ceil(trendData.length / 7);
 
             setChartData(
                 trendData.map((item, index) => {
                     const value = item.rollingAverage;
                     const isPeak = index === peakIndex;
-
                     const isHighValue = value >= peak * 0.7;
-
                     const text = isPeak || isHighValue ? String(Math.round(value)) : undefined;
 
                     const shouldShowLabel = index % showEveryNth === 0 || index === trendData.length - 1;
 
-                    const dayLabel = item.dayOrDate;
+                    let dayLabel = '';
+                    if (shouldShowLabel) {
+                        const dateStr = String(item.dayOrDate);
+
+                        if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                            const [year, month, day] = dateStr.split('-');
+                            const monthName = new Date(Number(year), Number(month) - 1)
+                                .toLocaleString('da-DK', { month: 'short' });
+                            dayLabel = `${Number(day)} ${monthName}`;
+                        }
+                        // Hvis det ligner "25/10" eller "25.10"
+                        else if (/^\d{1,2}[\/\.]\d{1,2}$/.test(dateStr)) {
+                            const [day, month] = dateStr.split(/[\/\.]/);
+                            const monthName = new Date(2025, Number(month) - 1)
+                                .toLocaleString('da-DK', { month: 'short' });
+                            dayLabel = `${Number(day)} ${monthName}`;
+                        }
+                        // fallback
+                        else {
+                            dayLabel = dateStr;
+                        }
+                    }
+
+
                     const textShiftX =
                         text && text.length === 1 ? 0 :
                             text && text.length === 2 ? -4 :
@@ -185,17 +203,19 @@ export const ScanActivityChart: React.FC = () => {
 
                     return {
                         value: Math.round(value * 10) / 10,
-                        label: shouldShowLabel ? dayLabel : '',
+                        label: dayLabel,
                         labelTextStyle: {
                             color: '#9CA3AF',
                             fontSize: 10,
                             fontWeight: '600',
-                            transform: [{ rotate: '30deg' }],
-                            width: 45,
-                            textAlign: 'center',
+                            transform: [{ rotate: '-30deg' }],
+                            width: 50,
+                            textAlign: 'right',
+                            alignSelf: 'flex-end',
+                            marginRight: index === trendData.length - 1 ? 10 : 0,
                         },
                         dataPointText: text,
-                        textColor: isHighValue ? '#5B8DEF' : '#5B8DEF',
+                        textColor: '#5B8DEF',
                         textFontSize: isHighValue ? 14 : 13,
                         textShiftX,
                         textShiftY: -20,
@@ -203,6 +223,7 @@ export const ScanActivityChart: React.FC = () => {
                 })
             );
         }
+
         else if (periodType === 'week' && data.heatmap?.length) {
             const englishPeriod = periodMapping[selectedPeriod];
             const filtered =
@@ -226,7 +247,6 @@ export const ScanActivityChart: React.FC = () => {
             const peak = Math.max(...values, 1);
             const peakIndex = values.indexOf(peak);
             const peakDayName = sortedDays[peakIndex];
-
             const avg = values.reduce((a, b) => a + b, 0) / values.length;
             const ratio = peak / (avg || 1);
 
@@ -336,38 +356,40 @@ export const ScanActivityChart: React.FC = () => {
                 </View>
             </View>
 
-            {periodType === 'week' && (
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    style={{ marginBottom: 10 }}
-                >
-                    {periods.map((period) => (
-                        <TouchableOpacity
-                            key={period}
-                            onPress={() => {
-                                if (selectedPeriod !== period) {
-                                    setSelectedPeriod(period);
-                                    animateChange();
-                                }
-                            }}
+            <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{
+                    marginBottom: 10,
+                    opacity: periodType === 'week' ? 1 : 0,
+                }}
+                pointerEvents={periodType === 'week' ? 'auto' : 'none'}
+            >
+                {periods.map((period) => (
+                    <TouchableOpacity
+                        key={period}
+                        onPress={() => {
+                            if (selectedPeriod !== period) {
+                                setSelectedPeriod(period);
+                                animateChange();
+                            }
+                        }}
+                        style={[
+                            styles.filterButton,
+                            selectedPeriod === period && styles.filterButtonActive,
+                        ]}
+                    >
+                        <Text
                             style={[
-                                styles.filterButton,
-                                selectedPeriod === period && styles.filterButtonActive,
+                                styles.filterText,
+                                selectedPeriod === period && styles.filterTextActive,
                             ]}
                         >
-                            <Text
-                                style={[
-                                    styles.filterText,
-                                    selectedPeriod === period && styles.filterTextActive,
-                                ]}
-                            >
-                                {period}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
-                </ScrollView>
-            )}
+                            {period}
+                        </Text>
+                    </TouchableOpacity>
+                ))}
+            </ScrollView>
 
             <Animated.View
                 style={[
@@ -382,7 +404,6 @@ export const ScanActivityChart: React.FC = () => {
                     <Text style={styles.dateRange}>Ingen data tilgængelig</Text>
                 ) : (
                     <>
-                        {/* 🔥 Loading vises nu som overlay tekst, grafen forbliver synlig */}
                         {loading && (
                             <Text style={[styles.dateRange, { opacity: 0.6, marginBottom: 8 }]}>
                                 Henter nyeste data...
