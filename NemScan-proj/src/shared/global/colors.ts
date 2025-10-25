@@ -4,7 +4,9 @@ export const colors = {
     inactive: '#a0a0a0',
     white: '#fff',
     black: '#000',
-    important: '#fc6969'
+    important: '#fc6969',
+    campaign: '#10b981',
+    campaign_background: 'rgba(209,250,229,0.32)',
 };
 
 export const toastStateColors = {

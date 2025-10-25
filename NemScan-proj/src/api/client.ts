@@ -1,19 +1,19 @@
-import { API_URL } from '@/enviroment/config';
-import { getToken } from '@/src/services/auth/storageService';
+import { API_URL } from '@/enviroment/config'
+import {getToken} from "@/src/services/auth/storageService";
 
 console.log('API URL', API_URL);
 
 export const apiClient = async <T>(
     endpoint: string,
     options: RequestInit = {},
-    requireAuth = true
+    requireAuth = true,
+    parseAsJson = true
 ): Promise<T> => {
     const token = requireAuth ? await getToken() : null;
-    const isFormData = options.body instanceof FormData;
 
     const headers: HeadersInit = {
+        'Content-Type': 'application/json',
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
         ...options.headers,
     };
 
@@ -27,9 +27,10 @@ export const apiClient = async <T>(
         throw new Error(`Request failed: ${response.statusText}`);
     }
 
-    const contentType = response.headers.get('content-type');
-    if (contentType && contentType.includes('application/json')) {
+    if (parseAsJson) {
         return (await response.json()) as T;
+    } else {
+        return (await response.text()) as T;
     }
-    return {} as T;
+
 };
