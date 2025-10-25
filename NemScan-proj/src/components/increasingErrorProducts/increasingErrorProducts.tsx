@@ -26,7 +26,7 @@ export const IncreasingErrorProducts: React.FC<IncreasingErrorProductsProps> = (
     if (error) {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Produkter med stigende rapporteringer</Text>
+                <Text style={styles.title}>Øget rapportering</Text>
                 <Text style={styles.emptyText}>{error}</Text>
             </View>
         );
@@ -35,7 +35,7 @@ export const IncreasingErrorProducts: React.FC<IncreasingErrorProductsProps> = (
     if (products.length === 0) {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Produkter med stigende rapporteringer</Text>
+                <Text style={styles.title}>Øget rapportering</Text>
                 <Text style={styles.emptyText}>Ingen produkter med fejl i perioden</Text>
             </View>
         );
@@ -43,13 +43,12 @@ export const IncreasingErrorProducts: React.FC<IncreasingErrorProductsProps> = (
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Produkter med stigende rapporteringer</Text>
+            <Text style={styles.title}>Øget rapportering</Text>
             <Text style={styles.subtitle}>De sidste {daysFilter} dage</Text>
 
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {products.map((product, index) => (
                     <View key={product.productNumber} style={styles.card}>
-                        <Text style={styles.rank}>#{index + 1}</Text>
                         <Text style={styles.name}>{product.productName}</Text>
                         <Text style={styles.rate}>{product.currentErrorRate.toFixed(1)}%</Text>
                         <Text style={styles.trend}>↑ {product.trendChange.toFixed(1)}%</Text>

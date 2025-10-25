@@ -1,28 +1,17 @@
 import { apiClient } from '@/src/api/client';
-import { ENDPOINTS } from "@/src/api/endoints"
+import { ENDPOINTS } from "@/src/api/endpoints"
 import {
     ErrorRateTrend,
     LowStockProduct,
-    ProductGroupStat,
-    ScanHeatmapItem,
+    ProductGroupStat, ScanActivityResponse,
     ScanPerformance, TopScannedProduct
 } from "@/src/services/statistics/interfaces";
 
-// Get weekly scan heatmap
-export const getScanWeeklyHeatmap = async (
-    from?: string,
-    to?: string
-): Promise<ScanHeatmapItem[]> => {
-
-    const queryParams = new URLSearchParams();
-    if (from) queryParams.append('from', from);
-    if (to) queryParams.append('to', to);
-
-    const url = queryParams.toString()
-        ? `${ENDPOINTS.STATISTICS.SCANS.WEEKLY_HEATMAP}?${queryParams.toString()}`
-        : ENDPOINTS.STATISTICS.SCANS.WEEKLY_HEATMAP;
-
-    return await apiClient<ScanHeatmapItem[]>(url);
+export const getScanActivity = async (
+    periodType: 'week' | 'month' = 'week'
+): Promise<ScanActivityResponse> => {
+    const url = `${ENDPOINTS.STATISTICS.SCANS.ACTIVITY}?periodType=${periodType}`;
+    return await apiClient<ScanActivityResponse>(url);
 };
 
 // Get scan performance

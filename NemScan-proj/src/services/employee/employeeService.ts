@@ -1,5 +1,5 @@
 import { apiClient } from '../../api/client';
-import { ENDPOINTS } from '../../api/endoints';
+import { ENDPOINTS } from '../../api/endpoints';
 import { EmployeeProfile } from './interfaces';
 
 // Get full employee profile

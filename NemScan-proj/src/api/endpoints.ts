@@ -10,7 +10,7 @@ export const ENDPOINTS = {
     },
     STATISTICS: {
         SCANS: {
-            WEEKLY_HEATMAP: '/api/statistics/scans/weekly-heatmap',
+            ACTIVITY: '/api/statistics/scans/activity',
             PERFORMANCE: '/api/statistics/scans/performance',
             PRODUCTGROUP_DISTRIBUTION: '/api/statistics/scans/product-group-distribution',
             LOW_STOCK_PRODUCTS: '/api/statistics/products/low-stock',
@@ -20,7 +20,6 @@ export const ENDPOINTS = {
     },
     REPORT: {
         TOP_FAILED: '/api/report/top-3-most-failed-products',
-        ERROR_PATTERNS: '/api/report/error-patterns',
         TODAY_COUNT: '/api/report/reports/count-today',
     },
 };

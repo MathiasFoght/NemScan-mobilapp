@@ -50,7 +50,7 @@ export const LowStockProducts: React.FC<LowStockProductsProps> = ({ minThreshold
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>Produkter med lav lagerbeholdning</Text>
+                    <Text style={styles.title}>Status for lav lagerbeholdning</Text>
                 </View>
                 <View style={styles.emptyContainer}>
                     <Text style={styles.emptyText}>{error}</Text>
@@ -63,7 +63,7 @@ export const LowStockProducts: React.FC<LowStockProductsProps> = ({ minThreshold
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>Produkter med lav lagerbeholdning</Text>
+                    <Text style={styles.title}>Status for lav lagerbeholdning</Text>
                 </View>
                 <View style={styles.emptyContainer}>
                     <Text style={styles.emptyText}>Alle produkter har tilstrækkelig lagerbeholdning</Text>
@@ -75,7 +75,7 @@ export const LowStockProducts: React.FC<LowStockProductsProps> = ({ minThreshold
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>Produkter med lav lagerbeholdning</Text>
+                <Text style={styles.title}>Status for lav lagerbeholdning</Text>
             </View>
 
             <ScrollView style={styles.listContainer} showsVerticalScrollIndicator={false}>
@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '700',
         color: '#1C1C1E',
+        marginBottom: 16,
     },
     listContainer: { maxHeight: 400 },
     productCard: {

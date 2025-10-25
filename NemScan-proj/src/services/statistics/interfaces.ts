@@ -4,6 +4,12 @@ export interface ScanHeatmapItem {
     count: number;
 }
 
+export interface ScanActivityResponse {
+    periodType: 'week' | 'month';
+    heatmap: ScanHeatmapItem[];
+    trend: { dayOrDate: string; rollingAverage: number; count: number }[];
+}
+
 export interface ScanPerformance {
     totalScans: number;
     successfulScans: number;

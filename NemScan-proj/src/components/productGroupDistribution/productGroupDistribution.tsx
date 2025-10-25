@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { ProductGroupStat } from '@/src/services/statistics/interfaces';
 import { getProductGroupDistribution } from "@/src/services/statistics/statisticsService";
 import { colors } from "@/src/shared/global/colors";
+import AnimatedBar from "@/src/components/animatedBar/animatedBar";
 
 const COLORS = [colors.primary, '#50E3C2', '#F5A623', '#FF6B9D', '#9013FE', '#7ED321'];
 
@@ -28,7 +29,7 @@ export const ProductGroupDistribution: React.FC = () => {
     if (error) {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Kategorier der scannes mest</Text>
+                <Text style={styles.title}>Mest scannede</Text>
                 <View style={styles.emptyContainer}>
                     <Text style={styles.emptyText}>{error}</Text>
                 </View>
@@ -39,7 +40,7 @@ export const ProductGroupDistribution: React.FC = () => {
     if (groups.length === 0) {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Kategorier der scannes mest</Text>
+                <Text style={styles.title}>Mest scannede</Text>
                 <View style={styles.emptyContainer}>
                     <Text style={styles.emptyText}>Ingen data tilgængelig</Text>
                 </View>
@@ -49,7 +50,7 @@ export const ProductGroupDistribution: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Kategorier der scannes mest</Text>
+            <Text style={styles.title}>Mest scannede</Text>
 
             <View style={styles.chartContainer}>
                 {groups.map((group, index) => {
@@ -60,17 +61,13 @@ export const ProductGroupDistribution: React.FC = () => {
                                 <Text style={styles.groupName}>
                                     {group.groupName.charAt(0).toUpperCase() + group.groupName.slice(1)}
                                 </Text>
-                                <Text style={styles.percentage}>{group.percentage.toFixed(1)}%</Text>
                             </View>
 
-                            <View style={styles.barBackground}>
-                                <View
-                                    style={[
-                                        styles.barFill,
-                                        { width: `${group.percentage}%`, backgroundColor: color },
-                                    ]}
-                                />
-                            </View>
+                            <AnimatedBar
+                                percentage={group.percentage}
+                                color={color}
+                                duration={1200}
+                            />
 
                             <Text style={styles.scanCount}>{group.scanCount} scanninger</Text>
                         </View>
@@ -116,29 +113,9 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#1C1C1E',
     },
-    percentage: {
-        fontSize: 16,
-        fontWeight: '700',
-        color: colors.primary,
-    },
-    barBackground: {
-        height: 12,
-        backgroundColor: '#F2F2F7',
-        borderRadius: 6,
-        overflow: 'hidden',
-    },
-    barFill: {
-        height: '100%',
-        borderRadius: 6,
-    },
     scanCount: {
         fontSize: 12,
         color: '#8E8E93',
-    },
-    loadingContainer: {
-        height: 200,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     emptyContainer: {
         height: 150,

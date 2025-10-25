@@ -4,9 +4,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { AlertCircle } from 'lucide-react-native';
 import { getTopFailedProducts } from '@/src/services/report/reportService';
 import { FrequentErrorProduct } from '@/src/services/report/interfaces';
-import styles from './topFailedProductsCard.styles';
+import styles from './top3ProductsWithReportsCard.styles';
 
-export const TopFailedProductsCard: React.FC = () => {
+export const Top3ProductsWithReportsCard: React.FC = () => {
     const [topProducts, setTopProducts] = useState<FrequentErrorProduct[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -36,7 +36,7 @@ export const TopFailedProductsCard: React.FC = () => {
                     <View style={styles.iconWrapper}>
                         <AlertCircle size={20} color="#fff" strokeWidth={2.5} />
                     </View>
-                    <Text style={styles.title}>Fejlplagede{'\n'}varer</Text>
+                    <Text style={styles.title}>Rapporterings{'\n'}varer</Text>
                 </View>
 
                 {loading ? (

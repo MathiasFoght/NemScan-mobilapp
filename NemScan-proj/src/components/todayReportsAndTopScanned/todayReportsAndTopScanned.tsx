@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { getTodayReportCount } from "@/src/services/report/reportService";
 import { getTopScannedProductToday } from "@/src/services/statistics/statisticsService";
+import { Frown } from "lucide-react-native";
+import CountUp from "@/src/components/countUp/countUp";
 
 export const TodayReportsAndTopScanned: React.FC = () => {
     const [todayReports, setTodayReports] = useState<number>(0);
@@ -16,8 +18,14 @@ export const TodayReportsAndTopScanned: React.FC = () => {
                     getTodayReportCount(),
                     getTopScannedProductToday(),
                 ]);
+
                 setTodayReports(reports.totalReportsToday);
-                setMostScannedProduct(topProduct);
+
+                if (!topProduct || topProduct.scanCount === 0) {
+                    setMostScannedProduct(null);
+                } else {
+                    setMostScannedProduct(topProduct);
+                }
             } catch (err) {
                 console.error('Error loading key metrics:', err);
                 setError('Kunne ikke hente data');
@@ -37,14 +45,27 @@ export const TodayReportsAndTopScanned: React.FC = () => {
 
     return (
         <View style={styles.container}>
+            {/* Dagens rapporter */}
             <View style={styles.card}>
                 <Text style={styles.label}>Dagens rapporter</Text>
-                <Text style={styles.value}>{todayReports}</Text>
+                <CountUp
+                    value={todayReports}
+                    duration={2000}
+                    delay={200}
+                    decimals={0}
+                    style={styles.value}
+                />
             </View>
 
-            {mostScannedProduct && (
+            {/* Mest scannede produkt */}
+            {!mostScannedProduct || !mostScannedProduct.productName || mostScannedProduct.scanCount === 0 ? (
+                <View style={[styles.card, styles.centered]}>
+                    <Frown size={42} color="#8E8E93" strokeWidth={1.6} />
+                    <Text style={styles.noDataText}>Ingen scanninger</Text>
+                </View>
+            ) : (
                 <View style={styles.card}>
-                    <Text style={styles.label}>Mest scannede produkt</Text>
+                    <Text style={styles.label}>Flest scanninger</Text>
                     <Text style={styles.productName}>{mostScannedProduct.productName}</Text>
                     <Text style={styles.scanCount}>{mostScannedProduct.scanCount} scanninger</Text>
                 </View>
@@ -63,7 +84,6 @@ const styles = StyleSheet.create({
     centered: {
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: 120,
     },
     card: {
         flex: 1,
@@ -75,6 +95,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.05,
         shadowRadius: 8,
         elevation: 2,
+        minHeight: 110,
     },
     label: {
         fontSize: 12,
@@ -96,6 +117,12 @@ const styles = StyleSheet.create({
     scanCount: {
         fontSize: 14,
         color: '#8E8E93',
+    },
+    noDataText: {
+        fontSize: 15,
+        color: '#8E8E93',
+        fontWeight: '500',
+        marginTop: 8,
     },
     errorText: {
         color: '#FF3B30',

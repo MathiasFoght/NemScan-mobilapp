@@ -5,11 +5,10 @@ import { useTranslation } from 'react-i18next';
 import { getEmployeeProfile } from '@/src/services/employee/employeeService';
 import { Header } from '@/src/ui/header/header';
 import { Toast } from '@/src/components/toast/toast';
-import { WeeklyHeatmapChart } from '@/src/components/weeklyHeatmapChart/weeklyHeatmapChart';
 import { PerformanceCard } from '@/src/components/performanceCard/performanceCard';
-import { TopFailedProductsCard } from '@/src/components/topFailedProductsCard/topFailedProductsCard';
-import { ErrorPatternsCard } from '@/src/components/errorPatternsCard/errorPatternsCard';
+import { Top3ProductsWithReportsCard } from '@/src/components/top3ProductsWithReportsCard/top3ProductsWithReportsCard';
 import { styles } from '@/src/styles/screens/homeScreen.styles';
+import { ScanActivityChart } from "@/src/components/scanActivityChart/scanActivityChart";
 
 export default function HomeScreen() {
     const { t } = useTranslation();
@@ -52,14 +51,12 @@ export default function HomeScreen() {
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             >
                 <View style={styles.content}>
-                    <WeeklyHeatmapChart />
+                    <ScanActivityChart />
 
                     <View style={styles.cardsRow}>
                         <PerformanceCard />
-                        <TopFailedProductsCard />
+                        <Top3ProductsWithReportsCard />
                     </View>
-
-                    <ErrorPatternsCard />
                 </View>
             </ScrollView>
         </View>
