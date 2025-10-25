@@ -1,35 +1,43 @@
-import {useCallback, useState} from 'react';
-import { View, Text } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { View, ScrollView, RefreshControl } from 'react-native';
+import { useFocusEffect } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { getEmployeeProfile } from '@/src/services/employee/employeeService';
 import { Header } from '@/src/ui/header/header';
 import { Toast } from '@/src/components/toast/toast';
-import styles from "@/src/styles/screens/homeScreen.styles";
-import '@/i18n/i18n.config';
-import { useTranslation } from "react-i18next";
-import {useFocusEffect} from "expo-router";
+import { PerformanceCard } from '@/src/components/performanceCard/performanceCard';
+import { Top3ProductsWithReportsCard } from '@/src/components/top3ProductsWithReportsCard/top3ProductsWithReportsCard';
+import { styles } from '@/src/styles/screens/homeScreen.styles';
+import { ScanActivityChart } from "@/src/components/scanActivityChart/scanActivityChart";
 
 export default function HomeScreen() {
+    const { t } = useTranslation();
     const [employee, setEmployee] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const { t } = useTranslation();
+    const [refreshing, setRefreshing] = useState(false);
 
-    useFocusEffect(
-        useCallback(() => {
-            const fetchProfile = async () => {
-                try {
-                    const profile = await getEmployeeProfile();
-                    setEmployee(profile);
-                    setError(null);
-                } catch (err: any) {
-                    setError(t("employeeProfile.errors.errorFetchingEmployee"));
-                } finally {
-                    setLoading(false);
-                }
-            };
-            fetchProfile();
-        }, [t])
-    );
+    const fetchData = useCallback(async () => {
+        setLoading(true);
+        try {
+            const profile = await getEmployeeProfile();
+            setEmployee(profile);
+            setError(null);
+        } catch (err) {
+            console.error('Error loading data:', err);
+            setError(t('toastErrors.errorFetching'));
+        } finally {
+            setLoading(false);
+        }
+    }, [t]);
+
+    useFocusEffect(useCallback(() => { fetchData(); }, [fetchData]));
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await fetchData();
+        setRefreshing(false);
+    };
 
     return (
         <View style={styles.container}>
@@ -38,9 +46,19 @@ export default function HomeScreen() {
 
             {employee && <Header {...employee} />}
 
-            <View style={styles.content}>
-                <Text>Home Screen</Text>
-            </View>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            >
+                <View style={styles.content}>
+                    <ScanActivityChart />
+
+                    <View style={styles.cardsRow}>
+                        <PerformanceCard />
+                        <Top3ProductsWithReportsCard />
+                    </View>
+                </View>
+            </ScrollView>
         </View>
     );
 }
