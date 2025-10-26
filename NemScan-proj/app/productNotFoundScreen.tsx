@@ -1,4 +1,4 @@
-import {View, Text, TextInput, ScrollView, TouchableOpacity, ActivityIndicator} from "react-native";
+import {View, Text, TextInput, ScrollView, TouchableOpacity, ActivityIndicator, Image} from "react-native";
 import { router } from "expo-router";
 import { useState, useEffect } from "react";
 import {MaterialIcons} from "@expo/vector-icons";
@@ -128,7 +128,7 @@ export default function productNotFoundScreen() {
                     <Text style={styles.headerTitle}>Product Not Found</Text>
                     <View style={styles.placeholder} />
                 </View>
-                <Text style={styles.infoText}>
+                <Text style={styles.subText}>
                     Search and select the product from the list below.
                 </Text>
                 <View style={styles.searchContainer}>
@@ -169,6 +169,17 @@ export default function productNotFoundScreen() {
                                 ]}
                                 onPress={() => handleSelectProduct(item.productNumber)}
                             >
+                                {item.imageUrl ? (
+                                    <Image
+                                        source={{ uri: item.imageUrl }}
+                                        style={styles.productImage}
+                                        resizeMode="contain"
+                                    />
+                                ) : (
+                                    <View style={styles.productImagePlaceholder}>
+                                        <MaterialIcons name="image" size={24} color={colors.inactive} />
+                                    </View>
+                                )}
                                 <Text style={[
                                     styles.productName,
                                     selectedProduct === item.productNumber && styles.productNameSelected

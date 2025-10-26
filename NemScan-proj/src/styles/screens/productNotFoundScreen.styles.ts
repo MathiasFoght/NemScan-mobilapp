@@ -28,12 +28,6 @@ export default StyleSheet.create({
     placeholder: {
         width: 40,
     },
-    infoText: {
-        marginTop: 12,
-        fontSize: 16,
-        color: colors.inactive,
-        textAlign: 'center',
-    },
     searchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -92,6 +86,21 @@ export default StyleSheet.create({
         shadowRadius: 4,
         elevation: 3,
     },
+    productImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 8,
+        marginRight: 12,
+    },
+    productImagePlaceholder: {
+        width: 50,
+        height: 50,
+        borderRadius: 8,
+        marginRight: 12,
+        backgroundColor: '#F5F7FA',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     productName: {
         fontSize: 16,
         fontWeight: '500',
@@ -114,6 +123,12 @@ export default StyleSheet.create({
         color: colors.primary,
         marginTop: 16,
         marginBottom: 8,
+    },
+    subText: {
+        marginTop: 12,
+        fontSize: 16,
+        color: colors.inactive,
+        textAlign: 'center',
     },
     emptyState: {
         alignItems: 'center',
