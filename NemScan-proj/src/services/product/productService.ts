@@ -4,9 +4,7 @@ import { ProductEmployee, ProductCustomer, CustomerProductResponse } from "../pr
 import {getDeviceId} from "@/src/utils/helpers/getDeviceId";
 
 // Get product by barcode from customer
-export const getProductCustomer = async (
-    barcode: string
-): Promise<ProductCustomer> => {
+export const getProductCustomer = async (barcode: string): Promise<ProductCustomer> => {
     const url = ENDPOINTS.PRODUCT.CUSTOMER_PRODUCT.replace("{barcode}", barcode);
     const deviceId = await getDeviceId();
 
@@ -22,9 +20,7 @@ export const getProductCustomer = async (
 };
 
 // Get product by barcode from employee
-export const getProductEmployee = async (
-    barcode: string
-): Promise<ProductEmployee> => {
+export const getProductEmployee = async (barcode: string): Promise<ProductEmployee> => {
     const url = ENDPOINTS.PRODUCT.EMPLOYEE_PRODUCT.replace("{barcode}", barcode);
     const deviceId = await getDeviceId();
 

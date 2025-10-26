@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {memo, useEffect, useRef, useState} from 'react';
 import {
     View,
     Text,
@@ -24,7 +24,7 @@ const periodMapping: { [key: string]: string } = {
     Aften: 'Evening',
 };
 
-export const ScanActivityChart: React.FC = () => {
+export const ScanActivityChartComponent: React.FC = () => {
     const { t } = useTranslation();
     const [data, setData] = useState<ScanActivityResponse | null>(null);
     const [chartData, setChartData] = useState<any[]>([]);
@@ -32,9 +32,11 @@ export const ScanActivityChart: React.FC = () => {
     const [selectedPeriod, setSelectedPeriod] = useState<string>('Alle');
     const [loading, setLoading] = useState(true);
     const [periodType, setPeriodType] = useState<'week' | 'month'>('week');
+    const [isTransitioning, setIsTransitioning] = useState(false);
 
-    const opacityAnim = useRef(new Animated.Value(1)).current;
     const scaleAnim = useRef(new Animated.Value(1)).current;
+    const opacityAnim = useRef(new Animated.Value(1)).current;
+    const filterHeightAnim = useRef(new Animated.Value(1)).current;
 
     const screenWidth = Dimensions.get('window').width;
 
@@ -102,40 +104,114 @@ export const ScanActivityChart: React.FC = () => {
     }, [periodType]);
 
     const animateChange = () => {
+        setIsTransitioning(true);
+
         Animated.parallel([
-            Animated.sequence([
-                Animated.timing(opacityAnim, {
-                    toValue: 0.3,
-                    duration: 200,
-                    easing: Easing.ease,
-                    useNativeDriver: true,
+            Animated.timing(opacityAnim, {
+                toValue: 0,
+                duration: 150,
+                useNativeDriver: true,
+            }),
+            Animated.timing(scaleAnim, {
+                toValue: 0.95,
+                duration: 150,
+                easing: Easing.ease,
+                useNativeDriver: true,
+            }),
+        ]).start(() => {
+            // Chart data opdateres her - efter fade out
+            setTimeout(() => {
+                setIsTransitioning(false);
+                Animated.parallel([
+                    Animated.timing(opacityAnim, {
+                        toValue: 1,
+                        duration: 200,
+                        useNativeDriver: true,
+                    }),
+                    Animated.spring(scaleAnim, {
+                        toValue: 1,
+                        friction: 6,
+                        tension: 40,
+                        useNativeDriver: true,
+                    }),
+                ]).start();
+            }, 50);
+        });
+    };
+
+    const animatePeriodTypeChange = (newType: 'week' | 'month') => {
+        setIsTransitioning(true);
+        setChartData([]);
+
+        if (newType === 'month') {
+            Animated.parallel([
+                Animated.timing(filterHeightAnim, {
+                    toValue: 0,
+                    duration: 250,
+                    easing: Easing.inOut(Easing.ease),
+                    useNativeDriver: false,
                 }),
                 Animated.timing(opacityAnim, {
-                    toValue: 1,
-                    duration: 400,
-                    easing: Easing.out(Easing.cubic),
-                    useNativeDriver: true,
-                }),
-            ]),
-            Animated.sequence([
-                Animated.timing(scaleAnim, {
-                    toValue: 0.95,
+                    toValue: 0,
                     duration: 200,
-                    easing: Easing.ease,
                     useNativeDriver: true,
                 }),
-                Animated.spring(scaleAnim, {
-                    toValue: 1,
-                    friction: 7,
-                    tension: 40,
+            ]).start(() => {
+                setTimeout(() => {
+                    setIsTransitioning(false);
+                    Animated.parallel([
+                        Animated.timing(opacityAnim, {
+                            toValue: 1,
+                            duration: 250,
+                            useNativeDriver: true,
+                        }),
+                        Animated.spring(scaleAnim, {
+                            toValue: 1,
+                            friction: 6,
+                            tension: 40,
+                            useNativeDriver: true,
+                        }),
+                    ]).start();
+                }, 50);
+            });
+        }
+        else {
+            Animated.parallel([
+                Animated.timing(opacityAnim, {
+                    toValue: 0,
+                    duration: 150,
                     useNativeDriver: true,
                 }),
-            ]),
-        ]).start();
+            ]).start(() => {
+                setTimeout(() => {
+                    setIsTransitioning(false);
+                    Animated.parallel([
+                        Animated.timing(filterHeightAnim, {
+                            toValue: 1,
+                            duration: 250,
+                            easing: Easing.inOut(Easing.ease),
+                            useNativeDriver: false,
+                        }),
+                        Animated.timing(opacityAnim, {
+                            toValue: 1,
+                            duration: 250,
+                            delay: 100,
+                            useNativeDriver: true,
+                        }),
+                        Animated.spring(scaleAnim, {
+                            toValue: 1,
+                            friction: 6,
+                            tension: 40,
+                            useNativeDriver: true,
+                        }),
+                    ]).start();
+                }, 50);
+            });
+        }
     };
 
     useEffect(() => {
-        if (!data) return;
+        if (!data || isTransitioning) return;
 
         if (periodType === 'month' && data.trend?.length) {
             const trendData = data.trend;
@@ -182,19 +258,16 @@ export const ScanActivityChart: React.FC = () => {
                                 .toLocaleString('da-DK', { month: 'short' });
                             dayLabel = `${Number(day)} ${monthName}`;
                         }
-                        // Hvis det ligner "25/10" eller "25.10"
                         else if (/^\d{1,2}[\/\.]\d{1,2}$/.test(dateStr)) {
                             const [day, month] = dateStr.split(/[\/\.]/);
                             const monthName = new Date(2025, Number(month) - 1)
                                 .toLocaleString('da-DK', { month: 'short' });
                             dayLabel = `${Number(day)} ${monthName}`;
                         }
-                        // fallback
                         else {
                             dayLabel = dateStr;
                         }
                     }
-
 
                     const textShiftX =
                         text && text.length === 1 ? 0 :
@@ -298,10 +371,10 @@ export const ScanActivityChart: React.FC = () => {
                 })
             );
         }
-    }, [data, selectedPeriod, periodType]);
+    }, [data, selectedPeriod, periodType, isTransitioning]);
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { height: 440, overflow: 'hidden' }]}>
             <View style={styles.header}>
                 <Text style={styles.title}>
                     {periodType === 'week' ? 'Ugentlig Aktivitet' : 'Månedlig Aktivitet'}
@@ -318,7 +391,8 @@ export const ScanActivityChart: React.FC = () => {
                             if (periodType !== 'week') {
                                 setPeriodType('week');
                                 setSelectedPeriod('Alle');
-                                animateChange();
+                                animatePeriodTypeChange('week');
+                                setTimeout(() => setPeriodType('week'), 150);
                             }
                         }}
                     >
@@ -340,7 +414,8 @@ export const ScanActivityChart: React.FC = () => {
                         onPress={() => {
                             if (periodType !== 'month') {
                                 setPeriodType('month');
-                                animateChange();
+                                animatePeriodTypeChange('month');
+                                setTimeout(() => setPeriodType('month'), 150);
                             }
                         }}
                     >
@@ -356,49 +431,60 @@ export const ScanActivityChart: React.FC = () => {
                 </View>
             </View>
 
-            <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                style={{
-                    marginBottom: 10,
-                    opacity: periodType === 'week' ? 1 : 0,
-                }}
-                pointerEvents={periodType === 'week' ? 'auto' : 'none'}
-            >
-                {periods.map((period) => (
-                    <TouchableOpacity
-                        key={period}
-                        onPress={() => {
-                            if (selectedPeriod !== period) {
-                                setSelectedPeriod(period);
-                                animateChange();
-                            }
-                        }}
-                        style={[
-                            styles.filterButton,
-                            selectedPeriod === period && styles.filterButtonActive,
-                        ]}
+            <View style={{ minHeight: 50, marginBottom: 10 }}>
+                <Animated.View
+                    style={{
+                        maxHeight: filterHeightAnim.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [0, 100],
+                        }),
+                        opacity: filterHeightAnim,
+                        overflow: 'hidden',
+                    }}
+                >
+                    <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        pointerEvents={periodType === 'week' ? 'auto' : 'none'}
                     >
-                        <Text
-                            style={[
-                                styles.filterText,
-                                selectedPeriod === period && styles.filterTextActive,
-                            ]}
-                        >
-                            {period}
-                        </Text>
-                    </TouchableOpacity>
-                ))}
-            </ScrollView>
+                        {periods.map((period) => (
+                            <TouchableOpacity
+                                key={period}
+                                onPress={() => {
+                                    if (selectedPeriod !== period) {
+                                        setSelectedPeriod(period);
+                                        animateChange();
+                                    }
+                                }}
+                                style={[
+                                    styles.filterButton,
+                                    selectedPeriod === period && styles.filterButtonActive,
+                                ]}
+                            >
+                                <Text
+                                    style={[
+                                        styles.filterText,
+                                        selectedPeriod === period && styles.filterTextActive,
+                                    ]}
+                                >
+                                    {period}
+                                </Text>
+                            </TouchableOpacity>
+                        ))}
+                    </ScrollView>
+                </Animated.View>
+            </View>
 
             <Animated.View
                 style={[
                     styles.chartWrapper,
                     {
-                        opacity: opacityAnim,
                         transform: [{ scale: scaleAnim }],
+                        opacity: opacityAnim,
+                        minHeight: 240,
                     },
                 ]}
+                pointerEvents="box-none"
             >
                 {!chartData.length ? (
                     <Text style={styles.dateRange}>Ingen data tilgængelig</Text>
@@ -481,5 +567,5 @@ export const ScanActivityChart: React.FC = () => {
         </View>
     );
 };
-
+export const ScanActivityChart = memo(ScanActivityChartComponent);
 export default ScanActivityChart;

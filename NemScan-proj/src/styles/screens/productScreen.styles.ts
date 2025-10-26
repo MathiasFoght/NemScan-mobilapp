@@ -9,17 +9,17 @@ export const styles = StyleSheet.create({
         backgroundColor: colors.white,
     },
     topSection: {
-        flexDirection: "row", // Arrange button and image side by side
-        alignItems: "stretch", // Vertically center the button and image
-        justifyContent: "flex-start", // Align to the left
-        height: height * 0.35, // Reduced height for better balance
+        flexDirection: "row",
+        alignItems: "stretch",
+        justifyContent: "flex-start",
+        height: height * 0.35,
         backgroundColor: colors.primary,
-        paddingHorizontal: 20, // Add padding for spacing
-        paddingVertical: 70, // Add vertical padding
+        paddingHorizontal: 20,
+        paddingVertical: 70,
         position: "relative",
     },
     buttonContainer: {
-        marginRight: 65, // Space between button and image
+        marginRight: 65,
     },
     gradientOverlay: {
         position: "absolute",
@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
         opacity: 0.3,
     },
     imageContainer: {
-        width: width * 0.4, // Adjust image container size
+        width: width * 0.4,
         height: width * 0.4,
         borderRadius: 20,
         backgroundColor: colors.white,
