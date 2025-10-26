@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { TrendingUp, TrendingDown, Zap } from 'lucide-react-native';
 import { getScanPerformance } from '@/src/services/statistics/statisticsService';
 import styles from './performanceCard.styles';
-import CountUp from "@/src/components/countUp/countUp";
+import { CountUp } from "@/src/components/countUp/countUp";
 
 export const PerformanceCard: React.FC = () => {
     const [loading, setLoading] = useState(true);

@@ -5,7 +5,7 @@ import i18n from "i18next";
 import Button from "@/src/ui/button/button";
 import { Avatar } from "@/src/ui/avatar/avatar";
 import { colors } from "@/src/shared/global/colors";
-import { useCallback, useState } from "react";
+import {useCallback, useEffect, useState} from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { getEmployeeProfile } from "@/src/services/employee/employeeService";
 import { Toast } from "@/src/components/toast/toast";
@@ -13,6 +13,7 @@ import { router, useFocusEffect } from "expo-router";
 import styles from "@/src/styles/screens/settingsScreen.styles";
 import { useTranslation } from "react-i18next";
 import { useProfileImageActions } from "@/src/hooks/useProfileImageActions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SettingsScreen() {
     const { logout } = useAuth();
@@ -25,7 +26,15 @@ export default function SettingsScreen() {
         type: null,
         message: "",
     });
+    const [scannerSoundEnabled, setScannerSoundEnabled] = useState(true);
     const { handleProfileImageUpload, handleResetProfileImage } = useProfileImageActions(setEmployee, setToast);
+
+    useEffect(() => {
+        (async () => {
+            const storedValue = await AsyncStorage.getItem("scannerSoundEnabled");
+            if (storedValue !== null) setScannerSoundEnabled(storedValue === "true");
+        })();
+    }, []);
 
     useFocusEffect(
         useCallback(() => {
@@ -43,6 +52,11 @@ export default function SettingsScreen() {
             fetchProfile();
         }, [t])
     );
+
+    const toggleScannerSound = async (value: boolean) => {
+        setScannerSoundEnabled(value);
+        await AsyncStorage.setItem("scannerSoundEnabled", value.toString());
+    };
 
     const toggleLanguage = (value: boolean) => {
         const newLang = value ? "da" : "en";
@@ -121,7 +135,26 @@ export default function SettingsScreen() {
                             ios_backgroundColor="#D1D5DB"
                         />
                     </View>
-
+                    <View style={styles.settingsItem}>
+                        <View style={styles.settingsItemLeft}>
+                            <View style={styles.iconContainer}>
+                                <MaterialIcons name="volume-up" size={22} color={colors.primary} />
+                            </View>
+                            <View>
+                                <Text style={styles.settingsItemTitle}>Lyd</Text>
+                                <Text style={styles.settingsItemSubtitle}>
+                                    Lyd ved scanning
+                                </Text>
+                            </View>
+                        </View>
+                        <Switch
+                            value={scannerSoundEnabled}
+                            onValueChange={toggleScannerSound}
+                            trackColor={{ false: "#D1D5DB", true: colors.secondary }}
+                            thumbColor={colors.white}
+                            ios_backgroundColor="#D1D5DB"
+                        />
+                    </View>
                     <View style={styles.settingsItem}>
                         <View style={styles.settingsItemLeft}>
                             <View style={styles.iconContainer}>

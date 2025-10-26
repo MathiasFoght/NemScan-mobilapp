@@ -8,9 +8,11 @@ import { Toast } from '@/src/components/toast/toast';
 import { PerformanceCard } from '@/src/components/performanceCard/performanceCard';
 import { Top3ProductsWithReportsCard } from '@/src/components/top3ProductsWithReportsCard/top3ProductsWithReportsCard';
 import { styles } from '@/src/styles/screens/homeScreen.styles';
-import { ScanActivityChart } from "@/src/components/scanActivityChart/scanActivityChart";
+import { ScanActivityChart } from '@/src/components/scanActivityChart/scanActivityChart';
 
-export default function HomeScreen() {
+const MemoizedScanActivityChart = React.memo(ScanActivityChart);
+
+export default function DashboardScreen() {
     const { t } = useTranslation();
     const [employee, setEmployee] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -31,7 +33,11 @@ export default function HomeScreen() {
         }
     }, [t]);
 
-    useFocusEffect(useCallback(() => { fetchData(); }, [fetchData]));
+    useFocusEffect(
+        useCallback(() => {
+            fetchData();
+        }, [fetchData])
+    );
 
     const onRefresh = async () => {
         setRefreshing(true);
@@ -48,10 +54,14 @@ export default function HomeScreen() {
 
             <ScrollView
                 showsVerticalScrollIndicator={false}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
             >
                 <View style={styles.content}>
-                    <ScanActivityChart />
+                    <View collapsable={false} style={{ overflow: 'hidden', zIndex: 1 }}>
+                        <MemoizedScanActivityChart />
+                    </View>
 
                     <View style={styles.cardsRow}>
                         <PerformanceCard />

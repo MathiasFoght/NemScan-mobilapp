@@ -13,11 +13,10 @@ import Scanner from "@/src/components/scanner/scanner";
 import { getProductCustomer } from "@/src/services/product/productService";
 import { useFocusEffect } from "@react-navigation/native";
 
-export default function Index() {
+export default function StartScreen() {
     const { t } = useTranslation();
     const { userType } = useAuth();
     const { setCustomerProduct, clearProducts } = useProduct();
-
     const [scanning, setScanning] = useState(false);
     const [permission, requestPermission] = useCameraPermissions();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);

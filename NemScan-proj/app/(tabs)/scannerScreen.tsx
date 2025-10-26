@@ -17,7 +17,7 @@ import { ProductEmployee, ProductCustomer } from "@/src/services/product/interfa
 export default function ScannerScreen() {
     const { t } = useTranslation();
     const { userType } = useAuth();
-    const { setCustomerProduct, setEmployeeProduct, employeeProduct } = useProduct();
+    const { setCustomerProduct, setEmployeeProduct } = useProduct();
 
     const [scanning, setScanning] = useState(false);
     const [permission, requestPermission] = useCameraPermissions();
@@ -35,9 +35,6 @@ export default function ScannerScreen() {
         if (!permission) requestPermission();
     }, [permission]);
 
-    const handleEmployeeLogin = () => {
-        router.push("/loginScreen");
-    };
 
     const handleScanned = async (barcode: string) => {
         if (scanning) return false;
@@ -92,9 +89,6 @@ export default function ScannerScreen() {
         }
     };
 
-    // Type-guard for EmployeeProduct (hvis du vil vise lagerbeholdning her)
-    const isEmployeeProduct = (product: ProductCustomer | ProductEmployee): product is ProductEmployee =>
-        (product as ProductEmployee).currentStockQuantity !== undefined;
 
     if (!permission) return <Text>Anmoder om kamera adgang...</Text>;
     if (!permission.granted) return <Text>Ingen adgang til kameraet</Text>;
@@ -180,13 +174,6 @@ export default function ScannerScreen() {
                         <Text style={styles.instructionTitle}>Scan stregkode</Text>
                         <Text style={styles.instructionText}>Placer stregkoden inden for rammen.</Text>
                     </View>
-                </View>
-
-                <View style={styles.footer}>
-                    <TouchableOpacity style={styles.employeeButton} onPress={handleEmployeeLogin}>
-                        <MaterialIcons name="person-outline" size={20} color={colors.primary} />
-                        <Text style={styles.employeeText}>{t("login.employeeLogin")}</Text>
-                    </TouchableOpacity>
                 </View>
             </View>
         </CameraPermissionWrapper>
