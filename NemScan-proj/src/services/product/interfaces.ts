@@ -1,7 +1,11 @@
 export interface ProductCustomer {
+    uid: string;
+    deviceId: string;
+    productNumber: string;
     productName: string;
-    currentSalesPrice: number;
     productGroup: string;
+    productBrand: string;
+    currentSalesPrice: number;
     campaigns: Campaigns[];
 }
 
@@ -20,6 +24,5 @@ export interface Campaigns {
 }
 
 export interface ProductEmployee extends ProductCustomer {
-    productNumber: string;
     currentStockQuantity: number;
 }

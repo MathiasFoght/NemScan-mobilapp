@@ -1,18 +1,42 @@
-import { apiClient } from '../../api/client';
-import { ENDPOINTS } from '../../api/endpoints';
-import {ProductEmployee, ProductCustomer, CustomerProductResponse} from '../product/interfaces';
+import { apiClient } from "../../api/client";
+import { ENDPOINTS } from "../../api/endpoints";
+import { ProductEmployee, ProductCustomer, CustomerProductResponse } from "../product/interfaces";
+import {getDeviceId} from "@/src/utils/helpers/getDeviceId";
 
 // Get product by barcode from customer
-export const getProductCustomer = async (barcode: string): Promise<ProductCustomer> => {
+export const getProductCustomer = async (
+    barcode: string
+): Promise<ProductCustomer> => {
     const url = ENDPOINTS.PRODUCT.CUSTOMER_PRODUCT.replace("{barcode}", barcode);
-    const response = await apiClient<CustomerProductResponse>(url);
+    const deviceId = await getDeviceId();
+
+    const response = await apiClient<CustomerProductResponse>(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ deviceId }),
+    });
+
     return response.product;
 };
 
 // Get product by barcode from employee
-export const getProductEmployee = async (barcode: string): Promise<ProductEmployee> => {
+export const getProductEmployee = async (
+    barcode: string
+): Promise<ProductEmployee> => {
     const url = ENDPOINTS.PRODUCT.EMPLOYEE_PRODUCT.replace("{barcode}", barcode);
-    return await apiClient<ProductEmployee>(url);
+    const deviceId = await getDeviceId();
+
+    const response = await apiClient<ProductEmployee>(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ deviceId }),
+    });
+
+    return response;
 };
 
 // Get product image by barcode
