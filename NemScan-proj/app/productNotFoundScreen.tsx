@@ -10,14 +10,16 @@ import '@/i18n/i18n.config';
 import { getAllProducts } from "@/src/services/product/productService";
 import { ProductBasic } from "@/src/services/product/interfaces";
 import { createReport } from "@/src/services/report/reportService";
+import { Toast } from "@/src/components/toast/toast";
+import { useTranslation } from "react-i18next";
 
 export default function productNotFoundScreen() {
+    const { t } = useTranslation();
     const { userType } = useAuth();
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
     const [products, setProducts] = useState<ProductBasic[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
@@ -26,10 +28,8 @@ export default function productNotFoundScreen() {
                 setLoading(true);
                 const data = await getAllProducts();
                 setProducts(data);
-                setError(null);
             } catch (err) {
                 console.error("Failed to fetch products:", err);
-                setError("Kunne ikke hente produkter. Prøv igen.");
             } finally {
                 setLoading(false);
             }
@@ -45,10 +45,8 @@ export default function productNotFoundScreen() {
     const handleSelectProduct = (productNumber: string) => {
         if (selectedProduct === productNumber) {
             setSelectedProduct(null);
-            console.log("Product deselected");
         } else {
             setSelectedProduct(productNumber);
-            console.log("Selected product:", products.find(p => p.productNumber === productNumber));
         }
     };
 
@@ -63,84 +61,21 @@ export default function productNotFoundScreen() {
                     productName: product.name,
                     userRole: userType || "",
                 };
-
-                console.log("Sending report:", reportData);
                 
                 const response = await createReport(reportData);
-                
-                console.log("Report created successfully:", response);
                 
                 router.back();
             } catch (err) {
                 console.error("Failed to create report:", err);
-                setError("Kunne ikke oprette rapport. Prøv igen.");
             } finally {
                 setSubmitting(false);
             }
         }
     };
 
-    if (loading) {
-        return (
-            <View style={styles.container}>
-                <View style={styles.headerBar}>
-                    <Button
-                        onPress={router.back}
-                        icon={<MaterialIcons name="arrow-back-ios-new" size={24} color="#000" />}
-                        iconPosition="left"
-                        variant="simple"
-                        style={{ height: 40 }}
-                    />
-                    <Text style={styles.headerTitle}>Product Not Found</Text>
-                    <View style={styles.placeholder} />
-                </View>
-                <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="large" color={colors.primary} />
-                    <Text style={styles.loadingText}>Henter produkter...</Text>
-                </View>
-            </View>
-        );
-    }
-
-    if (error) {
-        return (
-            <View style={styles.container}>
-                <View style={styles.headerBar}>
-                    <Button
-                        onPress={router.back}
-                        icon={<MaterialIcons name="arrow-back-ios-new" size={24} color="#000" />}
-                        iconPosition="left"
-                        variant="simple"
-                        style={{ height: 40 }}
-                    />
-                    <Text style={styles.headerTitle}>Product Not Found</Text>
-                    <View style={styles.placeholder} />
-                </View>
-                <View style={styles.errorContainer}>
-                    <MaterialIcons name="error-outline" size={64} color={colors.important} />
-                    <Text style={styles.errorText}>{error}</Text>
-                    <Button
-                        onPress={() => {
-                            setLoading(true);
-                            setError(null);
-                            getAllProducts()
-                                .then(data => {
-                                    setProducts(data);
-                                })
-                                .catch(() => setError("Kunne ikke hente produkter. Prøv igen."))
-                                .finally(() => setLoading(false));
-                        }}
-                        title="Prøv igen"
-                        variant="primary"
-                        style={{ marginTop: 20 }}
-                    />
-                </View>
-            </View>
-        );
-    }
-
     return (
           <View style={styles.container}>
+            <Toast type="loading" message={t('common.loading')} visible={loading} />
                <View style={styles.headerBar}>
                     <Button
                         onPress={router.back}
@@ -155,6 +90,7 @@ export default function productNotFoundScreen() {
                 <Text style={styles.subText}>
                     Search and select the product from the list below.
                 </Text>
+                
                 <View style={styles.searchContainer}>
                     <MaterialIcons 
                         name="search" 
@@ -220,14 +156,15 @@ export default function productNotFoundScreen() {
                             </TouchableOpacity>
                         ))
                     ) : (
-                        <View style={styles.emptyState}>
-                            <MaterialIcons 
-                                name="search-off" 
-                                size={48} 
-                                color={colors.inactive} 
-                            />
-                            <Text style={styles.emptyText}>No products found</Text>
-                        </View>
+                          [1, 2, 3].map((index) => (
+                            <View key={index} style={styles.productItemSkeleton}>
+                                <View style={styles.skeletonImage} />
+                                <View style={styles.skeletonTextContainer}>
+                                    <View style={styles.skeletonText} />
+                                    <View style={styles.skeletonTextShort} />
+                                </View>
+                            </View>
+                        ))
                     )}
                 </ScrollView>
 
