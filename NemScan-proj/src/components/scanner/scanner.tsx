@@ -4,7 +4,7 @@ import { CameraView, BarcodeScanningResult } from "expo-camera";
 import * as Haptics from "expo-haptics";
 import { Audio } from "expo-av";
 import { ScannerProps } from "@/src/components/scanner/interfaces";
-import { styles } from "./scanner.styles";
+import styles from "./scanner.styles";
 
 export default function Scanner({ onScanned, paused }: ScannerProps) {
     const lastScanned = useRef<string | null>(null);

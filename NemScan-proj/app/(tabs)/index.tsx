@@ -12,7 +12,7 @@ import { ScanActivityChart } from '@/src/components/scanActivityChart/scanActivi
 
 const MemoizedScanActivityChart = React.memo(ScanActivityChart);
 
-export default function HomeScreen() {
+export default function DashboardScreen() {
     const { t } = useTranslation();
     const [employee, setEmployee] = useState<any>(null);
     const [loading, setLoading] = useState(true);

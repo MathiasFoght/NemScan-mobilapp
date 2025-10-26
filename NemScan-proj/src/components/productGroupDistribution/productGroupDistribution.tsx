@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { ProductGroupStat } from '@/src/services/statistics/interfaces';
 import { getProductGroupDistribution } from "@/src/services/statistics/statisticsService";
 import { colors } from "@/src/shared/global/colors";
 import AnimatedBar from "@/src/components/animatedBar/animatedBar";
+import styles from "./productGroupDistribution.styles";
 
 const COLORS = [colors.primary, '#50E3C2', '#F5A623', '#FF6B9D', '#9013FE', '#7ED321'];
 
@@ -77,53 +78,3 @@ export const ProductGroupDistribution: React.FC = () => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#FFFFFF',
-        borderRadius: 16,
-        padding: 16,
-        marginHorizontal: 16,
-        marginBottom: 16,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 8,
-        elevation: 2,
-    },
-    title: {
-        fontSize: 18,
-        fontWeight: '700',
-        color: '#1C1C1E',
-        marginBottom: 16,
-    },
-    chartContainer: {
-        gap: 18,
-    },
-    barItem: {
-        gap: 6,
-    },
-    barHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    groupName: {
-        fontSize: 15,
-        fontWeight: '600',
-        color: '#1C1C1E',
-    },
-    scanCount: {
-        fontSize: 12,
-        color: '#8E8E93',
-    },
-    emptyContainer: {
-        height: 150,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    emptyText: {
-        fontSize: 15,
-        color: '#8E8E93',
-    },
-});

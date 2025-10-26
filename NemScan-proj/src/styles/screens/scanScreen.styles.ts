@@ -85,7 +85,7 @@ export default StyleSheet.create({
         right: 0,
         alignItems: "center",
         paddingHorizontal: 40,
-        paddingVertical: 8, // Added to accommodate button without large gaps
+        paddingVertical: 8,
     },
     instructionBox: {
         backgroundColor: "rgba(255, 255, 255, 0.95)",
@@ -130,7 +130,7 @@ export default StyleSheet.create({
         borderColor: colors.primary,
         borderWidth: 2,
         gap: 8,
-        marginBottom: 12, // Small gap between button and instructionBox
+        marginBottom: 12,
     },
     manualEntryText: {
         fontSize: 16,
@@ -145,7 +145,6 @@ export default StyleSheet.create({
         paddingBottom: 50,
         paddingTop: 20,
         alignItems: "center",
-        // backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     employeeButton: {
         flexDirection: "row",
