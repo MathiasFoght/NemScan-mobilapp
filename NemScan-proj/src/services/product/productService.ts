@@ -1,6 +1,11 @@
 import { apiClient } from "../../api/client";
 import { ENDPOINTS } from "../../api/endpoints";
-import { ProductEmployee, ProductCustomer, CustomerProductResponse } from "../product/interfaces";
+import {
+    ProductEmployee,
+    ProductCustomer,
+    CustomerProductResponse,
+    EmployeeProductResponse
+} from "../product/interfaces";
 import {getDeviceId} from "@/src/utils/helpers/getDeviceId";
 
 // Get product by barcode from customer
@@ -28,7 +33,7 @@ export const getProductEmployee = async (
     const url = ENDPOINTS.PRODUCT.EMPLOYEE_PRODUCT.replace("{barcode}", barcode);
     const deviceId = await getDeviceId();
 
-    const response = await apiClient<ProductEmployee>(url, {
+    const response = await apiClient<EmployeeProductResponse>(url, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -36,7 +41,7 @@ export const getProductEmployee = async (
         body: JSON.stringify({ deviceId }),
     });
 
-    return response;
+    return response.product;
 };
 
 // Get product image by barcode

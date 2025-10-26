@@ -93,11 +93,6 @@ export default StyleSheet.create({
         paddingHorizontal: 24,
         borderRadius: 16,
         alignItems: "center",
-        shadowColor: colors.black,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.0,
-        shadowRadius: 8,
-        elevation: 8,
     },
     instructionIcon: {
         marginBottom: 8,

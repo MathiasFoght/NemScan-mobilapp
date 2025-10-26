@@ -67,7 +67,7 @@ export default function Scanner({ onScanned, paused }: ScannerProps) {
                         style={StyleSheet.absoluteFill}
                         onBarcodeScanned={handleBarCodeScanned}
                         barcodeScannerSettings={{
-                            barcodeTypes: ["qr", "ean13", "ean8", "code128"],
+                            barcodeTypes: ["ean13", "upc_a", "upc_e", "ean8", "code128"],
                         }}
                     />
                 )}
