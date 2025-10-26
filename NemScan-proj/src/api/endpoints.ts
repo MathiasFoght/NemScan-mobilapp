@@ -13,6 +13,7 @@ export const ENDPOINTS = {
         EMPLOYEE_PRODUCT: '/api/Product/employee/by-barcode/{barcode}',
         IMAGE_PRODUCT: '/api/Product/image/by-barcode/{barcode}',
         DELETE: '/api/employee/profile-image',
+        ALL_PRODUCTS: '/api/Product/all-products',
     },
     STATISTICS: {
         SCANS: {

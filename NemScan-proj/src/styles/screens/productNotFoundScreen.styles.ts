@@ -30,11 +30,9 @@ export default StyleSheet.create({
     },
     infoText: {
         marginTop: 12,
-        fontSize: 15,
-        color: "#6c757d",
-        textAlign: "center",
-        lineHeight: 22,
-        paddingHorizontal: 16,
+        fontSize: 16,
+        color: colors.inactive,
+        textAlign: 'center',
     },
     searchContainer: {
         flexDirection: 'row',
@@ -117,11 +115,6 @@ export default StyleSheet.create({
         marginTop: 16,
         marginBottom: 8,
     },
-    subText: {
-        fontSize: 16,
-        color: colors.inactive,
-        textAlign: 'center',
-    },
     emptyState: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -144,5 +137,28 @@ export default StyleSheet.create({
     },
     sendButtonDisabled: {
         opacity: 0.5,
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+    loadingText: {
+        fontSize: 16,
+        color: colors.inactive,
+        marginTop: 16,
+    },
+    errorContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+    errorText: {
+        fontSize: 16,
+        color: colors.inactive,
+        marginTop: 16,
+        textAlign: 'center',
     },
 });

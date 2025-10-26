@@ -1,52 +1,119 @@
-import {View, Text, TextInput, ScrollView, TouchableOpacity} from "react-native";
+import {View, Text, TextInput, ScrollView, TouchableOpacity, ActivityIndicator} from "react-native";
 import { router } from "expo-router";
-import { useState } from "react";
-import { useAuth } from "@/src/contexts/authContext";
+import { useState, useEffect } from "react";
 import {MaterialIcons} from "@expo/vector-icons";
 import Button from "@/src/ui/button/button";
 import styles from "@/src/styles/screens/productNotFoundScreen.styles";
 import {colors} from "@/src/shared/global/colors";
 import '@/i18n/i18n.config';
-
-// Hardcoded array til test - erstat senere med API call
-const MOCK_PRODUCTS = [
-    { id: 1, name: "Coca Cola 330ml" },
-    { id: 2, name: "Pepsi Max 500ml" },
-    { id: 3, name: "Fanta Orange 330ml" },
-    { id: 4, name: "Sprite 500ml" },
-    { id: 5, name: "Red Bull Energy Drink" },
-    { id: 6, name: "Monster Energy" },
-    { id: 7, name: "7UP 330ml" },
-    { id: 8, name: "Mountain Dew" },
-    { id: 9, name: "Dr Pepper 330ml" },
-    { id: 10, name: "Mirinda Orange" },
-];
+import { getAllProducts } from "@/src/services/product/productService";
+import { ProductBasic } from "@/src/services/product/interfaces";
 
 export default function productNotFoundScreen() {
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
+    const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+    const [products, setProducts] = useState<ProductBasic[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const filteredProducts = MOCK_PRODUCTS.filter(product =>
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                setLoading(true);
+                const data = await getAllProducts();
+                setProducts(data);
+                setError(null);
+            } catch (err) {
+                console.error("Failed to fetch products:", err);
+                setError("Kunne ikke hente produkter. Prøv igen.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
+    const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handleSelectProduct = (productId: number) => {
-        if (selectedProduct === productId) {
+    const handleSelectProduct = (productNumber: string) => {
+        if (selectedProduct === productNumber) {
             setSelectedProduct(null);
             console.log("Product deselected");
         } else {
-            setSelectedProduct(productId);
-            console.log("Selected product:", MOCK_PRODUCTS.find(p => p.id === productId));
+            setSelectedProduct(productNumber);
+            console.log("Selected product:", products.find(p => p.productNumber === productNumber));
         }
     };
 
     const handleSendProduct = () => {
-        const product = MOCK_PRODUCTS.find(p => p.id === selectedProduct);
+        const product = products.find(p => p.productNumber === selectedProduct);
         if (product) {
-            console.log("Sending product:", product.name, "id:", product.id);
+            console.log("Sending product:", product.name, "productNumber:", product.productNumber);
             router.back();
         }
     };
+
+    if (loading) {
+        return (
+            <View style={styles.container}>
+                <View style={styles.headerBar}>
+                    <Button
+                        onPress={router.back}
+                        icon={<MaterialIcons name="arrow-back-ios-new" size={24} color="#000" />}
+                        iconPosition="left"
+                        variant="simple"
+                        style={{ height: 40 }}
+                    />
+                    <Text style={styles.headerTitle}>Product Not Found</Text>
+                    <View style={styles.placeholder} />
+                </View>
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color={colors.primary} />
+                    <Text style={styles.loadingText}>Henter produkter...</Text>
+                </View>
+            </View>
+        );
+    }
+
+    if (error) {
+        return (
+            <View style={styles.container}>
+                <View style={styles.headerBar}>
+                    <Button
+                        onPress={router.back}
+                        icon={<MaterialIcons name="arrow-back-ios-new" size={24} color="#000" />}
+                        iconPosition="left"
+                        variant="simple"
+                        style={{ height: 40 }}
+                    />
+                    <Text style={styles.headerTitle}>Product Not Found</Text>
+                    <View style={styles.placeholder} />
+                </View>
+                <View style={styles.errorContainer}>
+                    <MaterialIcons name="error-outline" size={64} color={colors.important} />
+                    <Text style={styles.errorText}>{error}</Text>
+                    <Button
+                        onPress={() => {
+                            setLoading(true);
+                            getAllProducts()
+                                .then(data => {
+                                    setProducts(data);
+                                    setError(null);
+                                })
+                                .catch(() => setError("Kunne ikke hente produkter. Prøv igen."))
+                                .finally(() => setLoading(false));
+                        }}
+                        title="Prøv igen"
+                        variant="primary"
+                        style={{ marginTop: 20 }}
+                    />
+                </View>
+            </View>
+        );
+    }
 
     return (
           <View style={styles.container}>
@@ -95,20 +162,20 @@ export default function productNotFoundScreen() {
                     {filteredProducts.length > 0 ? (
                         filteredProducts.map((item) => (
                             <TouchableOpacity
-                                key={item.id}
+                                key={item.productNumber}
                                 style={[
                                     styles.productItem,
-                                    selectedProduct === item.id && styles.productItemSelected
+                                    selectedProduct === item.productNumber && styles.productItemSelected
                                 ]}
-                                onPress={() => handleSelectProduct(item.id)}
+                                onPress={() => handleSelectProduct(item.productNumber)}
                             >
                                 <Text style={[
                                     styles.productName,
-                                    selectedProduct === item.id && styles.productNameSelected
+                                    selectedProduct === item.productNumber && styles.productNameSelected
                                 ]}>
                                     {item.name}
                                 </Text>
-                                {selectedProduct === item.id && (
+                                {selectedProduct === item.productNumber && (
                                     <MaterialIcons 
                                         name="check-circle" 
                                         size={24} 

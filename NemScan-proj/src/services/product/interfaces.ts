@@ -26,3 +26,9 @@ export interface Campaigns {
 export interface ProductEmployee extends ProductCustomer {
     currentStockQuantity: number;
 }
+
+export interface ProductBasic {
+    productNumber: string;
+    name: string;
+    imageUrl: string;
+}
