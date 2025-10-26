@@ -1,19 +1,33 @@
-import { useEffect, useRef } from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import { View, StyleSheet } from "react-native";
 import { CameraView, BarcodeScanningResult } from "expo-camera";
 import * as Haptics from "expo-haptics";
 import { Audio } from "expo-av";
 import { ScannerProps } from "@/src/components/scanner/interfaces";
 import styles from "./scanner.styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useFocusEffect} from "expo-router";
 
-export default function Scanner({ onScanned, paused, soundEnabled = true }: ScannerProps) {
+export default function Scanner({ onScanned, paused }: ScannerProps) {
     const lastScanned = useRef<string | null>(null);
     const stopped = useRef(false);
     const cooldown = useRef(false);
+    const [soundEnabled, setSoundEnabled] = useState(true);
 
     useEffect(() => {
         stopped.current = paused || false;
     }, [paused]);
+
+    useFocusEffect(
+        useCallback(() => {
+            (async () => {
+                const stored = await AsyncStorage.getItem("scannerSoundEnabled");
+                if (stored !== null) {
+                    setSoundEnabled(stored === "true");
+                }
+            })();
+        }, [])
+    );
 
     // Afspil lyd og håndter fejl
     const playSound = async (soundFile: any) => {
