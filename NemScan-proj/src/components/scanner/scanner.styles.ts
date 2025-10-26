@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { colors } from "@/src/shared/global/colors";
 
-export const localStyles = StyleSheet.create({
+export const styles = StyleSheet.create({
     overlay: {
         flex: 1,
         width: "100%",
