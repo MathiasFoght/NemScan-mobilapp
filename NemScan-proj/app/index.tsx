@@ -2,6 +2,7 @@ import { View, Text, Modal, TouchableOpacity, TextInput } from "react-native";
 import { useEffect, useState, useCallback } from "react";
 import { router } from "expo-router";
 import { useAuth } from "@/src/contexts/authContext";
+import { useProduct } from "@/src/contexts/productContext";
 import CameraPermissionWrapper from "@/src/permissions/CameraPermissionWrapper";
 import { MaterialIcons } from "@expo/vector-icons";
 import styles from "@/src/styles/screens/scanScreen.styles";
@@ -15,6 +16,7 @@ import { useFocusEffect } from "@react-navigation/native";
 export default function Index() {
     const { t } = useTranslation();
     const { userType } = useAuth();
+    const { setProduct } = useProduct();
 
     const [scanning, setScanning] = useState(false);
     const [permission, requestPermission] = useCameraPermissions();
@@ -46,18 +48,22 @@ export default function Index() {
 
         try {
             const product = await getProductCustomer(barcode);
+
             if (product) {
-                router.push({ pathname: "/productScreen", params: { barcode } });
+                setProduct(product);
+
+                setTimeout(() => {
+                    router.push({ pathname: "/productScreen", params: { barcode } });
+                }, 100);
+
                 return true;
             } else {
                 setErrorMessage("Produktet findes ikke i systemet.");
                 return false;
             }
-        } catch (err) {
-            console.error(err);
-            setErrorMessage("Kunne ikke kontakte serveren.");
+        } catch {
+            setErrorMessage("Beklager! Produkt blev ikke fundet.");
             return false;
-        } finally {
         }
     };
 
@@ -96,12 +102,10 @@ export default function Index() {
     return (
         <CameraPermissionWrapper>
             <View style={styles.container}>
-                {/* Scanner with overlay */}
                 <View style={styles.scannerContainer}>
                     <Scanner onScanned={handleScanned} paused={scanning} />
                 </View>
 
-                {/* Enhanced Error Modal */}
                 <Modal
                     transparent
                     animationType="fade"
@@ -134,7 +138,6 @@ export default function Index() {
                     </View>
                 </Modal>
 
-                {/* Manual Entry Modal */}
                 <Modal
                     transparent
                     animationType="fade"
@@ -176,18 +179,12 @@ export default function Index() {
                         style={styles.manualEntryButton}
                         onPress={handleOpenManualEntry}
                     >
-                        <MaterialIcons
-                            name="edit"
-                            size={20}
-                            color={colors.primary}
-                        />
+                        <MaterialIcons name="edit" size={20} color={colors.primary} />
                         <Text style={styles.manualEntryText}>Indtast manuelt</Text>
                     </TouchableOpacity>
                 </View>
 
-                {/* Instructions with Manual Entry Button */}
                 <View style={styles.instructionContainer}>
-
                     <View style={styles.instructionBox}>
                         <MaterialIcons
                             name="barcode-reader"
@@ -202,7 +199,6 @@ export default function Index() {
                     </View>
                 </View>
 
-                {/* Footer with employee button */}
                 <View style={styles.footer}>
                     <TouchableOpacity
                         style={styles.employeeButton}

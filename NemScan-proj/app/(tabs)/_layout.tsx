@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { MaterialIcons } from "@expo/vector-icons";
+import {AntDesign, MaterialIcons} from "@expo/vector-icons";
 import { colors } from "@/src/shared/global/colors";
 import '@/i18n/i18n.config';
 import { useTranslation } from "react-i18next";
@@ -18,10 +18,10 @@ export default function TabLayout() {
                 tabBarIcon: ({ color, size }) => {
                     if (route.name === "index") {
                         return <MaterialIcons name="home" size={size} color={color} />;
+                    } else if (route.name === "scannerScreen") {
+                        return <AntDesign name="scan" size={size} color={color} />;
                     } else if (route.name === "statisticsScreen") {
                         return <MaterialIcons name="query-stats" size={size} color={color} />;
-                    } else if (route.name === "graphicsScreen") {
-                        return <MaterialIcons name="bar-chart" size={size} color={color} />;
                     } else if (route.name === "settingsScreen") {
                         return <MaterialIcons name="settings" size={size} color={color} />;
                     }
@@ -30,8 +30,8 @@ export default function TabLayout() {
             })}
         >
             <Tabs.Screen name="index" options={{ title: t('tabs.homeScreen') }} />
+            <Tabs.Screen name="scannerScreen" options={{ title: t('tabs.scannerScreen') }} />
             <Tabs.Screen name="statisticsScreen" options={{ title: t('tabs.statisticsScreen') }} />
-            <Tabs.Screen name="graphicsScreen" options={{ title: t('tabs.graphicsScreen') }} />
             <Tabs.Screen name="settingsScreen" options={{ title: t('tabs.settingsScreen') }} />
         </Tabs>
     );

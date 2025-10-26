@@ -6,6 +6,9 @@
     "back": "Tilbage",
     "loading": "Henter..."
   },
+  "toastErrors": {
+    "errorFetching": "Der opstod en fejl"
+  },
   "errors": {
     "login": {
       "loginAlertTitle": "Der skete en fejl",
@@ -32,7 +35,7 @@
   "tabs": {
     "homeScreen": "Hjem",
     "statisticsScreen": "Statistik",
-    "graphicsScreen": "Indsigt",
+    "scannerScreen": "Scan",
     "settingsScreen": "Indstillinger"
   },
   "employeeProfile": {
@@ -50,9 +53,6 @@
       "role": "Ingen data",
       "position": "Ingen data",
       "storeNumber": "Ingen data"
-    },
-    "errors": {
-      "errorFetchingEmployee": "Kunne ikke hente medarbejderoplysninger"
     }
   },
   "settings": {
