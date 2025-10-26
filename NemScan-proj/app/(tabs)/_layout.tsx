@@ -1,11 +1,24 @@
-import { Tabs } from "expo-router";
-import {AntDesign, MaterialIcons} from "@expo/vector-icons";
+import { Tabs, useSegments } from "expo-router";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { colors } from "@/src/shared/global/colors";
 import '@/i18n/i18n.config';
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
+import { StatusBar } from "react-native";
 
 export default function TabLayout() {
     const { t } = useTranslation();
+    const segments = useSegments();
+
+    useEffect(() => {
+        const currentTab = segments[segments.length - 1];
+
+        if (currentTab === "scannerScreen" || currentTab === "statisticsScreen" || currentTab === "settingsScreen") {
+            StatusBar.setBarStyle("dark-content");
+        } else {
+            StatusBar.setBarStyle("light-content");
+        }
+    }, [segments]);
 
     return (
         <Tabs
