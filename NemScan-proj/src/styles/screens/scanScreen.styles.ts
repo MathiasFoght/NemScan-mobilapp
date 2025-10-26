@@ -88,16 +88,7 @@ export default StyleSheet.create({
         paddingVertical: 8,
     },
     instructionBox: {
-        backgroundColor: "rgba(255, 255, 255, 0.95)",
-        paddingVertical: 12,
-        paddingHorizontal: 24,
-        borderRadius: 16,
         alignItems: "center",
-        shadowColor: colors.black,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.0,
-        shadowRadius: 8,
-        elevation: 8,
     },
     instructionIcon: {
         marginBottom: 8,
@@ -115,10 +106,11 @@ export default StyleSheet.create({
     },
     manualEntryContainer: {
         position: "absolute",
-        top: height * 0.356,
+        top: "36%",
         left: 0,
-        right: 8,
+        right: 0,
         alignItems: "center",
+        justifyContent: "center",
     },
     manualEntryButton: {
         flexDirection: "row",

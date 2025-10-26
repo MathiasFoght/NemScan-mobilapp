@@ -6,7 +6,7 @@ import { Audio } from "expo-av";
 import { ScannerProps } from "@/src/components/scanner/interfaces";
 import styles from "./scanner.styles";
 
-export default function Scanner({ onScanned, paused }: ScannerProps) {
+export default function Scanner({ onScanned, paused, soundEnabled = true }: ScannerProps) {
     const lastScanned = useRef<string | null>(null);
     const stopped = useRef(false);
     const cooldown = useRef(false);
@@ -17,6 +17,7 @@ export default function Scanner({ onScanned, paused }: ScannerProps) {
 
     // Afspil lyd og håndter fejl
     const playSound = async (soundFile: any) => {
+        if (!soundEnabled) return;
         try {
             const { sound } = await Audio.Sound.createAsync(soundFile);
             await sound.playAsync();
