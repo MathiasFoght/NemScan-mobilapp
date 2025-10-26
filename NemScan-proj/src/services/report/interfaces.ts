@@ -4,3 +4,9 @@ export interface FrequentErrorProduct {
     errorCount: number;
     percentage: number;
 }
+
+export interface CreateReportRequest {
+    productNumber: string;
+    productName: string;
+    userRole: string;
+}

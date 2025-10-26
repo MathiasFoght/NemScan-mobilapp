@@ -28,5 +28,6 @@ export const ENDPOINTS = {
     REPORT: {
         TOP_FAILED: '/api/report/top-3-most-failed-products',
         TODAY_COUNT: '/api/report/reports/count-today',
+        CREATE: '/api/Report/create',
     },
 };

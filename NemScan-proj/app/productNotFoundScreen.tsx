@@ -1,6 +1,7 @@
 import {View, Text, TextInput, ScrollView, TouchableOpacity, ActivityIndicator, Image} from "react-native";
 import { router } from "expo-router";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/src/contexts/authContext";
 import {MaterialIcons} from "@expo/vector-icons";
 import Button from "@/src/ui/button/button";
 import styles from "@/src/styles/screens/productNotFoundScreen.styles";
@@ -8,13 +9,16 @@ import {colors} from "@/src/shared/global/colors";
 import '@/i18n/i18n.config';
 import { getAllProducts } from "@/src/services/product/productService";
 import { ProductBasic } from "@/src/services/product/interfaces";
+import { createReport } from "@/src/services/report/reportService";
 
 export default function productNotFoundScreen() {
+    const { userType } = useAuth();
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
     const [products, setProducts] = useState<ProductBasic[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -48,11 +52,31 @@ export default function productNotFoundScreen() {
         }
     };
 
-    const handleSendProduct = () => {
+    const handleSendProduct = async () => {
         const product = products.find(p => p.productNumber === selectedProduct);
         if (product) {
-            console.log("Sending product:", product.name, "productNumber:", product.productNumber);
-            router.back();
+            try {
+                setSubmitting(true);
+                
+                const reportData = {
+                    productNumber: product.productNumber,
+                    productName: product.name,
+                    userRole: userType || "",
+                };
+
+                console.log("Sending report:", reportData);
+                
+                const response = await createReport(reportData);
+                
+                console.log("Report created successfully:", response);
+                
+                router.back();
+            } catch (err) {
+                console.error("Failed to create report:", err);
+                setError("Kunne ikke oprette rapport. Prøv igen.");
+            } finally {
+                setSubmitting(false);
+            }
         }
     };
 
@@ -98,10 +122,10 @@ export default function productNotFoundScreen() {
                     <Button
                         onPress={() => {
                             setLoading(true);
+                            setError(null);
                             getAllProducts()
                                 .then(data => {
                                     setProducts(data);
-                                    setError(null);
                                 })
                                 .catch(() => setError("Kunne ikke hente produkter. Prøv igen."))
                                 .finally(() => setLoading(false));
@@ -210,12 +234,12 @@ export default function productNotFoundScreen() {
                 <View style={styles.buttonContainer}>
                     <Button
                         onPress={handleSendProduct}
-                        title="Send Product"
+                        title={submitting ? "Sender..." : "Send Product"}
                         variant="primary"
-                        disabled={selectedProduct === null}
+                        disabled={selectedProduct === null || submitting}
                         style={[
                             styles.sendButton,
-                            selectedProduct === null && styles.sendButtonDisabled
+                            (selectedProduct === null || submitting) && styles.sendButtonDisabled
                         ]}
                     />
                 </View>
