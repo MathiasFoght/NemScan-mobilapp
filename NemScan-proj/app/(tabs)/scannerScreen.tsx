@@ -73,6 +73,11 @@ export default function ScannerScreen() {
         setScanning(false);
     };
 
+    const navigateToProductNotFound = () => {
+        router.push("/productNotFoundScreen");
+        handleClosePopup();
+    };
+
     const handleOpenManualEntry = () => {
         setManualBarcode("");
         setManualEntryModalVisible(true);
@@ -106,28 +111,37 @@ export default function ScannerScreen() {
                     <Scanner onScanned={handleScanned} paused={scanning} />
                 </View>
 
-                <Modal
+                 <Modal
                     transparent
                     animationType="fade"
                     visible={!!errorMessage}
-                    onRequestClose={handleClosePopup}
-                >
-                    <View style={styles.modalBackground}>
-                        <View style={styles.modalBox}>
-                            <MaterialIcons
-                                name="error-outline"
-                                size={56}
-                                color={colors.important}
-                                style={styles.modalIcon}
-                            />
-                            <Text style={styles.modalTitle}>Kunne ikke finde produkt</Text>
-                            <Text style={styles.modalText}>{errorMessage}</Text>
-                            <TouchableOpacity style={styles.modalButton} onPress={handleClosePopup}>
-                                <Text style={styles.modalButtonText}>Prøv igen</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </Modal>
+                    onRequestClose={handleClosePopup}>
+                        <View style={styles.modalBackground}>
+                                <View style={styles.modalBox}>
+                                    <MaterialIcons
+                                        name="error-outline"
+                                        size={56}
+                                        color={colors.important}
+                                        style={styles.modalIcon}
+                                    />
+                                    <Text style={styles.modalTitle}>Kunne ikke finde produkt</Text>
+                                    <Text style={styles.modalText}>{errorMessage}</Text>
+
+                                    <TouchableOpacity style={styles.modalButton} onPress={handleClosePopup}>
+                                        <Text style={styles.modalButtonText}>Prøv igen</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={[styles.modalButton, styles.reportButton]}
+                                        onPress={navigateToProductNotFound}
+                                    >
+                                        <Text style={styles.modalButtonText}>Rapportér</Text>
+                                    </TouchableOpacity>
+
+                                </View>
+                         </View>
+                  </Modal>
+
 
                 <Modal
                     transparent

@@ -233,6 +233,7 @@ export default StyleSheet.create({
         gap: 12,
     },
     reportButton: {
+        marginTop: 8,
         backgroundColor: "#6c757d",
     },
 });

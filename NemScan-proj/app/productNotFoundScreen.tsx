@@ -234,7 +234,7 @@ export default function productNotFoundScreen() {
                 <View style={styles.buttonContainer}>
                     <Button
                         onPress={handleSendProduct}
-                        title={submitting ? "Sender..." : "Send Product"}
+                        title={submitting ? "Sender..." : "Send Report"}
                         variant="primary"
                         disabled={selectedProduct === null || submitting}
                         style={[
