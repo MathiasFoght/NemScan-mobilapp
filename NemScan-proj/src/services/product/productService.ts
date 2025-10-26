@@ -1,21 +1,21 @@
 import { apiClient } from '../../api/client';
 import { ENDPOINTS } from '../../api/endpoints';
-import {Product_Customer, Product_Employee} from '../product/interfaces';
+import {ProductEmployee, ProductCustomer, CustomerProductResponse} from '../product/interfaces';
 
-// Get full employee profile
-export const getProductCustomer = async (barcode: string): Promise<Product_Customer> => {
+// Get product by barcode from customer
+export const getProductCustomer = async (barcode: string): Promise<ProductCustomer> => {
     const url = ENDPOINTS.PRODUCT.CUSTOMER_PRODUCT.replace("{barcode}", barcode);
-    console.log("Fetching product for customer with URL:", url);
-    const response = await apiClient<Product_Customer>(url);
-    console.log("Received product data for customer:", response);
-    return response;
+    const response = await apiClient<CustomerProductResponse>(url);
+    return response.product;
 };
 
-export const getProductEmployee = async (barcode: string): Promise<Product_Employee> => {
+// Get product by barcode from employee
+export const getProductEmployee = async (barcode: string): Promise<ProductEmployee> => {
     const url = ENDPOINTS.PRODUCT.EMPLOYEE_PRODUCT.replace("{barcode}", barcode);
-    return await apiClient<Product_Employee>(url);
+    return await apiClient<ProductEmployee>(url);
 };
 
+// Get product image by barcode
 export const getProductImage = async (barcode: string): Promise<string> => {
     const url = ENDPOINTS.PRODUCT.IMAGE_PRODUCT.replace("{barcode}", barcode);
     return await apiClient<string>(url, {}, true, false);

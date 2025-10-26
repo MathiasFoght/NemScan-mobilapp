@@ -1,8 +1,13 @@
-export interface Product_Customer {
+export interface ProductCustomer {
     productName: string;
     currentSalesPrice: number;
     productGroup: string;
     campaigns: Campaigns[];
+}
+
+export interface CustomerProductResponse {
+    product: ProductCustomer;
+    scanLogId: string;
 }
 
 export interface Campaigns {
@@ -14,7 +19,7 @@ export interface Campaigns {
     discountInPercentage: number;
 }
 
-export interface Product_Employee extends Product_Customer {
+export interface ProductEmployee extends ProductCustomer {
     productNumber: string;
     currentStockQuantity: number;
 }
