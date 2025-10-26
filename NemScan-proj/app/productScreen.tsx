@@ -5,28 +5,48 @@ import { styles } from "@/src/styles/screens/productScreen.styles";
 import { colors } from "@/src/shared/global/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import Button from "@/src/ui/button/button";
-import { getProductImage, getProductCustomer } from "@/src/services/product/productService";
+import { getProductImage, getProductCustomer, getProductEmployee } from "@/src/services/product/productService";
 import { useProduct } from "@/src/contexts/productContext";
-import { ProductCustomer } from "@/src/services/product/interfaces";
+import { useAuth } from "@/src/contexts/authContext";
+import { ProductEmployee, ProductCustomer } from "@/src/services/product/interfaces";
 
 export default function ProductScreen() {
     const { barcode } = useLocalSearchParams<{ barcode: string }>();
-    const { product, setProduct, clearProduct } = useProduct();
+    const {
+        customerProduct,
+        employeeProduct,
+        setCustomerProduct,
+        setEmployeeProduct
+    } = useProduct();
+    const { userType } = useAuth();
+
+    const product = userType === "customer" ? customerProduct : employeeProduct;
 
     const [productImageUrl, setProductImageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    // Type-guard for ProductEmployee
+    function isEmployeeProduct(product: ProductCustomer | ProductEmployee): product is ProductEmployee {
+        return (product as ProductEmployee).currentStockQuantity !== undefined;
+    }
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 let currentProduct = product;
 
-                // Fallback hvis product ved en fejl IKKE er gemt i context, men er scannede
+                // Load produkt hvis context ikke allerede har det
                 if (!currentProduct && barcode) {
-                    const res: ProductCustomer = await getProductCustomer(barcode);
-                    setProduct(res);
-                    currentProduct = res;
+                    if (userType === "customer") {
+                        const res = await getProductCustomer(barcode);
+                        setCustomerProduct(res);
+                        currentProduct = res;
+                    } else {
+                        const res = await getProductEmployee(barcode);
+                        setEmployeeProduct(res);
+                        currentProduct = res;
+                    }
                 }
 
                 if (!currentProduct) {
@@ -35,13 +55,11 @@ export default function ProductScreen() {
                     return;
                 }
 
-                if (barcode) {
-                    try {
-                        const img = await getProductImage(barcode);
-                        setProductImageUrl(img);
-                    } catch {
-                        setProductImageUrl(null);
-                    }
+                try {
+                    const img = await getProductImage(barcode!);
+                    setProductImageUrl(img);
+                } catch {
+                    setProductImageUrl(null);
                 }
 
                 setLoading(false);
@@ -52,11 +70,7 @@ export default function ProductScreen() {
         };
 
         fetchData();
-
-        return () => {
-            clearProduct();
-        };
-    }, [barcode, product]);
+    }, [barcode]);
 
     if (loading) {
         return (
@@ -127,10 +141,21 @@ export default function ProductScreen() {
                     </View>
 
                     <View style={styles.divider} />
+
                     <View style={styles.infoRow}>
                         <Text style={styles.infoLabel}>Stregkode</Text>
                         <Text style={styles.infoValue}>{barcode}</Text>
                     </View>
+
+                    {userType === "employee" && isEmployeeProduct(product) && (
+                        <>
+                            <View style={styles.divider} />
+                            <View style={styles.infoRow}>
+                                <Text style={styles.infoLabel}>Lagerbeholdning</Text>
+                                <Text style={styles.infoValue}>{product.currentStockQuantity} stk.</Text>
+                            </View>
+                        </>
+                    )}
                 </View>
 
                 {product.campaigns && product.campaigns.length > 0 && (
@@ -145,27 +170,22 @@ export default function ProductScreen() {
                                         </Text>
                                     </View>
                                 </View>
+
                                 <View style={styles.campaignDetails}>
                                     <View style={styles.campaignRow}>
                                         <Text style={styles.campaignLabel}>Start</Text>
                                         <Text style={styles.campaignValue}>
-                                            {new Date(campaign.fromDate).toLocaleDateString("da-DK", {
-                                                day: "numeric",
-                                                month: "short",
-                                                year: "numeric",
-                                            })}
+                                            {new Date(campaign.fromDate).toLocaleDateString("da-DK")}
                                         </Text>
                                     </View>
+
                                     <View style={styles.campaignRow}>
                                         <Text style={styles.campaignLabel}>Slut</Text>
                                         <Text style={styles.campaignValue}>
-                                            {new Date(campaign.toDate).toLocaleDateString("da-DK", {
-                                                day: "numeric",
-                                                month: "short",
-                                                year: "numeric",
-                                            })}
+                                            {new Date(campaign.toDate).toLocaleDateString("da-DK")}
                                         </Text>
                                     </View>
+
                                     {campaign.activateAtQuantity > 1 && (
                                         <View style={styles.campaignRow}>
                                             <Text style={styles.campaignLabel}>Kræver</Text>

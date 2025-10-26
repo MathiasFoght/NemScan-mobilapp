@@ -14,6 +14,11 @@ export interface CustomerProductResponse {
     scanLogId: string;
 }
 
+export interface EmployeeProductResponse {
+    product: ProductEmployee;
+    scanLogId: string;
+}
+
 export interface Campaigns {
     uid: string;
     name: string;

@@ -16,7 +16,7 @@ import { useFocusEffect } from "@react-navigation/native";
 export default function Index() {
     const { t } = useTranslation();
     const { userType } = useAuth();
-    const { setProduct } = useProduct();
+    const { setCustomerProduct, clearProducts } = useProduct();
 
     const [scanning, setScanning] = useState(false);
     const [permission, requestPermission] = useCameraPermissions();
@@ -44,13 +44,14 @@ export default function Index() {
 
     const handleScanned = async (barcode: string) => {
         if (scanning) return false;
+        clearProducts();
         setScanning(true);
 
         try {
             const product = await getProductCustomer(barcode);
 
             if (product) {
-                setProduct(product);
+                setCustomerProduct(product);
 
                 setTimeout(() => {
                     router.push({ pathname: "/productScreen", params: { barcode } });
@@ -69,6 +70,7 @@ export default function Index() {
 
     const handleClosePopup = () => {
         setErrorMessage(null);
+        clearProducts();
         setScanning(false);
     };
 
@@ -106,44 +108,20 @@ export default function Index() {
                     <Scanner onScanned={handleScanned} paused={scanning} />
                 </View>
 
-                <Modal
-                    transparent
-                    animationType="fade"
-                    visible={!!errorMessage}
-                    onRequestClose={handleClosePopup}
-                >
+                <Modal transparent animationType="fade" visible={!!errorMessage} onRequestClose={handleClosePopup}>
                     <View style={styles.modalBackground}>
                         <View style={styles.modalBox}>
-                            <MaterialIcons
-                                name="error-outline"
-                                size={56}
-                                color={colors.important}
-                                style={styles.modalIcon}
-                            />
+                            <MaterialIcons name="error-outline" size={56} color={colors.important} style={styles.modalIcon} />
                             <Text style={styles.modalTitle}>Kunne ikke finde produkt</Text>
                             <Text style={styles.modalText}>{errorMessage}</Text>
-
-                            <View style={styles.notFoundModalButtonContainer}>
-                                <TouchableOpacity style={styles.modalButton} onPress={handleClosePopup}>
-                                    <Text style={styles.modalButtonText}>Prøv igen</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={[styles.modalButton, styles.reportButton]}
-                                    onPress={() => navigateToProductNotFound()}
-                                >
-                                    <Text style={styles.modalButtonText}>Rapportér</Text>
-                                </TouchableOpacity>
-                            </View>
+                            <TouchableOpacity style={styles.modalButton} onPress={handleClosePopup}>
+                                <Text style={styles.modalButtonText}>Prøv igen</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>
 
-                <Modal
-                    transparent
-                    animationType="fade"
-                    visible={manualEntryModalVisible}
-                    onRequestClose={handleCloseManualEntry}
-                >
+                <Modal transparent animationType="fade" visible={manualEntryModalVisible} onRequestClose={handleCloseManualEntry}>
                     <View style={styles.modalBackground}>
                         <View style={styles.modalBox}>
                             <Text style={styles.modalTitle}>Indtast stregkode</Text>
@@ -157,16 +135,10 @@ export default function Index() {
                                 autoFocus
                             />
                             <View style={styles.modalButtonContainer}>
-                                <TouchableOpacity
-                                    style={[styles.modalButton, styles.cancelButton]}
-                                    onPress={handleCloseManualEntry}
-                                >
+                                <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={handleCloseManualEntry}>
                                     <Text style={styles.modalButtonText}>Annuller</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={styles.modalButton}
-                                    onPress={handleSubmitManualBarcode}
-                                >
+                                <TouchableOpacity style={styles.modalButton} onPress={handleSubmitManualBarcode}>
                                     <Text style={styles.modalButtonText}>Udfør</Text>
                                 </TouchableOpacity>
                             </View>
@@ -175,10 +147,7 @@ export default function Index() {
                 </Modal>
 
                 <View style={styles.manualEntryContainer}>
-                    <TouchableOpacity
-                        style={styles.manualEntryButton}
-                        onPress={handleOpenManualEntry}
-                    >
+                    <TouchableOpacity style={styles.manualEntryButton} onPress={handleOpenManualEntry}>
                         <MaterialIcons name="edit" size={20} color={colors.primary} />
                         <Text style={styles.manualEntryText}>Indtast manuelt</Text>
                     </TouchableOpacity>
@@ -186,34 +155,19 @@ export default function Index() {
 
                 <View style={styles.instructionContainer}>
                     <View style={styles.instructionBox}>
-                        <MaterialIcons
-                            name="barcode-reader"
-                            size={80}
-                            color={colors.primary}
-                            style={styles.instructionIcon}
-                        />
+                        <MaterialIcons name="barcode-reader" size={80} color={colors.primary} style={styles.instructionIcon} />
                         <Text style={styles.instructionTitle}>Scan stregkode</Text>
-                        <Text style={styles.instructionText}>
-                            Placer stregkoden inden for rammen.
-                        </Text>
+                        <Text style={styles.instructionText}>Placer stregkoden inden for rammen.</Text>
                     </View>
                 </View>
 
                 <View style={styles.footer}>
-                    <TouchableOpacity
-                        style={styles.employeeButton}
-                        onPress={handleEmployeeLogin}
-                    >
-                        <MaterialIcons
-                            name="person-outline"
-                            size={20}
-                            color={colors.primary}
-                        />
-                        <Text style={styles.employeeText}>
-                            {t("login.employeeLogin")}
-                        </Text>
+                    <TouchableOpacity style={styles.employeeButton} onPress={handleEmployeeLogin}>
+                        <MaterialIcons name="person-outline" size={20} color={colors.primary} />
+                        <Text style={styles.employeeText}>{t("login.employeeLogin")}</Text>
                     </TouchableOpacity>
                 </View>
+
             </View>
         </CameraPermissionWrapper>
     );
