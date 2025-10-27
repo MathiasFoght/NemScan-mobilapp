@@ -1,22 +1,37 @@
-import { useEffect, useRef } from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import { View, StyleSheet } from "react-native";
 import { CameraView, BarcodeScanningResult } from "expo-camera";
 import * as Haptics from "expo-haptics";
 import { Audio } from "expo-av";
 import { ScannerProps } from "@/src/components/scanner/interfaces";
-import { localStyles } from "./scanner.styles";
+import styles from "./scanner.styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useFocusEffect} from "expo-router";
 
 export default function Scanner({ onScanned, paused }: ScannerProps) {
     const lastScanned = useRef<string | null>(null);
     const stopped = useRef(false);
     const cooldown = useRef(false);
+    const [soundEnabled, setSoundEnabled] = useState(true);
 
     useEffect(() => {
         stopped.current = paused || false;
     }, [paused]);
 
+    useFocusEffect(
+        useCallback(() => {
+            (async () => {
+                const stored = await AsyncStorage.getItem("scannerSoundEnabled");
+                if (stored !== null) {
+                    setSoundEnabled(stored === "true");
+                }
+            })();
+        }, [])
+    );
+
     // Afspil lyd og håndter fejl
     const playSound = async (soundFile: any) => {
+        if (!soundEnabled) return;
         try {
             const { sound } = await Audio.Sound.createAsync(soundFile);
             await sound.playAsync();
@@ -38,7 +53,7 @@ export default function Scanner({ onScanned, paused }: ScannerProps) {
         cooldown.current = true;
 
         try {
-            const success = await onScanned(result.data); // ✅ Parent returnerer true/false
+            const success = await onScanned(result.data);
 
             if (success) {
                 void playSound(require('@/assets/sounds/success.mp3'));
@@ -60,8 +75,8 @@ export default function Scanner({ onScanned, paused }: ScannerProps) {
 
 
     return (
-        <View style={localStyles.overlay}>
-            <View style={localStyles.cameraBox}>
+        <View style={styles.overlay}>
+            <View style={styles.cameraBox}>
                 {!paused && (
                     <CameraView
                         style={StyleSheet.absoluteFill}
@@ -73,14 +88,14 @@ export default function Scanner({ onScanned, paused }: ScannerProps) {
                 )}
 
                 {/* Transparente overlays */}
-                <View style={localStyles.overlayTop} />
-                <View style={localStyles.overlayBottom} />
-                <View style={localStyles.overlayLeft} />
-                <View style={localStyles.overlayRight} />
+                <View style={styles.overlayTop} />
+                <View style={styles.overlayBottom} />
+                <View style={styles.overlayLeft} />
+                <View style={styles.overlayRight} />
 
                 {/* Inderste lag */}
-                <View style={localStyles.cameraInner} />
-                <View style={localStyles.innerFrame} />
+                <View style={styles.cameraInner} />
+                <View style={styles.innerFrame} />
             </View>
         </View>
     );

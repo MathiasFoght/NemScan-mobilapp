@@ -85,13 +85,9 @@ export default StyleSheet.create({
         right: 0,
         alignItems: "center",
         paddingHorizontal: 40,
-        paddingVertical: 8, // Added to accommodate button without large gaps
+        paddingVertical: 8,
     },
     instructionBox: {
-        backgroundColor: "rgba(255, 255, 255, 0.95)",
-        paddingVertical: 12,
-        paddingHorizontal: 24,
-        borderRadius: 16,
         alignItems: "center",
     },
     instructionIcon: {
@@ -110,10 +106,11 @@ export default StyleSheet.create({
     },
     manualEntryContainer: {
         position: "absolute",
-        top: height * 0.356,
+        top: "36%",
         left: 0,
-        right: 8,
+        right: 0,
         alignItems: "center",
+        justifyContent: "center",
     },
     manualEntryButton: {
         flexDirection: "row",
@@ -125,7 +122,7 @@ export default StyleSheet.create({
         borderColor: colors.primary,
         borderWidth: 2,
         gap: 8,
-        marginBottom: 12, // Small gap between button and instructionBox
+        marginBottom: 12,
     },
     manualEntryText: {
         fontSize: 16,
@@ -140,7 +137,6 @@ export default StyleSheet.create({
         paddingBottom: 50,
         paddingTop: 20,
         alignItems: "center",
-        // backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     employeeButton: {
         flexDirection: "row",
