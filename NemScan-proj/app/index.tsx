@@ -73,6 +73,11 @@ export default function StartScreen() {
         setScanning(false);
     };
 
+    const navigateToProductNotFound = () => {
+        router.push("/productNotFoundScreen");
+        handleClosePopup();
+    };
+
     const handleOpenManualEntry = () => {
         setManualBarcode("");
         setManualEntryModalVisible(true);
@@ -108,9 +113,18 @@ export default function StartScreen() {
                             <MaterialIcons name="error-outline" size={56} color={colors.important} style={styles.modalIcon} />
                             <Text style={styles.modalTitle}>Kunne ikke finde produkt</Text>
                             <Text style={styles.modalText}>{errorMessage}</Text>
+
                             <TouchableOpacity style={styles.modalButton} onPress={handleClosePopup}>
                                 <Text style={styles.modalButtonText}>Prøv igen</Text>
                             </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={[styles.modalButton, styles.reportButton]}
+                                onPress={navigateToProductNotFound}
+                            >
+                                <Text style={styles.modalButtonText}>Rapportér</Text>
+                            </TouchableOpacity>
+
                         </View>
                     </View>
                 </Modal>

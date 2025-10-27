@@ -224,4 +224,12 @@ export default StyleSheet.create({
         width: "100%",
         gap: 16,
     },
+    notFoundModalButtonContainer: {
+        flexDirection: "column",
+        gap: 12,
+    },
+    reportButton: {
+        marginTop: 8,
+        backgroundColor: "#6c757d",
+    },
 });

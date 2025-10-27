@@ -13,6 +13,7 @@ export const ENDPOINTS = {
         EMPLOYEE_PRODUCT: '/api/Product/employee/by-barcode/{barcode}',
         IMAGE_PRODUCT: '/api/Product/image/by-barcode/{barcode}',
         DELETE: '/api/employee/profile-image',
+        ALL_PRODUCTS: '/api/Product/all-products',
     },
     STATISTICS: {
         SCANS: {
@@ -27,5 +28,6 @@ export const ENDPOINTS = {
     REPORT: {
         TOP_FAILED: '/api/report/top-3-most-failed-products',
         TODAY_COUNT: '/api/report/reports/count-today',
+        CREATE: '/api/Report/create',
     },
 };
