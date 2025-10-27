@@ -5,13 +5,14 @@ import { useAuth } from "@/src/contexts/authContext";
 import {MaterialIcons} from "@expo/vector-icons";
 import Button from "@/src/ui/button/button";
 import styles from "@/src/styles/screens/productNotFoundScreen.styles";
-import {colors} from "@/src/shared/global/colors";
 import '@/i18n/i18n.config';
 import { getAllProducts } from "@/src/services/product/productService";
 import { ProductBasic } from "@/src/services/product/interfaces";
 import { createReport } from "@/src/services/report/reportService";
 import { Toast } from "@/src/components/toast/toast";
 import { useTranslation } from "react-i18next";
+import { SearchBar } from "@/src/components/searchBar/searchBar";
+import { ProductRow } from "@/src/components/productRow/productRow";
 
 export default function productNotFoundScreen() {
     const { t } = useTranslation();
@@ -90,30 +91,13 @@ export default function productNotFoundScreen() {
                 <Text style={styles.subText}>
                     Search and select the product from the list below.
                 </Text>
-                
-                <View style={styles.searchContainer}>
-                    <MaterialIcons 
-                        name="search" 
-                        size={24} 
-                        color={colors.inactive} 
-                        style={styles.searchIcon}
-                    />
-                    <TextInput
-                        style={styles.searchInput}
-                        placeholder="Search for products"
-                        value={searchQuery}
-                        onChangeText={setSearchQuery}
-                        placeholderTextColor={colors.inactive}
-                    />
-                    {searchQuery.length > 0 && (
-                        <Button
-                            onPress={() => setSearchQuery("")}
-                            icon={<MaterialIcons name="close" size={20} color={colors.inactive} />}
-                            variant="simple"
-                            style={styles.clearButton}
-                        />
-                    )}
-                </View>
+
+                <SearchBar
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                    placeholder="Search for products"
+                    onClear={() => setSearchQuery("")}
+                />
 
                 <ScrollView 
                     style={styles.productList}
@@ -121,39 +105,12 @@ export default function productNotFoundScreen() {
                 >
                     {filteredProducts.length > 0 ? (
                         filteredProducts.map((item) => (
-                            <TouchableOpacity
+                           <ProductRow
                                 key={item.productNumber}
-                                style={[
-                                    styles.productItem,
-                                    selectedProduct === item.productNumber && styles.productItemSelected
-                                ]}
+                                product={item}
+                                isSelected={selectedProduct === item.productNumber}
                                 onPress={() => handleSelectProduct(item.productNumber)}
-                            >
-                                {item.imageUrl ? (
-                                    <Image
-                                        source={{ uri: item.imageUrl }}
-                                        style={styles.productImage}
-                                        resizeMode="contain"
-                                    />
-                                ) : (
-                                    <View style={styles.productImagePlaceholder}>
-                                        <MaterialIcons name="image" size={24} color={colors.inactive} />
-                                    </View>
-                                )}
-                                <Text style={[
-                                    styles.productName,
-                                    selectedProduct === item.productNumber && styles.productNameSelected
-                                ]}>
-                                    {item.name}
-                                </Text>
-                                {selectedProduct === item.productNumber && (
-                                    <MaterialIcons 
-                                        name="check-circle" 
-                                        size={24} 
-                                        color={colors.white} 
-                                    />
-                                )}
-                            </TouchableOpacity>
+                           />
                         ))
                     ) : (
                           [1, 2, 3].map((index) => (
@@ -171,7 +128,7 @@ export default function productNotFoundScreen() {
                 <View style={styles.buttonContainer}>
                     <Button
                         onPress={handleSendProduct}
-                        title={submitting ? "Sender..." : "Send Report"}
+                        title={submitting ? "Sending..." : "Send Report"}
                         variant="primary"
                         disabled={selectedProduct === null || submitting}
                         style={[
