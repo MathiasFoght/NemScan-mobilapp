@@ -1,4 +1,4 @@
-import {View, Text, TextInput, ScrollView, TouchableOpacity, ActivityIndicator, Image} from "react-native";
+import {View, Text, ScrollView} from "react-native";
 import { router } from "expo-router";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/src/contexts/authContext";
