@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import { router } from "expo-router";
 import { useAuth } from "@/src/contexts/authContext";
 import { useProduct } from "@/src/contexts/productContext";
-import CameraPermissionWrapper from "@/src/permissions/CameraPermissionWrapper";
+import CameraPermissionWrapper from "@/src/permissions/cameraPermissionWrapper";
 import { MaterialIcons } from "@expo/vector-icons";
 import styles from "@/src/styles/screens/scanScreen.styles";
 import { colors } from "@/src/shared/global/colors";
@@ -115,7 +115,7 @@ export default function ScannerScreen() {
                                     <MaterialIcons
                                         name="error-outline"
                                         size={56}
-                                        color={colors.important}
+                                        color={colors.attention}
                                         style={styles.modalIcon}
                                     />
                                     <Text style={styles.modalTitle}>Kunne ikke finde produkt</Text>

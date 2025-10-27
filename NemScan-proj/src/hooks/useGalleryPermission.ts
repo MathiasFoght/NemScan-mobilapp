@@ -4,15 +4,22 @@ import { useEffect, useState } from 'react';
 export const useGalleryPermission = () => {
     const [hasPermission, setHasPermission] = useState<boolean | null>(null);
 
+    // Henter nuværende status ved mount
     useEffect(() => {
-        const requestPermission = async () => {
-            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        (async () => {
+            const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
             setHasPermission(status === 'granted');
             console.log("Gallery permission status:", status);
-        };
-
-        requestPermission();
+        })();
     }, []);
 
-    return { hasPermission };
+    const requestPermission = async (): Promise<boolean> => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        const granted = status === 'granted';
+        setHasPermission(granted);
+        console.log("Gallery permission request result:", status);
+        return granted;
+    };
+
+    return { hasPermission, requestPermission };
 };

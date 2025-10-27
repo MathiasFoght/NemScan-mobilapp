@@ -4,9 +4,14 @@ export const colors = {
     inactive: '#a0a0a0',
     white: '#fff',
     black: '#000',
-    important: '#fc6969',
+    attention: '#f55a5a',
     campaign: '#10b981',
-    campaign_background: 'rgba(209,250,229,0.32)',
+    campaignBackground: 'rgba(209,250,229,0.32)',
+    lowStcok: {
+        critical: '#f55a5a',
+        warning: '#ffad40',
+        low: '#ffd733',
+    }
 };
 
 export const toastStateColors = {
@@ -23,7 +28,7 @@ export const toastStateColors = {
         background: '#e0e7ff',
     },
     error: {
-        color: colors.important,
+        color: colors.attention,
         background: '#fee2e2',
     },
     loading: {

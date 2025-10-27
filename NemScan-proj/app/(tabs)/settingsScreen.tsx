@@ -187,7 +187,7 @@ export default function SettingsScreen() {
                                     name="delete-forever"
                                     size={22}
                                     color={
-                                        employee?.profileImageUrl ? colors.important : colors.inactive
+                                        employee?.profileImageUrl ? colors.attention : colors.inactive
                                     }
                                 />
                             </Pressable>

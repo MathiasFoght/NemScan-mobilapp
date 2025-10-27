@@ -1,4 +1,5 @@
 import {StyleSheet} from "react-native";
+import {colors} from "@/src/shared/global/colors";
 
 export default StyleSheet.create({
     container: {
@@ -81,4 +82,31 @@ export default StyleSheet.create({
         gap: 12,
     },
     emptyText: {fontSize: 15, color: '#8E8E93', textAlign: 'center'},
+    subtitle: {
+        fontSize: 13,
+        color: '#8E8E93',
+        marginTop: 4,
+    },
+    loadMoreButton: {
+        backgroundColor: '#F9F9F9',
+        borderRadius: 12,
+        padding: 16,
+        marginTop: 4,
+        marginBottom: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderColor: '#E5E5EA',
+        borderStyle: 'dashed',
+    },
+    loadMoreText: {
+        fontSize: 15,
+        fontWeight: '600',
+        color: colors.black,
+        marginBottom: 4,
+    },
+    loadMoreSubtext: {
+        fontSize: 12,
+        color: '#8E8E93',
+    },
 });
