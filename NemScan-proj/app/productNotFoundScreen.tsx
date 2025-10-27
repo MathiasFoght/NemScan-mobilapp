@@ -13,6 +13,8 @@ import { Toast } from "@/src/components/toast/toast";
 import { useTranslation } from "react-i18next";
 import { SearchBar } from "@/src/components/searchBar/searchBar";
 import { ProductRow } from "@/src/components/productRow/productRow";
+import InfoText from "@/src/components/infoText/infoText";
+import BottomButton from "@/src/components/bottomButton/bottomButton";
 
 export default function productNotFoundScreen() {
     const { t } = useTranslation();
@@ -88,9 +90,8 @@ export default function productNotFoundScreen() {
                     <Text style={styles.headerTitle}>Product Not Found</Text>
                     <View style={styles.placeholder} />
                 </View>
-                <Text style={styles.subText}>
-                    Search and select the product from the list below.
-                </Text>
+
+                <InfoText text="Search and select the product from the list below." />
 
                 <SearchBar
                     value={searchQuery}
@@ -125,18 +126,12 @@ export default function productNotFoundScreen() {
                     )}
                 </ScrollView>
 
-                <View style={styles.buttonContainer}>
-                    <Button
-                        onPress={handleSendProduct}
-                        title={submitting ? "Sending..." : "Send Report"}
-                        variant="primary"
-                        disabled={selectedProduct === null || submitting}
-                        style={[
-                            styles.sendButton,
-                            (selectedProduct === null || submitting) && styles.sendButtonDisabled
-                        ]}
-                    />
-                </View>
+              <BottomButton
+                onPress={handleSendProduct}
+                title="Send Report"
+                submitting={submitting}
+                disabled={selectedProduct === null}
+                />
         </View>
     );
 }
