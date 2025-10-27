@@ -110,7 +110,7 @@ export default function StartScreen() {
                 <Modal transparent animationType="fade" visible={!!errorMessage} onRequestClose={handleClosePopup}>
                     <View style={styles.modalBackground}>
                         <View style={styles.modalBox}>
-                            <MaterialIcons name="error-outline" size={56} color={colors.important} style={styles.modalIcon} />
+                            <MaterialIcons name="error-outline" size={56} color={colors.attention} style={styles.modalIcon} />
                             <Text style={styles.modalTitle}>Kunne ikke finde produkt</Text>
                             <Text style={styles.modalText}>{errorMessage}</Text>
 

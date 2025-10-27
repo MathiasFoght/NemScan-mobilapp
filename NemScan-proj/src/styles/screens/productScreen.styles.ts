@@ -117,7 +117,7 @@ export const styles = StyleSheet.create({
         textAlign: "right",
     },
     campaignBadge: {
-        backgroundColor: colors.important,
+        backgroundColor: colors.attention,
         paddingHorizontal: 12,
         paddingVertical: 6,
         borderRadius: 12,
@@ -131,7 +131,7 @@ export const styles = StyleSheet.create({
         letterSpacing: 0.3,
     },
     campaignCard: {
-        backgroundColor: colors.campaign_background,
+        backgroundColor: colors.campaignBackground,
         borderRadius: 16,
         padding: 20,
         marginBottom: 16,
@@ -200,7 +200,7 @@ export const styles = StyleSheet.create({
         backgroundColor: colors.white,
     },
     error: {
-        color: colors.important,
+        color: colors.attention,
         textAlign: "center",
         fontSize: 16,
         fontWeight: "500",

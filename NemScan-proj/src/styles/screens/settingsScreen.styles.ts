@@ -111,10 +111,10 @@ export default StyleSheet.create({
     },
     logoutButton: {
         width: "100%",
-        borderColor: colors.important,
+        borderColor: colors.attention,
     },
     logoutText: {
-        color: colors.important,
+        color: colors.attention,
     },
     center: {
         alignItems: 'center',

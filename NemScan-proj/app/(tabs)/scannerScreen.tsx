@@ -115,7 +115,7 @@ export default function ScannerScreen() {
                                     <MaterialIcons
                                         name="error-outline"
                                         size={56}
-                                        color={colors.important}
+                                        color={colors.attention}
                                         style={styles.modalIcon}
                                     />
                                     <Text style={styles.modalTitle}>Kunne ikke finde produkt</Text>
