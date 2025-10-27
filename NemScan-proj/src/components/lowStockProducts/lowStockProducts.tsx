@@ -6,7 +6,7 @@ import { LowStockProductsProps } from "@/src/components/lowStockProducts/interfa
 import styles from "./lowStockProducts.styles";
 import { colors } from "@/src/shared/global/colors";
 
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 10;
 
 export const LowStockProducts: React.FC<LowStockProductsProps> = ({ minThreshold = 100 }) => {
     const [allProducts, setAllProducts] = useState<LowStockProduct[]>([]);
