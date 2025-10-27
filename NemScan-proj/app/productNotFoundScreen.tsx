@@ -13,10 +13,9 @@ import { Toast } from "@/src/components/toast/toast";
 import { useTranslation } from "react-i18next";
 import { SearchBar } from "@/src/components/searchBar/searchBar";
 import { ProductRow } from "@/src/components/productRow/productRow";
-import InfoText from "@/src/components/infoText/infoText";
 import BottomButton from "@/src/components/bottomButton/bottomButton";
 
-export default function productNotFoundScreen() {
+export default function ProductNotFoundScreen() {
     const { t } = useTranslation();
     const { userType } = useAuth();
     const [searchQuery, setSearchQuery] = useState("");
@@ -87,16 +86,14 @@ export default function productNotFoundScreen() {
                         variant="simple"
                         style={{ height: 40 }}
                     />
-                    <Text style={styles.headerTitle}>Product Not Found</Text>
+                    <Text style={styles.headerTitle}>Raportering</Text>
                     <View style={styles.placeholder} />
                 </View>
-
-                <InfoText text="Search and select the product from the list below." />
 
                 <SearchBar
                     value={searchQuery}
                     onChangeText={setSearchQuery}
-                    placeholder="Search for products"
+                    placeholder="Søg efter produkt"
                     onClear={() => setSearchQuery("")}
                 />
 
@@ -128,7 +125,7 @@ export default function productNotFoundScreen() {
 
               <BottomButton
                 onPress={handleSendProduct}
-                title="Send Report"
+                title="Indsend"
                 submitting={submitting}
                 disabled={selectedProduct === null}
                 />

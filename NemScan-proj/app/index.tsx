@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import { router } from "expo-router";
 import { useAuth } from "@/src/contexts/authContext";
 import { useProduct } from "@/src/contexts/productContext";
-import CameraPermissionWrapper from "@/src/permissions/CameraPermissionWrapper";
+import CameraPermissionWrapper from "@/src/permissions/cameraPermissionWrapper";
 import { MaterialIcons } from "@expo/vector-icons";
 import styles from "@/src/styles/screens/scanScreen.styles";
 import { colors } from "@/src/shared/global/colors";

@@ -1,22 +1,43 @@
-import { Alert } from "react-native";
+import { Alert, Linking } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useTranslation } from "react-i18next";
 import { getEmployeeProfile, uploadEmployeeProfileImage, deleteEmployeeProfileImage } from "@/src/services/employee/employeeService";
 import { useGalleryPermission } from "@/src/hooks/useGalleryPermission";
 
-export const useProfileImageActions = (setEmployee: (emp: any) => void, setToast: (toast: any) => void) => {
+export const useProfileImageActions = (
+    setEmployee: (emp: any) => void,
+    setToast: (toast: any) => void
+) => {
     const { t } = useTranslation();
-    const { hasPermission } = useGalleryPermission();
+    const { hasPermission, requestPermission } = useGalleryPermission();
 
     // Change profile image
     const handleProfileImageUpload = async () => {
         try {
             if (hasPermission === false) {
-                setToast({
-                    type: "error",
-                    message: t("employeeProfile.errors.permissionDenied"),
-                });
+                Alert.alert(
+                    t("employeeProfile.errors.permissionDeniedTitle", "Adgang nægtet"),
+                    t("employeeProfile.errors.permissionDeniedMessage", "Du skal give adgang til billeder for at kunne uploade et profilbillede."),
+                    [
+                        { text: t("common.cancel", "Annuller"), style: "cancel" },
+                        {
+                            text: t("common.goToSettings", "Gå til indstillinger"),
+                            onPress: () => Linking.openSettings(),
+                        },
+                    ]
+                );
                 return;
+            }
+
+            if (hasPermission === null) {
+                const granted = await requestPermission();
+                if (!granted) {
+                    setToast({
+                        type: "error",
+                        message: t("employeeProfile.errors.permissionDenied"),
+                    });
+                    return;
+                }
             }
 
             const result = await ImagePicker.launchImageLibraryAsync({
@@ -55,7 +76,9 @@ export const useProfileImageActions = (setEmployee: (emp: any) => void, setToast
 
     // Reset profile image
     const handleResetProfileImage = () => {
-        Alert.alert(t("settings.preferences.resetConfirmTitle"), t("settings.preferences.resetConfirmMessage"),
+        Alert.alert(
+            t("settings.preferences.resetConfirmTitle"),
+            t("settings.preferences.resetConfirmMessage"),
             [
                 { text: t("common.cancel"), style: "cancel" },
                 {
