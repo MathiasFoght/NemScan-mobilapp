@@ -1,0 +1,21 @@
+{
+  "title": "My profile",
+  "employeeInfo": "Employee information",
+  "storeInfo": "Store information",
+  "fields": {
+    "employeeNumber": "Employee number",
+    "position": "Role",
+    "storeNumber": "Store"
+  },
+  "positions": {
+    "ServiceAssistant": "Service assistant",
+    "StoreManager": "Store manager"
+  },
+  "details": {
+    "employeeNumber": "Employee ID",
+    "storeNumber": "Store"
+  },
+  "fallbacks": {
+    "noEmployeeFound": "No employee information"
+  }
+}

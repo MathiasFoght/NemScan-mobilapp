@@ -21,7 +21,7 @@ export default function SettingsScreen() {
     const [employee, setEmployee] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const { t } = useTranslation();
+    const { t } = useTranslation(["screens", "common"]);
     const [toast, setToast] = useState<{ type: 'success' | 'error' | 'loading' | 'info' | null; message?: string }>({
         type: null,
         message: "",
@@ -44,7 +44,7 @@ export default function SettingsScreen() {
                     setEmployee(profile);
                     setError(null);
                 } catch (err: any) {
-                    setError(t("toastErrors.errorFetching"));
+                    setError(t("common:errors.errorFetching"));
                 } finally {
                     setLoading(false);
                 }
@@ -70,19 +70,19 @@ export default function SettingsScreen() {
 
     return (
         <View style={styles.container}>
-            <Toast type="loading" message={t("common.loading")} visible={loading} />
+            <Toast type="loading" message={t("common:loading")} visible={loading} />
             <Toast type="error" message={error || ""} visible={!!error} />
             {toast.type && <Toast type={toast.type} message={toast.message || ""} visible={!!toast.type} />}
 
             <View style={styles.header}>
                 <View style={styles.headerContent}>
                     <Avatar
-                        name={employee?.name || t("employeeProfile.fallbacks.name")}
+                        name={employee?.name}
                         imageUrl={employee?.profileImageUrl ?? undefined}
                     />
                     <View style={styles.headerTextContainer}>
                         <Text style={styles.userName}>
-                            {employee?.name || t("employeeProfile.fallbacks.name")}
+                            {employee?.name}
                         </Text>
                     </View>
                 </View>
@@ -94,7 +94,7 @@ export default function SettingsScreen() {
                 showsVerticalScrollIndicator={false}
             >
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t("settings.account.title")}</Text>
+                    <Text style={styles.sectionTitle}>{t("screens:settings.account.title")}</Text>
 
                     <Pressable style={styles.settingsItem} onPress={navigateToProfile}>
                         <View style={styles.settingsItemLeft}>
@@ -102,8 +102,8 @@ export default function SettingsScreen() {
                                 <MaterialIcons name="person" size={22} color={colors.primary} />
                             </View>
                             <View>
-                                <Text style={styles.settingsItemTitle}>{t("settings.account.profileTitle")}</Text>
-                                <Text style={styles.settingsItemSubtitle}>{t("settings.account.profileSubtitle")}</Text>
+                                <Text style={styles.settingsItemTitle}>{t("screens:settings.account.profileTitle")}</Text>
+                                <Text style={styles.settingsItemSubtitle}>{t("screens:settings.account.profileSubtitle")}</Text>
                             </View>
                         </View>
                         <MaterialIcons name="chevron-right" size={24} color={colors.inactive} />
@@ -111,7 +111,7 @@ export default function SettingsScreen() {
                 </View>
 
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t("settings.preferences.title")}</Text>
+                    <Text style={styles.sectionTitle}>{t("screens:settings.preferences.title")}</Text>
 
                     <View style={styles.settingsItem}>
                         <View style={styles.settingsItemLeft}>
@@ -119,11 +119,11 @@ export default function SettingsScreen() {
                                 <MaterialIcons name="language" size={22} color={colors.primary} />
                             </View>
                             <View>
-                                <Text style={styles.settingsItemTitle}>{t("settings.preferences.languageTitle")}</Text>
+                                <Text style={styles.settingsItemTitle}>{t("screens:settings.preferences.languageTitle")}</Text>
                                 <Text style={styles.settingsItemSubtitle}>
                                     {currentLanguage === "da"
-                                        ? t("settings.preferences.languageSubtitleDa")
-                                        : t("settings.preferences.languageSubtitleEn")}
+                                        ? t("screens:settings.preferences.languageSubtitleDa")
+                                        : t("screens:settings.preferences.languageSubtitleEn")}
                                 </Text>
                             </View>
                         </View>
@@ -141,9 +141,9 @@ export default function SettingsScreen() {
                                 <MaterialIcons name="volume-up" size={22} color={colors.primary} />
                             </View>
                             <View>
-                                <Text style={styles.settingsItemTitle}>Lyd</Text>
+                                <Text style={styles.settingsItemTitle}>{t("screens:settings.preferences.scannerSoundTitle")}</Text>
                                 <Text style={styles.settingsItemSubtitle}>
-                                    Lyd ved scanning
+                                    {t("screens:settings.preferences.scannerSoundSubtitle")}
                                 </Text>
                             </View>
                         </View>
@@ -162,10 +162,10 @@ export default function SettingsScreen() {
                             </View>
                             <View>
                                 <Text style={styles.settingsItemTitle}>
-                                    {t("settings.preferences.changeProfileImageTitle")}
+                                    {t("screens:settings.preferences.changeProfileImageTitle")}
                                 </Text>
                                 <Text style={styles.settingsItemSubtitle}>
-                                    {t("settings.preferences.changeProfileImageSubtitle")}
+                                    {t("screens:settings.preferences.changeProfileImageSubtitle")}
                                 </Text>
                             </View>
                         </View>
@@ -199,7 +199,7 @@ export default function SettingsScreen() {
 
             <View style={styles.logoutContainer}>
                 <Button
-                    title={t("settings.logout.button")}
+                    title={t("screens:settings.logout.button")}
                     onPress={logout}
                     variant="outline"
                     style={styles.logoutButton}

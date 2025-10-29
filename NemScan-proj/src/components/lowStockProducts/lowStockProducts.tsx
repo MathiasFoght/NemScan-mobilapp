@@ -5,6 +5,8 @@ import { getLowStockProducts } from "@/src/services/statistics/statisticsService
 import { LowStockProductsProps } from "@/src/components/lowStockProducts/interfaces";
 import styles from "./lowStockProducts.styles";
 import { colors } from "@/src/shared/global/colors";
+import '@/i18n/i18n.config';
+import { useTranslation } from "react-i18next";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -15,6 +17,7 @@ export const LowStockProducts: React.FC<LowStockProductsProps> = ({ minThreshold
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [newItemsStartIndex, setNewItemsStartIndex] = useState(0);
+    const { t } = useTranslation(["screens", "common"]);
 
     useEffect(() => {
         const loadData = async () => {
@@ -28,7 +31,7 @@ export const LowStockProducts: React.FC<LowStockProductsProps> = ({ minThreshold
                 setNewItemsStartIndex(0);
             } catch (err) {
                 console.error('Error loading low stock products:', err);
-                setError('Kunne ikke hente produkter med lav lagerbeholdning.');
+                setError(t("common:errors.errorFetching"));
             } finally {
                 setIsLoading(false);
             }
@@ -66,9 +69,9 @@ export const LowStockProducts: React.FC<LowStockProductsProps> = ({ minThreshold
 
     const getCriticalityText = (level: string) => {
         switch (level) {
-            case 'critical': return 'Kritisk lav';
-            case 'warning': return 'Advarsel';
-            default: return 'Lav';
+            case 'critical': return t("screens:statistics.lowStockProducts.labels.critical");
+            case 'warning': return t("screens:statistics.lowStockProducts.labels.warning");
+            default: return t("screens:statistics.lowStockProducts.labels.low");
         }
     };
 
@@ -122,14 +125,14 @@ export const LowStockProducts: React.FC<LowStockProductsProps> = ({ minThreshold
 
                     <View style={styles.stockInfo}>
                         <View style={styles.stockItem}>
-                            <Text style={styles.stockLabel}>Nuværende</Text>
+                            <Text style={styles.stockLabel}>{t("screens:statistics.lowStockProducts.currentCount")}</Text>
                             <Text style={[styles.stockValue, { color }]}>{product.currentStock}</Text>
                         </View>
 
                         <View style={styles.stockDivider} />
 
                         <View style={styles.stockItem}>
-                            <Text style={styles.stockLabel}>Minimum</Text>
+                            <Text style={styles.stockLabel}>{t("screens:statistics.lowStockProducts.threshold")}</Text>
                             <Text style={styles.stockValue}>{product.minStock}</Text>
                         </View>
                     </View>
@@ -154,7 +157,7 @@ export const LowStockProducts: React.FC<LowStockProductsProps> = ({ minThreshold
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>Status for lav lagerbeholdning</Text>
+                    <Text style={styles.title}>{t("screens:statistics.lowStockProducts.title")}</Text>
                 </View>
                 <View style={styles.emptyContainer}>
                     <Text style={styles.emptyText}>{error}</Text>
@@ -167,10 +170,10 @@ export const LowStockProducts: React.FC<LowStockProductsProps> = ({ minThreshold
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>Status for lav lagerbeholdning</Text>
+                    <Text style={styles.title}>{t("screens:statistics.lowStockProducts.title")}</Text>
                 </View>
                 <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="large" color={colors.lowStcok.warning} />
+                    <ActivityIndicator size="large" color="#8E8E93" />
                 </View>
             </View>
         );
@@ -180,10 +183,10 @@ export const LowStockProducts: React.FC<LowStockProductsProps> = ({ minThreshold
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>Status for lav lagerbeholdning</Text>
+                    <Text style={styles.title}>{t("screens:statistics.lowStockProducts.title")}</Text>
                 </View>
                 <View style={styles.emptyContainer}>
-                    <Text style={styles.emptyText}>Alle produkter har tilstrækkelig lagerbeholdning</Text>
+                    <Text style={styles.emptyText}>{t("screens:statistics.lowStockProducts.noProducts")}</Text>
                 </View>
             </View>
         );
@@ -192,7 +195,7 @@ export const LowStockProducts: React.FC<LowStockProductsProps> = ({ minThreshold
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>Status for lav lagerbeholdning</Text>
+                <Text style={styles.title}>{t("screens:statistics.lowStockProducts.title")}</Text>
             </View>
 
             <ScrollView style={styles.listContainer} showsVerticalScrollIndicator={false}>
@@ -215,9 +218,9 @@ export const LowStockProducts: React.FC<LowStockProductsProps> = ({ minThreshold
                         onPress={loadMore}
                         activeOpacity={0.7}
                     >
-                        <Text style={styles.loadMoreText}>Indlæs flere</Text>
+                        <Text style={styles.loadMoreText}>{t("screens:statistics.lowStockProducts.loadMore")}</Text>
                         <Text style={styles.loadMoreSubtext}>
-                            ({allProducts.length - displayedProducts.length} tilbage)
+                            ({allProducts.length - displayedProducts.length} {t("screens:statistics.lowStockProducts.paginationRest")})
                         </Text>
                     </TouchableOpacity>
                 )}

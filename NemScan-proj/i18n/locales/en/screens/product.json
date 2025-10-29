@@ -1,0 +1,14 @@
+{
+  "price": "Price",
+  "category": "Category",
+  "brand": "Brand",
+  "barcode": "Barcode",
+  "stock": "In stock",
+  "pieces": "pcs.",
+  "campaign": {
+    "start": "Start",
+    "end": "End",
+    "requires": "Activated at"
+  },
+  "noProduct": "No product data found"
+}

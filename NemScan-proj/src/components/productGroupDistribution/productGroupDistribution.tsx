@@ -5,12 +5,15 @@ import { getProductGroupDistribution } from "@/src/services/statistics/statistic
 import { colors } from "@/src/shared/global/colors";
 import AnimatedBar from "@/src/components/animatedBar/animatedBar";
 import styles from "./productGroupDistribution.styles";
+import "@/i18n/i18n.config";
+import {useTranslation} from "react-i18next";
 
 const COLORS = [colors.primary, '#50E3C2', '#F5A623', '#FF6B9D', '#9013FE', '#7ED321'];
 
 export const ProductGroupDistribution: React.FC = () => {
     const [groups, setGroups] = useState<ProductGroupStat[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const { t } = useTranslation(["screens", "common"]);
 
     useEffect(() => {
         const loadData = async () => {
@@ -20,7 +23,7 @@ export const ProductGroupDistribution: React.FC = () => {
                 setGroups(data);
             } catch (err) {
                 console.error('Error loading product group distribution:', err);
-                setError('Kunne ikke hente kategoridata.');
+                setError(t("common:errors.errorFetching"));
             }
         };
 
@@ -30,7 +33,7 @@ export const ProductGroupDistribution: React.FC = () => {
     if (error) {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Mest scannede</Text>
+                <Text style={styles.title}>{t("screens:statistics.productGroupDistribution.title")}</Text>
                 <View style={styles.emptyContainer}>
                     <Text style={styles.emptyText}>{error}</Text>
                 </View>
@@ -41,9 +44,9 @@ export const ProductGroupDistribution: React.FC = () => {
     if (groups.length === 0) {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Mest scannede</Text>
+                <Text style={styles.title}>{t("screens:statistics.productGroupDistribution.title")}</Text>
                 <View style={styles.emptyContainer}>
-                    <Text style={styles.emptyText}>Ingen data tilgængelig</Text>
+                    <Text style={styles.emptyText}>{t("screens:statistics.productGroupDistribution.noData")}</Text>
                 </View>
             </View>
         );
@@ -51,7 +54,7 @@ export const ProductGroupDistribution: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Mest scannede</Text>
+            <Text style={styles.title}>{t("screens:statistics.productGroupDistribution.title")}</Text>
 
             <View style={styles.chartContainer}>
                 {groups.map((group, index) => {
@@ -70,7 +73,7 @@ export const ProductGroupDistribution: React.FC = () => {
                                 duration={1200}
                             />
 
-                            <Text style={styles.scanCount}>{group.scanCount} scanninger</Text>
+                            <Text style={styles.scanCount}>{group.scanCount} {t("screens:statistics.productGroupDistribution.scans")}</Text>
                         </View>
                     );
                 })}

@@ -1,0 +1,11 @@
+{
+  "appName": "NemScan",
+  "back": "Back",
+  "loading": "Loading...",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "goToSettings": "Go to settings",
+  "errors": {
+    "errorFetching": "An error occurred"
+  }
+}

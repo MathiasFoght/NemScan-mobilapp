@@ -1,0 +1,53 @@
+{
+  "scanActivityChart": {
+    "dataView": {
+      "week": "This week",
+      "month": "This month"
+    },
+    "weeklyActivity": "Weekly activity",
+    "monthlyActivity": "Monthly activity",
+    "thisWeek": "This week",
+    "thisMonth": "This month",
+    "period": {
+      "all": "All",
+      "morning": "Morning",
+      "lateMorning": "Late morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening"
+    },
+    "days": {
+      "monday": "Mon",
+      "tuesday": "Tue",
+      "wednesday": "Wed",
+      "thursday": "Thu",
+      "friday": "Fri",
+      "saturday": "Sat",
+      "sunday": "Sun"
+    },
+    "noData": "No data available",
+    "fetchingData": "Fetching latest data...",
+    "dateRange": "{{start}} - {{end}}",
+    "pointer": {
+      "day": "{{day}}",
+      "value": "{{value}}"
+    }
+  },
+  "performanceCard": {
+    "title": "Efficiency\nthis month",
+    "trend": "Trend"
+  },
+  "mostReportedProductsCard": {
+    "title": "Most\nreported",
+    "noData": "No data"
+  },
+  "header": {
+    "positions": {
+      "ServiceAssistant": "Service assistant",
+      "StoreManager": "Store manager"
+    },
+    "details": {
+      "employeeNumber": "Employee ID",
+      "storeNumber": "Store"
+    }
+  }
+}

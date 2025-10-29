@@ -1,0 +1,34 @@
+{
+  "account": {
+    "title": "Account",
+    "profileTitle": "Your profile",
+    "profileSubtitle": "View employee information"
+  },
+  "preferences": {
+    "title": "Preferences",
+    "languageTitle": "Danish",
+    "languageSubtitleDa": "Switch to English",
+    "languageSubtitleEn": "Switch to English",
+    "scannerSoundTitle": "Sound",
+    "scannerSoundSubtitle": "Sound on scan",
+    "changeProfileImageTitle": "Change profile picture",
+    "changeProfileImageSubtitle": "Upload or reset",
+    "resetConfirmTitle": "Reset profile picture",
+    "resetConfirmMessage": "Are you sure you want to reset your profile picture?"
+  },
+  "permission": {
+    "permissionDeniedTitle": "Access denied",
+    "permissionDeniedMessage": "We need access to your camera roll to upload a profile picture"
+  },
+  "toastStates": {
+    "uploading": "Uploading...",
+    "uploadSuccess": "Profile picture updated",
+    "errorUploadingImage": "Could not update profile picture",
+    "deletingImage": "Removing...",
+    "imageDeletedSuccess": "Profile picture removed",
+    "errorDeletingImage": "Could not remove profile picture"
+  },
+  "logout": {
+    "button": "Log out"
+  }
+}

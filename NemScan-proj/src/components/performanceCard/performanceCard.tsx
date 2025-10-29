@@ -5,11 +5,13 @@ import { TrendingUp, TrendingDown, Zap } from 'lucide-react-native';
 import { getScanPerformance } from '@/src/services/statistics/statisticsService';
 import styles from './performanceCard.styles';
 import { CountUp } from "@/src/components/countUp/countUp";
+import {useTranslation} from "react-i18next";
 
 export const PerformanceCard: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [successRate, setSuccessRate] = useState<number | null>(null);
     const [trendValue, setTrendValue] = useState<number | null>(null);
+    const { t } = useTranslation(["screens"]);
 
     const isPositive = trendValue && trendValue > 0;
     const TrendIcon = isPositive ? TrendingUp : TrendingDown;
@@ -43,7 +45,7 @@ export const PerformanceCard: React.FC = () => {
                     <View style={styles.iconWrapper}>
                         <Zap size={20} color="#fff" strokeWidth={2.5} />
                     </View>
-                    <Text style={styles.title}>Effektivitet{'\n'}denne måned</Text>
+                    <Text style={styles.title}>{t("screens:dashboard.performanceCard.title")}</Text>
                 </View>
 
                 {/* Content */}
@@ -64,7 +66,7 @@ export const PerformanceCard: React.FC = () => {
                         )}
 
                         <View style={styles.footer}>
-                            <Text style={styles.subtitle}>Trend</Text>
+                            <Text style={styles.subtitle}>{t("screens:dashboard.performanceCard.trend")}</Text>
                             {trendValue !== null && (
                                 <View
                                     style={[

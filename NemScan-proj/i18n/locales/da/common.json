@@ -1,0 +1,11 @@
+{
+  "appName": "NemScan",
+  "back": "Tilbage",
+  "loading": "Henter...",
+  "confirm": "Bekræft",
+  "cancel": "Annuller",
+  "goToSettings": "Gå til indstillinger",
+  "errors": {
+    "errorFetching": "Der opstod en fejl"
+  }
+}

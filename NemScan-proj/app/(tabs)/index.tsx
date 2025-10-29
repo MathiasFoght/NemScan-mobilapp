@@ -6,14 +6,14 @@ import { getEmployeeProfile } from '@/src/services/employee/employeeService';
 import { Header } from '@/src/ui/header/header';
 import { Toast } from '@/src/components/toast/toast';
 import { PerformanceCard } from '@/src/components/performanceCard/performanceCard';
-import { Top3ProductsWithReportsCard } from '@/src/components/top3ProductsWithReportsCard/top3ProductsWithReportsCard';
+import { Top3ProductsMostReportedCard } from '@/src/components/top3ProductsMostReportedCard/top3ProductsMostReportedCard';
 import { styles } from '@/src/styles/screens/homeScreen.styles';
 import { ScanActivityChart } from '@/src/components/scanActivityChart/scanActivityChart';
 
 const MemoizedScanActivityChart = React.memo(ScanActivityChart);
 
 export default function DashboardScreen() {
-    const { t } = useTranslation();
+    const { t } = useTranslation(["common"]);
     const [employee, setEmployee] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -27,7 +27,7 @@ export default function DashboardScreen() {
             setError(null);
         } catch (err) {
             console.error('Error loading data:', err);
-            setError(t('toastErrors.errorFetching'));
+            setError(t('common:errors.errorFetching'));
         } finally {
             setLoading(false);
         }
@@ -47,7 +47,7 @@ export default function DashboardScreen() {
 
     return (
         <View style={styles.container}>
-            <Toast type="loading" message={t('common.loading')} visible={loading} />
+            <Toast type="loading" message={t('common:loading')} visible={loading} />
             <Toast type="error" message={error || ''} visible={!!error} />
 
             {employee && <Header {...employee} />}
@@ -65,7 +65,7 @@ export default function DashboardScreen() {
 
                     <View style={styles.cardsRow}>
                         <PerformanceCard />
-                        <Top3ProductsWithReportsCard />
+                        <Top3ProductsMostReportedCard />
                     </View>
                 </View>
             </ScrollView>

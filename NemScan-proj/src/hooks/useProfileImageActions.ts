@@ -1,5 +1,6 @@
 import { Alert, Linking } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import "@/i18n/i18n.config";
 import { useTranslation } from "react-i18next";
 import { getEmployeeProfile, uploadEmployeeProfileImage, deleteEmployeeProfileImage } from "@/src/services/employee/employeeService";
 import { useGalleryPermission } from "@/src/hooks/useGalleryPermission";
@@ -8,7 +9,7 @@ export const useProfileImageActions = (
     setEmployee: (emp: any) => void,
     setToast: (toast: any) => void
 ) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(["screens", "common"]);
     const { hasPermission, requestPermission } = useGalleryPermission();
 
     // Change profile image
@@ -16,12 +17,12 @@ export const useProfileImageActions = (
         try {
             if (hasPermission === false) {
                 Alert.alert(
-                    t("employeeProfile.errors.permissionDeniedTitle", "Adgang nægtet"),
-                    t("employeeProfile.errors.permissionDeniedMessage", "Du skal give adgang til billeder for at kunne uploade et profilbillede."),
+                    t("screens:settings.permission.permissionDeniedTitle"),
+                    t("screens:settings.permission.permissionDeniedMessage"),
                     [
-                        { text: t("common.cancel", "Annuller"), style: "cancel" },
+                        { text: t("common:cancel"), style: "cancel" },
                         {
-                            text: t("common.goToSettings", "Gå til indstillinger"),
+                            text: t("common:goToSettings"),
                             onPress: () => Linking.openSettings(),
                         },
                     ]
@@ -34,7 +35,7 @@ export const useProfileImageActions = (
                 if (!granted) {
                     setToast({
                         type: "error",
-                        message: t("employeeProfile.errors.permissionDenied"),
+                        message: "Permission to access camera roll was denied",
                     });
                     return;
                 }
@@ -56,18 +57,18 @@ export const useProfileImageActions = (
 
             const file = { uri, name: filename, type } as any;
 
-            setToast({ type: "loading", message: t("settings.toastStates.uploading") });
+            setToast({ type: "loading", message: t("screens:settings.toastStates.uploading") });
 
             await uploadEmployeeProfileImage(file);
             const updated = await getEmployeeProfile();
             setEmployee(updated);
 
-            setToast({ type: "success", message: t("settings.toastStates.uploadSuccess") });
+            setToast({ type: "success", message: t("screens:settings.toastStates.uploadSuccess") });
         } catch (err) {
             console.error("Upload error:", err);
             setToast({
                 type: "error",
-                message: t("settings.toastStates.errorUploadingImage"),
+                message: t("screens:settings.toastStates.errorUploadingImage"),
             });
         } finally {
             setTimeout(() => setToast({ type: null, message: "" }), 2000);
@@ -77,25 +78,25 @@ export const useProfileImageActions = (
     // Reset profile image
     const handleResetProfileImage = () => {
         Alert.alert(
-            t("settings.preferences.resetConfirmTitle"),
-            t("settings.preferences.resetConfirmMessage"),
+            t("screens:settings.preferences.resetProfileImageConfirmTitle"),
+            t("screens:settings.preferences.resetProfileImageConfirmMessage"),
             [
-                { text: t("common.cancel"), style: "cancel" },
+                { text: t("common:cancel"), style: "cancel" },
                 {
-                    text: t("common.confirm"),
+                    text: t("common:confirm"),
                     style: "destructive",
                     onPress: async () => {
                         try {
-                            setToast({ type: "loading", message: t("settings.toastStates.deletingImage") });
+                            setToast({ type: "loading", message: t("screens:settings.toastStates.deletingImage") });
                             await deleteEmployeeProfileImage();
                             const updated = await getEmployeeProfile();
                             setEmployee(updated);
-                            setToast({ type: "success", message: t("settings.toastStates.imageDeletedSuccess") });
+                            setToast({ type: "success", message: t("screens:settings.toastStates.imageDeletedSuccess") });
                         } catch (err) {
                             console.error("Delete error:", err);
                             setToast({
                                 type: "error",
-                                message: t("settings.toastStates.errorDeletingImage"),
+                                message: t("screens:settings.toastStates.errorDeletingImage"),
                             });
                         } finally {
                             setTimeout(() => setToast({ type: null, message: "" }), 2000);

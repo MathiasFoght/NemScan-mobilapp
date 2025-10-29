@@ -1,0 +1,15 @@
+{
+  "subtitle": "Medarbejder Login",
+  "employeeLogin": "Er du medarbejder? Log ind her",
+  "placeholder": "Medarbejdernummer",
+  "button": "Log ind",
+  "loginHelper": {
+    "title": "Hjælp til login",
+    "info": "Brug dit 3-cifrede medarbejdernummer, som du har modtaget fra din leder."
+  },
+  "specificErrors": {
+    "alert": {
+      "message": "Medarbejdernummer ikke genkendt"
+    }
+  }
+}

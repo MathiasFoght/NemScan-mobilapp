@@ -9,27 +9,18 @@ import {
     Easing,
 } from 'react-native';
 import { LineChart, CurveType } from 'react-native-gifted-charts';
+import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { getScanActivity } from '@/src/services/statistics/statisticsService';
 import { ScanActivityResponse } from '@/src/services/statistics/interfaces';
 import styles from './scanActivityChart.styles'
 
-const periods = ['Alle', 'Morgen', 'Formiddag', 'Eftermiddag', 'Aften'];
-
-const periodMapping: { [key: string]: string } = {
-    Alle: 'All',
-    Morgen: 'Morning',
-    Formiddag: 'Late Morning',
-    Eftermiddag: 'Afternoon',
-    Aften: 'Evening',
-};
-
 export const ScanActivityChartComponent: React.FC = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(["screens"]);
     const [data, setData] = useState<ScanActivityResponse | null>(null);
     const [chartData, setChartData] = useState<any[]>([]);
     const [maxValue, setMaxValue] = useState(50);
-    const [selectedPeriod, setSelectedPeriod] = useState<string>('Alle');
+    const [selectedPeriod, setSelectedPeriod] = useState<string>(t("screens:dashboard.scanActivityChart.period.all"));
     const [loading, setLoading] = useState(true);
     const [periodType, setPeriodType] = useState<'week' | 'month'>('week');
     const [isTransitioning, setIsTransitioning] = useState(false);
@@ -39,6 +30,22 @@ export const ScanActivityChartComponent: React.FC = () => {
     const filterHeightAnim = useRef(new Animated.Value(1)).current;
 
     const screenWidth = Dimensions.get('window').width;
+
+    const periods = [
+        t('screens:dashboard.scanActivityChart.period.all'),
+        t('screens:dashboard.scanActivityChart.period.morning'),
+        t('screens:dashboard.scanActivityChart.period.lateMorning'),
+        t('screens:dashboard.scanActivityChart.period.afternoon'),
+        t('screens:dashboard.scanActivityChart.period.evening'),
+    ];
+
+    const periodMapping: { [key: string]: string } = {
+        [t('screens:dashboard.scanActivityChart.period.all')]: 'All',
+        [t('screens:dashboard.scanActivityChart.period.morning')]: 'Morning',
+        [t('screens:dashboard.scanActivityChart.period.lateMorning')]: 'Late Morning',
+        [t('screens:dashboard.scanActivityChart.period.afternoon')]: 'Afternoon',
+        [t('screens:dashboard.scanActivityChart.period.evening')]: 'Evening',
+    };
 
     const getWeekRange = () => {
         const today = new Date();
@@ -69,23 +76,24 @@ export const ScanActivityChartComponent: React.FC = () => {
     };
 
     const getDateRange = () => {
+        const locale = i18n.language === 'en' ? 'en-US' : 'da-DK';
+
         if (periodType === 'week') {
             const { monday, sunday } = getWeekRange();
-            return `${monday.getDate()} ${monday.toLocaleString('da-DK', {
-                month: 'short',
-            })} - ${sunday.getDate()} ${sunday.toLocaleString('da-DK', {
-                month: 'short',
-            })}`;
+            return t('screens:dashboard.scanActivityChart.dateRange', {
+                start: `${monday.getDate()} ${monday.toLocaleString(locale, { month: 'short' })}`,
+                end: `${sunday.getDate()} ${sunday.toLocaleString(locale, { month: 'short' })}`,
+            });
         } else {
             const { firstDay } = getMonthRange();
             const today = new Date();
-            return `${firstDay.getDate()} ${firstDay.toLocaleString('da-DK', {
-                month: 'short',
-            })} - ${today.getDate()} ${today.toLocaleString('da-DK', {
-                month: 'short',
-            })}`;
+            return t('screens:dashboard.scanActivityChart.dateRange', {
+                start: `${firstDay.getDate()} ${firstDay.toLocaleString(locale, { month: 'short' })}`,
+                end: `${today.getDate()} ${today.toLocaleString(locale, { month: 'short' })}`,
+            });
         }
     };
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -94,7 +102,7 @@ export const ScanActivityChartComponent: React.FC = () => {
                 const res = await getScanActivity(periodType);
                 setData(res);
             } catch (err) {
-                console.error('Kunne ikke hente scanningsdata:', err);
+                console.error(t('screens:dashboard.scanActivityChart.noData'), err);
             } finally {
                 setLoading(false);
             }
@@ -119,7 +127,6 @@ export const ScanActivityChartComponent: React.FC = () => {
                 useNativeDriver: true,
             }),
         ]).start(() => {
-            // Chart data opdateres her - efter fade out
             setTimeout(() => {
                 setIsTransitioning(false);
                 Animated.parallel([
@@ -174,8 +181,7 @@ export const ScanActivityChartComponent: React.FC = () => {
                     ]).start();
                 }, 50);
             });
-        }
-        else {
+        } else {
             Animated.parallel([
                 Animated.timing(opacityAnim, {
                     toValue: 0,
@@ -300,7 +306,7 @@ export const ScanActivityChartComponent: React.FC = () => {
         else if (periodType === 'week' && data.heatmap?.length) {
             const englishPeriod = periodMapping[selectedPeriod];
             const filtered =
-                selectedPeriod === 'Alle'
+                selectedPeriod === t('screens:dashboard.scanActivityChart.period.all')
                     ? data.heatmap
                     : data.heatmap.filter((d) => d.period === englishPeriod);
 
@@ -339,8 +345,13 @@ export const ScanActivityChartComponent: React.FC = () => {
             setMaxValue(Math.ceil(roundedMax * scaleBoost));
 
             const dayTranslations: Record<string, string> = {
-                Monday: 'Man', Tuesday: 'Tir', Wednesday: 'Ons', Thursday: 'Tor',
-                Friday: 'Fre', Saturday: 'Lør', Sunday: 'Søn',
+                Monday: t('screens:dashboard.scanActivityChart.days.monday'),
+                Tuesday: t('screens:dashboard.scanActivityChart.days.tuesday'),
+                Wednesday: t('screens:dashboard.scanActivityChart.days.wednesday'),
+                Thursday: t('screens:dashboard.scanActivityChart.days.thursday'),
+                Friday: t('screens:dashboard.scanActivityChart.days.friday'),
+                Saturday: t('screens:dashboard.scanActivityChart.days.saturday'),
+                Sunday: t('screens:dashboard.scanActivityChart.days.sunday'),
             };
 
             setChartData(
@@ -377,7 +388,9 @@ export const ScanActivityChartComponent: React.FC = () => {
         <View style={[styles.container, { height: 440, overflow: 'hidden' }]}>
             <View style={styles.header}>
                 <Text style={styles.title}>
-                    {periodType === 'week' ? 'Ugentlig Aktivitet' : 'Månedlig Aktivitet'}
+                    {periodType === 'week'
+                        ? t('screens:dashboard.scanActivityChart.weeklyActivity')
+                        : t('screens:dashboard.scanActivityChart.monthlyActivity')}
                 </Text>
                 <Text style={styles.dateRange}>{getDateRange()}</Text>
 
@@ -390,7 +403,7 @@ export const ScanActivityChartComponent: React.FC = () => {
                         onPress={() => {
                             if (periodType !== 'week') {
                                 setPeriodType('week');
-                                setSelectedPeriod('Alle');
+                                setSelectedPeriod(t('screens:dashboard.scanActivityChart.period.all'));
                                 animatePeriodTypeChange('week');
                                 setTimeout(() => setPeriodType('week'), 150);
                             }
@@ -402,7 +415,7 @@ export const ScanActivityChartComponent: React.FC = () => {
                                 periodType === 'week' && styles.switchTextActive,
                             ]}
                         >
-                            Denne uge
+                            {t("screens:dashboard.scanActivityChart.dataView.week")}
                         </Text>
                     </TouchableOpacity>
 
@@ -425,7 +438,7 @@ export const ScanActivityChartComponent: React.FC = () => {
                                 periodType === 'month' && styles.switchTextActive,
                             ]}
                         >
-                            Denne måned
+                            {t("screens:dashboard.scanActivityChart.dataView.month")}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -487,12 +500,14 @@ export const ScanActivityChartComponent: React.FC = () => {
                 pointerEvents="box-none"
             >
                 {!chartData.length ? (
-                    <Text style={styles.dateRange}>Ingen data tilgængelig</Text>
+                    <Text style={styles.dateRange}>
+                        {t('screens:dashboard.scanActivityChart.noData')}
+                    </Text>
                 ) : (
                     <>
                         {loading && (
                             <Text style={[styles.dateRange, { opacity: 0.6, marginBottom: 8 }]}>
-                                Henter nyeste data...
+                                {t('screens:dashboard.scanActivityChart.fetchingData')}
                             </Text>
                         )}
 
@@ -546,8 +561,12 @@ export const ScanActivityChartComponent: React.FC = () => {
                                                     },
                                                 ]}
                                             >
-                                                <Text style={styles.pointerDay}>{items[0].label}</Text>
-                                                <Text style={styles.pointerValue}>{items[0].value}</Text>
+                                                <Text style={styles.pointerDay}>
+                                                    {t('screens:dashboard.scanActivityChart.pointer.day', { day: items[0].label })}
+                                                </Text>
+                                                <Text style={styles.pointerValue}>
+                                                    {t('screens:dashboard.scanActivityChart.pointer.value', { value: items[0].value })}
+                                                </Text>
                                             </View>
                                         ),
                                     }
@@ -567,5 +586,6 @@ export const ScanActivityChartComponent: React.FC = () => {
         </View>
     );
 };
+
 export const ScanActivityChart = memo(ScanActivityChartComponent);
 export default ScanActivityChart;

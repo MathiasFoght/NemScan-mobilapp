@@ -24,7 +24,7 @@ export default function LoginScreen() {
     const [employeeNumber, setEmployeeNumber] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const { t } = useTranslation();
+    const { t } = useTranslation(["screens", "common"]);
 
     const handleLogin = async () => {
         try {
@@ -33,7 +33,7 @@ export default function LoginScreen() {
             await login(employeeNumber);
             router.replace("/(tabs)");
         } catch (e: any) {
-            setError(t('errors.login.loginAlertMessage'));
+            setError(t('screens:login:specificErrors.alert.message'));
             setTimeout(() => setError(null), 5000);
         } finally {
             setLoading(false);
@@ -51,7 +51,7 @@ export default function LoginScreen() {
 
                     <View style={styles.header}>
                         <Button
-                            title={t('common.back')}
+                            title={t('common:back')}
                             onPress={() => router.back()}
                             icon={<MaterialIcons name="arrow-back-ios-new" size={24} color="#000" />}
                             variant="simple"
@@ -61,8 +61,8 @@ export default function LoginScreen() {
 
                     <View style={styles.logoSection}>
                         <Logo />
-                        <Text style={styles.appName}>{t('common.appName')}</Text>
-                        <Text style={styles.subtitle}>{t('login.subtitle')}</Text>
+                        <Text style={styles.appName}>{t('common:appName')}</Text>
+                        <Text style={styles.subtitle}>{t('screens:login.subtitle')}</Text>
                     </View>
 
                     <View style={styles.inputSection}>
@@ -75,7 +75,7 @@ export default function LoginScreen() {
                             />
                             <TextInput
                                 style={styles.input}
-                                placeholder={t('login.employeeNumberPlaceholder')}
+                                placeholder={t('screens:login.placeholder')}
                                 placeholderTextColor={colors.inactive}
                                 value={employeeNumber}
                                 onChangeText={setEmployeeNumber}
@@ -84,7 +84,7 @@ export default function LoginScreen() {
                         </View>
 
                         <Button
-                            title={t('login.button')}
+                            title={t('screens:login.button')}
                             onPress={handleLogin}
                             loading={loading}
                             disabled={!employeeNumber.trim() || loading}
@@ -100,10 +100,10 @@ export default function LoginScreen() {
                                     size={20}
                                     color={colors.primary}
                                 />
-                                <Text style={styles.helpTitle}>{t('login.loginHelper.title')}</Text>
+                                <Text style={styles.helpTitle}>{t('screens:login.loginHelper.title')}</Text>
                             </View>
                             <Text style={styles.helpText}>
-                                {t('login.loginHelper.content')}
+                                {t('screens:login.loginHelper.info')}
                             </Text>
                         </View>
                     </View>

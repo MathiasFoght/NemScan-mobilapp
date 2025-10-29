@@ -4,11 +4,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { AlertCircle } from 'lucide-react-native';
 import { getTopFailedProducts } from '@/src/services/report/reportService';
 import { FrequentErrorProduct } from '@/src/services/report/interfaces';
-import styles from './top3ProductsWithReportsCard.styles';
+import styles from './top3ProductsMostReportedCard.styles';
+import {useTranslation} from "react-i18next";
 
-export const Top3ProductsWithReportsCard: React.FC = () => {
+export const Top3ProductsMostReportedCard: React.FC = () => {
     const [topProducts, setTopProducts] = useState<FrequentErrorProduct[]>([]);
     const [loading, setLoading] = useState(true);
+    const { t } = useTranslation(["screens"]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -36,13 +38,13 @@ export const Top3ProductsWithReportsCard: React.FC = () => {
                     <View style={styles.iconWrapper}>
                         <AlertCircle size={20} color="#fff" strokeWidth={2.5} />
                     </View>
-                    <Text style={styles.title}>Mest{'\n'}rapporteret</Text>
+                    <Text style={styles.title}>{t("screens:dashboard.mostReportedProductsCard.title")}</Text>
                 </View>
 
                 {loading ? (
                     <ActivityIndicator color="#fff" />
                 ) : topProducts.length === 0 ? (
-                    <Text style={{ textAlign: 'center', color: '#e5e5e5' }}>Ingen data</Text>
+                    <Text style={{ textAlign: 'center', color: '#e5e5e5' }}>{t("screens:dashboard.mostReportedProductsCard.noData")}</Text>
                 ) : (
                     <View>
                         {topProducts.map((p, i) => {

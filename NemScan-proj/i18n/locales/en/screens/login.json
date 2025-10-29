@@ -1,0 +1,15 @@
+{
+  "subtitle": "Employee Login",
+  "employeeLogin": "Employee? Login",
+  "placeholder": "Employee number",
+  "button": "Login",
+  "loginHelper": {
+    "title": "Login help",
+    "info": "Use your 3-digit employee number provided by your manager."
+  },
+  "specificErrors": {
+    "alert": {
+      "message": "Employee number not recognized"
+    }
+  }
+}

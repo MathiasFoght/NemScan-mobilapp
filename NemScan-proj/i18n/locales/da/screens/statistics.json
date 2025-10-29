@@ -1,0 +1,33 @@
+{
+  "title": "Butiksindsigt",
+  "subtitle": "Få indsigt i statistikker og analyser",
+  "keyMetrics": {
+    "todayReports": "Dagens rapporter",
+    "mostScannedTitle": "Flest scanninger",
+    "mostScannedSubtitle": "scanninger",
+    "noScannedProduct": "Ingen scanninger"
+  },
+  "increasingErrorProducts": {
+    "title": "Øget rapportering",
+    "period": "De sidste {{count}} dage",
+    "noProductsWithIncreasingError": "Ingen produkter med fejl i perioden"
+  },
+  "productGroupDistribution": {
+    "title": "Mest scannede",
+    "noData": "Ingen data tilgængelig",
+    "scans": "scanninger"
+  },
+  "lowStockProducts": {
+    "title": "Status for lav lagerbeholdning",
+    "labels": {
+      "critical": "Kritisk lav",
+      "warning": "Advarsel",
+      "low": "Lav"
+    },
+    "currentCount": "Nuværende",
+    "threshold": "Minimum",
+    "loadMore": "Indlæs flere",
+    "paginationRest": "tilbage",
+    "noProducts": "Alle produkter har tilstrækkelig lagerbeholdning"
+  }
+}

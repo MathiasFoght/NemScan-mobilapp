@@ -17,7 +17,7 @@ export default function MyProfileScreen() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
-    const { t } = useTranslation();
+    const { t } = useTranslation(["screens", "common"]);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -26,7 +26,7 @@ export default function MyProfileScreen() {
                 setEmployee(data);
                 setError(null);
             } catch (err: any) {
-                setError(t('toastErrors.errorFetching'));
+                setError(t('common:errors.errorFetching'));
             } finally {
                 setLoading(false);
             }
@@ -36,7 +36,7 @@ export default function MyProfileScreen() {
 
     return (
         <View style={styles.container}>
-            <Toast type="loading" message={t('common.loading')} visible={loading} />
+            <Toast type="loading" message={t('common:loading')} visible={loading} />
             <Toast type="error" message={error || ''} visible={!!error} />
 
             <View style={styles.headerBar}>
@@ -47,14 +47,14 @@ export default function MyProfileScreen() {
                     variant="simple"
                     style={{ height: 40 }}
                 />
-                <Text style={styles.headerTitle}>{t('myProfile.title')}</Text>
+                <Text style={styles.headerTitle}>{t('screens:myProfile.title')}</Text>
                 <View style={styles.placeholder} />
             </View>
 
             {!loading && !employee ? (
                 <View style={styles.center}>
                     <MaterialIcons name="person-off" size={64} color={colors.inactive} />
-                    <Text style={styles.emptyText}>{t('myProfile.fallbacks.noEmployeeFound')}</Text>
+                    <Text style={styles.emptyText}>{t('screens:myProfile.fallbacks.noEmployeeFound')}</Text>
                 </View>
             ) : employee ? (
                 <ScrollView
@@ -63,30 +63,30 @@ export default function MyProfileScreen() {
                     showsVerticalScrollIndicator={false}
                 >
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>{t('myProfile.employeeInfo')}</Text>
+                        <Text style={styles.sectionTitle}>{t('screens:myProfile.employeeInfo')}</Text>
 
                         <View style={styles.infoCard}>
                             <InfoRow
                                 icon="badge"
-                                label={t('employeeProfile.details.employeeNumber')}
+                                label={t('screens:myProfile.details.employeeNumber')}
                                 value={employee.employeeNumber}
                             />
                             <InfoRow
                                 icon="work"
-                                label={t('myProfile.fields.position')}
-                                value={t(`employeeProfile.positions.${employee.position}`)}
+                                label={t('screens:myProfile.fields.position')}
+                                value={t(`screens:myProfile.positions.${employee.position}`)}
                                 hideBorder
                             />
                         </View>
                     </View>
 
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>{t('myProfile.storeInfo')}</Text>
+                        <Text style={styles.sectionTitle}>{t('screens:myProfile.storeInfo')}</Text>
 
                         <View style={styles.infoCard}>
                             <InfoRow
                                 icon="store"
-                                label={t('myProfile.fields.storeNumber')}
+                                label={t('screens:myProfile.fields.storeNumber')}
                                 value={employee.storeNumber}
                                 hideBorder
                             />

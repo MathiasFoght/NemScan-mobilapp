@@ -9,6 +9,8 @@ import { getProductImage, getProductCustomer, getProductEmployee } from "@/src/s
 import { useProduct } from "@/src/contexts/productContext";
 import { useAuth } from "@/src/contexts/authContext";
 import { ProductEmployee, ProductCustomer } from "@/src/services/product/interfaces";
+import '@/i18n/i18n.config';
+import { useTranslation } from "react-i18next";
 
 export default function ProductScreen() {
     const { barcode } = useLocalSearchParams<{ barcode: string }>();
@@ -19,6 +21,7 @@ export default function ProductScreen() {
         setEmployeeProduct
     } = useProduct();
     const { userType } = useAuth();
+    const { t } = useTranslation(["screens", "common"]);
 
     const product = userType === "customer" ? customerProduct : employeeProduct;
 
@@ -26,7 +29,6 @@ export default function ProductScreen() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // Type-guard for ProductEmployee
     function isEmployeeProduct(product: ProductCustomer | ProductEmployee): product is ProductEmployee {
         return (product as ProductEmployee).currentStockQuantity !== undefined;
     }
@@ -50,7 +52,7 @@ export default function ProductScreen() {
                 }
 
                 if (!currentProduct) {
-                    setError("Ingen produktdata fundet. Prøv at scanne igen.");
+                    setError(t("screens:product.noProduct"));
                     setLoading(false);
                     return;
                 }
@@ -64,7 +66,7 @@ export default function ProductScreen() {
 
                 setLoading(false);
             } catch {
-                setError("Kunne ikke hente produktdata");
+                setError(t("common:errors.errorFetching"));
                 setLoading(false);
             }
         };
@@ -91,7 +93,7 @@ export default function ProductScreen() {
     if (!product) {
         return (
             <View style={styles.errorContainer}>
-                <Text style={styles.error}>Ingen produktdata fundet.</Text>
+                <Text style={styles.error}>{t("common:errors.errorFetching")}</Text>
             </View>
         );
     }
@@ -130,20 +132,30 @@ export default function ProductScreen() {
                 <Text style={styles.title}>{product.productName}</Text>
 
                 <View style={styles.priceCard}>
-                    <Text style={styles.priceLabel}>Pris</Text>
+                    <Text style={styles.priceLabel}>{t("screens:product.price")}</Text>
                     <Text style={styles.priceValue}>{product.currentSalesPrice} kr</Text>
                 </View>
 
                 <View style={styles.infoCard}>
                     <View style={styles.infoRow}>
-                        <Text style={styles.infoLabel}>Kategori</Text>
+                        <Text style={styles.infoLabel}>{t("screens:product.category")}</Text>
                         <Text style={styles.infoValue}>{product.productGroup}</Text>
                     </View>
 
                     <View style={styles.divider} />
 
+                    {userType === "employee" && isEmployeeProduct(product) && product.productBrand && (
+                        <>
+                            <View style={styles.infoRow}>
+                                <Text style={styles.infoLabel}>{t("screens:product.brand")}</Text>
+                                <Text style={styles.infoValue}>{product.productBrand}</Text>
+                            </View>
+                            <View style={styles.divider} />
+                        </>
+                    )}
+
                     <View style={styles.infoRow}>
-                        <Text style={styles.infoLabel}>Stregkode</Text>
+                        <Text style={styles.infoLabel}>{t("screens:product.barcode")}</Text>
                         <Text style={styles.infoValue}>{barcode}</Text>
                     </View>
 
@@ -151,8 +163,8 @@ export default function ProductScreen() {
                         <>
                             <View style={styles.divider} />
                             <View style={styles.infoRow}>
-                                <Text style={styles.infoLabel}>Lagerbeholdning</Text>
-                                <Text style={styles.infoValue}>{product.currentStockQuantity} stk.</Text>
+                                <Text style={styles.infoLabel}>{t("screens:product.stock")}</Text>
+                                <Text style={styles.infoValue}>{product.currentStockQuantity} {t("screens:product.pieces")}</Text>
                             </View>
                         </>
                     )}
@@ -173,14 +185,14 @@ export default function ProductScreen() {
 
                                 <View style={styles.campaignDetails}>
                                     <View style={styles.campaignRow}>
-                                        <Text style={styles.campaignLabel}>Start</Text>
+                                        <Text style={styles.campaignLabel}>{t("screens:product.campaign.start")}</Text>
                                         <Text style={styles.campaignValue}>
                                             {new Date(campaign.fromDate).toLocaleDateString("da-DK")}
                                         </Text>
                                     </View>
 
                                     <View style={styles.campaignRow}>
-                                        <Text style={styles.campaignLabel}>Slut</Text>
+                                        <Text style={styles.campaignLabel}>{t("screens:product.campaign.end")}</Text>
                                         <Text style={styles.campaignValue}>
                                             {new Date(campaign.toDate).toLocaleDateString("da-DK")}
                                         </Text>
@@ -188,9 +200,9 @@ export default function ProductScreen() {
 
                                     {campaign.activateAtQuantity > 1 && (
                                         <View style={styles.campaignRow}>
-                                            <Text style={styles.campaignLabel}>Kræver</Text>
+                                            <Text style={styles.campaignLabel}>{t("screens:product.campaign.requires")}</Text>
                                             <Text style={styles.campaignValue}>
-                                                {campaign.activateAtQuantity} stk.
+                                                {campaign.activateAtQuantity} {t("screens:product.pieces")}
                                             </Text>
                                         </View>
                                     )}
