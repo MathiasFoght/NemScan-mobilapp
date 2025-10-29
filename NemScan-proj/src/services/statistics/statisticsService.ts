@@ -94,7 +94,7 @@ export const getIncreasingErrorRateProducts = async (
 // Low stock products
 export const getLowStockProducts = async (minThreshold = 100): Promise<LowStockProduct[]> => {
     const data = await apiClient<any[]>(
-        `${ENDPOINTS.STATISTICS.SCANS.LOW_STOCK_PRODUCTS}?minThreshold=${minThreshold}`
+        `${ENDPOINTS.STATISTICS.LOW_STOCK_PRODUCTS}?minThreshold=${minThreshold}`
     );
 
     return data.map(item => ({

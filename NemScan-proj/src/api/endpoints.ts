@@ -20,10 +20,10 @@ export const ENDPOINTS = {
             ACTIVITY: '/api/statistics/scans/activity',
             PERFORMANCE: '/api/statistics/scans/performance',
             PRODUCTGROUP_DISTRIBUTION: '/api/statistics/scans/product-group-distribution',
-            LOW_STOCK_PRODUCTS: '/api/statistics/products/low-stock',
             INCREASING_ERROR_RATE: '/api/statistics/errors/increasing-error-rate',
             TOP_SCANNED_PRODUCT: '/api/statistics/scans/top-product-today',
         },
+        LOW_STOCK_PRODUCTS: '/api/statistics/products/low-stock',
     },
     REPORT: {
         TOP_FAILED: '/api/report/top-3-most-failed-products',
