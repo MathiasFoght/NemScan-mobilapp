@@ -9,6 +9,7 @@ import {
     Easing,
 } from 'react-native';
 import { LineChart, CurveType } from 'react-native-gifted-charts';
+import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { getScanActivity } from '@/src/services/statistics/statisticsService';
 import { ScanActivityResponse } from '@/src/services/statistics/interfaces';
@@ -75,21 +76,24 @@ export const ScanActivityChartComponent: React.FC = () => {
     };
 
     const getDateRange = () => {
+        const locale = i18n.language === 'en' ? 'en-US' : 'da-DK';
+
         if (periodType === 'week') {
             const { monday, sunday } = getWeekRange();
             return t('screens:dashboard.scanActivityChart.dateRange', {
-                start: `${monday.getDate()} ${monday.toLocaleString('da-DK', { month: 'short' })}`,
-                end: `${sunday.getDate()} ${sunday.toLocaleString('da-DK', { month: 'short' })}`,
+                start: `${monday.getDate()} ${monday.toLocaleString(locale, { month: 'short' })}`,
+                end: `${sunday.getDate()} ${sunday.toLocaleString(locale, { month: 'short' })}`,
             });
         } else {
             const { firstDay } = getMonthRange();
             const today = new Date();
             return t('screens:dashboard.scanActivityChart.dateRange', {
-                start: `${firstDay.getDate()} ${firstDay.toLocaleString('da-DK', { month: 'short' })}`,
-                end: `${today.getDate()} ${today.toLocaleString('da-DK', { month: 'short' })}`,
+                start: `${firstDay.getDate()} ${firstDay.toLocaleString(locale, { month: 'short' })}`,
+                end: `${today.getDate()} ${today.toLocaleString(locale, { month: 'short' })}`,
             });
         }
     };
+
 
     useEffect(() => {
         const fetchData = async () => {

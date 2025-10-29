@@ -46,7 +46,7 @@
       "StoreManager": "Store manager"
     },
     "details": {
-      "employeeNumber": "Employee ID.",
+      "employeeNumber": "Employee ID",
       "storeNumber": "Store"
     }
   }
