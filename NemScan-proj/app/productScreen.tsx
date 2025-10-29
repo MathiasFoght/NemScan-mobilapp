@@ -144,7 +144,7 @@ export default function ProductScreen() {
 
                     <View style={styles.divider} />
 
-                    {userType === "employee" && isEmployeeProduct(product) && (
+                    {userType === "employee" && isEmployeeProduct(product) && product.productBrand && (
                         <>
                             <View style={styles.infoRow}>
                                 <Text style={styles.infoLabel}>{t("screens:product.brand")}</Text>
