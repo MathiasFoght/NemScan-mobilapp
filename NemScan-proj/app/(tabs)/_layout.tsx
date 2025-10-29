@@ -13,7 +13,14 @@ export default function TabLayout() {
     useEffect(() => {
         const currentTab = segments[segments.length - 1];
 
-        if (currentTab === "scannerScreen" || currentTab === "statisticsScreen" || currentTab === "settingsScreen") {
+        if (currentTab === "scannerScreen" ||
+            currentTab === "statisticsScreen" ||
+            currentTab === "settingsScreen" ||
+            currentTab === "myProfileScreen" ||
+            currentTab === "productNotFoundScreen" ||
+            currentTab === "loginScreen"
+        )
+        {
             StatusBar.setBarStyle("dark-content");
         } else {
             StatusBar.setBarStyle("light-content");

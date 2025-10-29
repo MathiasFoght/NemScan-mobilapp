@@ -32,7 +32,7 @@ export default function StartScreen() {
     );
 
     useEffect(() => {
-        if (userType === "customer") router.replace("/(tabs)");
+        if (userType === "employee") router.replace("/(tabs)");
     }, [userType]);
 
     useEffect(() => {
