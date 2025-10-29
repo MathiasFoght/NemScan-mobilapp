@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { StatusBar } from "react-native";
 
 export default function TabLayout() {
-    const { t } = useTranslation();
+    const { t } = useTranslation(["navbar"]);
     const segments = useSegments();
 
     useEffect(() => {
@@ -42,10 +42,10 @@ export default function TabLayout() {
                 },
             })}
         >
-            <Tabs.Screen name="index" options={{ title: t('tabs.homeScreen') }} />
-            <Tabs.Screen name="scannerScreen" options={{ title: t('tabs.scannerScreen') }} />
-            <Tabs.Screen name="statisticsScreen" options={{ title: t('tabs.statisticsScreen') }} />
-            <Tabs.Screen name="settingsScreen" options={{ title: t('tabs.settingsScreen') }} />
+            <Tabs.Screen name="index" options={{ title: t('navbar:tabs.index') }} />
+            <Tabs.Screen name="scannerScreen" options={{ title: t('navbar:tabs.scannerScreen') }} />
+            <Tabs.Screen name="statisticsScreen" options={{ title: t('navbar:tabs.statisticsScreen') }} />
+            <Tabs.Screen name="settingsScreen" options={{ title: t('navbar:tabs.settingsScreen') }} />
         </Tabs>
     );
 }

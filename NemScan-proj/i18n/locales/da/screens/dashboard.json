@@ -1,0 +1,53 @@
+{
+  "scanActivityChart": {
+    "dataView": {
+      "week": "Denne uge",
+      "month": "Denne måned"
+    },
+    "weeklyActivity": "Ugentlig aktivitet",
+    "monthlyActivity": "Månedlig aktivitet",
+    "thisWeek": "Denne uge",
+    "thisMonth": "Denne måned",
+    "period": {
+      "all": "Alle",
+      "morning": "Morgen",
+      "lateMorning": "Formiddag",
+      "afternoon": "Eftermiddag",
+      "evening": "Aften"
+    },
+    "days": {
+      "monday": "Man",
+      "tuesday": "Tir",
+      "wednesday": "Ons",
+      "thursday": "Tor",
+      "friday": "Fre",
+      "saturday": "Lør",
+      "sunday": "Søn"
+    },
+    "noData": "Ingen data tilgængelig",
+    "fetchingData": "Henter nyeste data...",
+    "dateRange": "{{start}} - {{end}}",
+    "pointer": {
+      "day": "{{day}}",
+      "value": "{{value}}"
+    }
+  },
+  "performanceCard": {
+    "title": "Effektivitet\ndenne måned",
+    "trend": "Trend"
+  },
+  "mostReportedProductsCard": {
+    "title": "Mest\nrapporteret",
+    "noData": "Ingen data"
+  },
+  "header": {
+    "positions": {
+      "ServiceAssistant": "Servicemedarbejder",
+      "StoreManager": "Butikschef"
+    },
+    "details": {
+      "employeeNumber": "Medarbejdernr.",
+      "storeNumber": "Butik"
+    }
+  }
+}

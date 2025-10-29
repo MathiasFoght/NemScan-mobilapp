@@ -4,10 +4,12 @@ import { ErrorRateTrend } from '@/src/services/statistics/interfaces';
 import { getIncreasingErrorRateProducts } from '@/src/services/statistics/statisticsService';
 import {IncreasingErrorProductsProps} from "@/src/components/increasingErrorProducts/interfaces";
 import styles from "./increasingErrorProducts.styles";
-
+import "@/i18n/i18n.config";
+import {useTranslation} from "react-i18next";
 export const IncreasingErrorProducts: React.FC<IncreasingErrorProductsProps> = ({daysFilter = 7,}) => {
     const [products, setProducts] = useState<ErrorRateTrend[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const { t } = useTranslation(["screens", "common"]);
 
     useEffect(() => {
         const loadData = async () => {
@@ -17,7 +19,7 @@ export const IncreasingErrorProducts: React.FC<IncreasingErrorProductsProps> = (
                 setProducts(data);
             } catch (err) {
                 console.error('Error loading increasing error rate products:', err);
-                setError('Kunne ikke hente produktdata.');
+                setError(t("common:errors.errorFetching"));
             }
         };
 
@@ -27,7 +29,7 @@ export const IncreasingErrorProducts: React.FC<IncreasingErrorProductsProps> = (
     if (error) {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Øget rapportering</Text>
+                <Text style={styles.title}>{t("screens:statistics.increasingErrorProducts.title")}</Text>
                 <Text style={styles.emptyText}>{error}</Text>
             </View>
         );
@@ -36,17 +38,16 @@ export const IncreasingErrorProducts: React.FC<IncreasingErrorProductsProps> = (
     if (products.length === 0) {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Øget rapportering</Text>
-                <Text style={styles.emptyText}>Ingen produkter med fejl i perioden</Text>
+                <Text style={styles.title}>{t("screens:statistics.increasingErrorProducts.title")}</Text>
+                <Text style={styles.emptyText}>{t("screens:statistics.increasingErrorProducts.noProductsWithIncreasingError")}</Text>
             </View>
         );
     }
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Øget rapportering</Text>
-            <Text style={styles.subtitle}>De sidste {daysFilter} dage</Text>
-
+            <Text style={styles.title}>{t("screens:statistics.increasingErrorProducts.title")}</Text>
+            <Text style={styles.subtitle}>{t('screens:statistics.increasingErrorProducts.period', { count: daysFilter })}</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {products.map((product, index) => (
                     <View key={product.productNumber} style={styles.card}>

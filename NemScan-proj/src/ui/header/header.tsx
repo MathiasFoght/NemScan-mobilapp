@@ -13,9 +13,9 @@ export const Header = ({
    storeNumber,
    profileImageUrl,
 }: HeaderProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(["screens"]);
 
-    const employeePosition = t(`employeeProfile.positions.${position}`);
+    const employeePosition = t(`screens:dashboard.header.positions.${position}`);
 
     return (
         <View style={styles.header}>
@@ -23,14 +23,14 @@ export const Header = ({
                 <Avatar name={name} imageUrl={profileImageUrl} />
 
                 <View style={styles.infoSection}>
-                    <Text style={styles.name}>{name || t('employeeProfile.fallbacks.name')}</Text>
+                    <Text style={styles.name}>{name}</Text>
                     <Text style={styles.position}>
-                        {employeePosition || t('employeeProfile.fallbacks.position')}
+                        {employeePosition}
                     </Text>
                     <View style={styles.detailsRow}>
-                        <Text style={styles.detail}>{t('employeeProfile.details.employeeNumber')} {employeeNumber || t('employeeProfile.fallbacks.employeeNumber')}</Text>
+                        <Text style={styles.detail}>{t('screens:dashboard.header.details.employeeNumber')} {employeeNumber}</Text>
                         <Text style={styles.separator}>•</Text>
-                        <Text style={styles.detail}>{t('employeeProfile.details.storeNumber')} {storeNumber || t('employeeProfile.fallbacks.storeNumber')}</Text>
+                        <Text style={styles.detail}>{t('screens:dashboard.header.details.storeNumber')} {storeNumber}</Text>
                     </View>
                 </View>
             </View>

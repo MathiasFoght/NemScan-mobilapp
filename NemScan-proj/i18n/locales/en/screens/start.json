@@ -1,0 +1,19 @@
+{
+  "manualEntryText": "Enter manually",
+  "instructionTitle": "Scan barcode",
+  "instructionText": "Place the barcode within the frame",
+  "employeeButton": "Employee? Login",
+  "manualEntryModal": {
+    "title": "Enter barcode",
+    "placeholder": "Product barcode",
+    "modalClose": "Cancel",
+    "modalConfirm": "Confirm",
+    "validationError": "Please enter a valid barcode"
+  },
+  "errorModal": {
+    "title": "Sorry",
+    "message": "Product not found",
+    "tryAgain": "Try again",
+    "report": "Report"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "manualEntryText": "Indtast manuelt",
+  "instructionTitle": "Scan stregkode",
+  "instructionText": "Placer stregkoden inden for rammen",
+  "manualEntryModal": {
+    "title": "Indtast stregkode",
+    "placeholder": "Produktets stregkode",
+    "modalClose": "Annuller",
+    "modalConfirm": "Udfør",
+    "validationError": "Indtast venligst en gyldig stregkode"
+  },
+  "errorModal": {
+    "title": "Beklager",
+    "message": "Produkt blev ikke fundet",
+    "tryAgain": "Prøv igen",
+    "report": "Rapportér"
+  }
+}

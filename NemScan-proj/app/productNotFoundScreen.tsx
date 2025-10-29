@@ -5,24 +5,24 @@ import { useAuth } from "@/src/contexts/authContext";
 import {MaterialIcons} from "@expo/vector-icons";
 import Button from "@/src/ui/button/button";
 import styles from "@/src/styles/screens/productNotFoundScreen.styles";
-import '@/i18n/i18n.config';
 import { getAllProducts } from "@/src/services/product/productService";
 import { ProductBasic } from "@/src/services/product/interfaces";
 import { createReport } from "@/src/services/report/reportService";
 import { Toast } from "@/src/components/toast/toast";
-import { useTranslation } from "react-i18next";
 import { SearchBar } from "@/src/components/searchBar/searchBar";
 import { ProductRow } from "@/src/components/productRow/productRow";
 import BottomButton from "@/src/components/bottomButton/bottomButton";
+import "@/i18n/i18n.config";
+import { useTranslation } from 'react-i18next';
 
 export default function ProductNotFoundScreen() {
-    const { t } = useTranslation();
     const { userType } = useAuth();
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
     const [products, setProducts] = useState<ProductBasic[]>([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const { t } = useTranslation(["screens", "common"]);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -77,7 +77,7 @@ export default function ProductNotFoundScreen() {
 
     return (
           <View style={styles.container}>
-            <Toast type="loading" message={t('common.loading')} visible={loading} />
+            <Toast type="loading" message={t('common:loading')} visible={loading} />
                <View style={styles.headerBar}>
                     <Button
                         onPress={router.back}
@@ -86,14 +86,14 @@ export default function ProductNotFoundScreen() {
                         variant="simple"
                         style={{ height: 40 }}
                     />
-                    <Text style={styles.headerTitle}>Raportering</Text>
+                    <Text style={styles.headerTitle}>{t("screens:productNotFound.title")}</Text>
                     <View style={styles.placeholder} />
                 </View>
 
                 <SearchBar
                     value={searchQuery}
                     onChangeText={setSearchQuery}
-                    placeholder="Søg efter produkt"
+                    placeholder={t("screens:productNotFound.searchPlaceholder")}
                     onClear={() => setSearchQuery("")}
                 />
 
@@ -125,7 +125,7 @@ export default function ProductNotFoundScreen() {
 
               <BottomButton
                 onPress={handleSendProduct}
-                title="Indsend"
+                title={t("screens:productNotFound.buttonText")}
                 submitting={submitting}
                 disabled={selectedProduct === null}
                 />

@@ -232,4 +232,12 @@ export default StyleSheet.create({
         marginTop: 8,
         backgroundColor: "#6c757d",
     },
+    errorText: {
+        color: colors.attention,
+        fontSize: 14,
+        marginTop: -8,
+        marginBottom: 12,
+        alignSelf: "flex-start",
+        textAlign: "left",
+    },
 });

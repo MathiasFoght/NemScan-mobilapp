@@ -1,0 +1,14 @@
+{
+  "price": "Pris",
+  "category": "Kategori",
+  "brand": "Brand",
+  "barcode": "Stregkode",
+  "stock": "På lager",
+  "pieces": "stk.",
+  "campaign": {
+    "start": "Start",
+    "end": "Slut",
+    "requires": "Aktiveres ved"
+  },
+  "noProduct": "Ingen produktdata fundet"
+}

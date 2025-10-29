@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, StyleSheet, RefreshControl, Text, SafeAreaView, LayoutChangeEvent } from 'react-native';
+import { View, ScrollView, RefreshControl, Text, SafeAreaView, LayoutChangeEvent } from 'react-native';
+import "@/i18n/i18n.config";
 import { useTranslation } from 'react-i18next';
 import { Toast } from '@/src/components/toast/toast';
 import { getTopScannedProductToday, getLowStockProducts, getProductGroupDistribution, getIncreasingErrorRateProducts } from '@/src/services/statistics/statisticsService';
 import { getTodayReportCount } from '@/src/services/report/reportService';
 import { ErrorRateTrend, ProductGroupStat, LowStockProduct } from '@/src/services/statistics/interfaces';
-import { TodayReportsAndTopScanned } from '@/src/components/todayReportsAndTopScanned/todayReportsAndTopScanned';
+import { KeyMetrics } from '@/src/components/keyMetrics/keyMetrics';
 import { ProductGroupDistribution } from '@/src/components/productGroupDistribution/productGroupDistribution';
 import { LowStockProducts } from '@/src/components/lowStockProducts/lowStockProducts';
 import { IncreasingErrorProducts } from '@/src/components/increasingErrorProducts/increasingErrorProducts';
+import styles from '@/src/styles/screens/statisticsScreen.styles';
 
 export default function StatisticsScreen() {
-    const { t } = useTranslation();
+    const { t } = useTranslation(["screens", "common"]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [headerHeight, setHeaderHeight] = useState(0);
@@ -45,8 +47,8 @@ export default function StatisticsScreen() {
             setProductGroups(groups);
             setLowStockProducts(lowStock);
         } catch (err) {
-            console.error('Fejl ved hentning af statistik:', err);
-            setError('Kunne ikke hente statistik. Prøv igen.');
+            console.error('Error fetching statistics:', err);
+            setError(t("common:errors.errorFetching"));
         } finally {
             setLoading(false);
             setRefreshing(false);
@@ -68,13 +70,13 @@ export default function StatisticsScreen() {
 
     return (
         <View style={styles.root}>
-            <Toast type="loading" message={t('common.loading')} visible={loading} />
+            <Toast type="loading" message={t('common:loading')} visible={loading} />
             <Toast type="error" message={error || ''} visible={!!error} />
 
             <SafeAreaView style={styles.headerContainer} onLayout={handleHeaderLayout}>
                 <View style={styles.header}>
-                    <Text style={styles.headerTitle}>Butiksindsigt</Text>
-                    <Text style={styles.headerSubtitle}>Få indsigt i statistikker og analyser</Text>
+                    <Text style={styles.headerTitle}>{t("screens:statistics.title")}</Text>
+                    <Text style={styles.headerSubtitle}>{t("screens:statistics.subtitle")}</Text>
                 </View>
             </SafeAreaView>
 
@@ -91,7 +93,7 @@ export default function StatisticsScreen() {
                 }
                 showsVerticalScrollIndicator={false}
             >
-                <TodayReportsAndTopScanned />
+                <KeyMetrics />
 
                 <IncreasingErrorProducts daysFilter={7} />
 
@@ -102,46 +104,3 @@ export default function StatisticsScreen() {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    root: {
-        flex: 1,
-        backgroundColor: '#F2F2F7',
-    },
-    scroll: {
-        flex: 1,
-    },
-    headerContainer: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 10,
-        backgroundColor: '#FFFFFF',
-        borderBottomColor: '#E5E5EA',
-        borderBottomWidth: 1,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 4,
-        elevation: 4,
-    },
-    header: {
-        paddingHorizontal: 20,
-        paddingTop: 12,
-        paddingBottom: 20,
-    },
-    headerTitle: {
-        fontSize: 28,
-        fontWeight: '700',
-        color: '#1C1C1E',
-        marginBottom: 4,
-    },
-    headerSubtitle: {
-        fontSize: 15,
-        color: '#8E8E93',
-    },
-    contentContainer: {
-        paddingBottom: 32,
-    },
-});

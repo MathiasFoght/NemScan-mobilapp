@@ -1,0 +1,33 @@
+{
+  "title": "Store insights",
+  "subtitle": "Gain insights into statistics and analyses",
+  "keyMetrics": {
+    "todayReports": "Today's reports",
+    "mostScannedTitle": "Most scanned",
+    "mostScannedSubtitle": "scans",
+    "noScannedProduct": "No scans"
+  },
+  "increasingErrorProducts": {
+    "title": "Increased reporting",
+    "period": "The last {{count}} days",
+    "noProductsWithIncreasingError": "No products with errors during this period"
+  },
+  "productGroupDistribution": {
+    "title": "Most scanned",
+    "noData": "No data available",
+    "scans": "scans"
+  },
+  "lowStockProducts": {
+    "title": "Low stock status",
+    "labels": {
+      "critical": "Critically low",
+      "warning": "Warning",
+      "low": "Low"
+    },
+    "currentCount": "Current",
+    "threshold": "Minimum",
+    "loadMore": "Load more",
+    "paginationRest": "remaining",
+    "noProducts": "All products have sufficient stock"
+  }
+}

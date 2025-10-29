@@ -1,0 +1,34 @@
+{
+  "account": {
+    "title": "Konto",
+    "profileTitle": "Din profil",
+    "profileSubtitle": "Se medarbejderoplysninger"
+  },
+  "preferences": {
+    "title": "Præferencer",
+    "languageTitle": "Dansk",
+    "languageSubtitleDa": "Skift til engelsk",
+    "languageSubtitleEn": "Switch to English",
+    "scannerSoundTitle": "Lyd",
+    "scannerSoundSubtitle": "Lyd ved scanning",
+    "changeProfileImageTitle": "Skift profilbillede",
+    "changeProfileImageSubtitle": "Upload eller nulstil",
+    "resetConfirmTitle": "Nulstil profilbillede",
+    "resetConfirmMessage": "Er du sikker på, at du vil nulstille dit profilbillede?"
+  },
+  "permission": {
+    "permissionDeniedTitle": "Adgang nægtet",
+    "permissionDeniedMessage": "Vi har brug for adgang til din kamerarulle for at kunne uploade et profilbillede"
+  },
+  "toastStates": {
+    "uploading": "Uploader...",
+    "uploadSuccess": "Profilbillede opdateret",
+    "errorUploadingImage": "Kunne ikke opdatere profilbillede",
+    "deletingImage": "Fjerner...",
+    "imageDeletedSuccess": "Profilbillede fjernet",
+    "errorDeletingImage": "Kunne ikke fjerne profilbillede"
+  },
+  "logout": {
+    "button": "Log ud"
+  }
+}

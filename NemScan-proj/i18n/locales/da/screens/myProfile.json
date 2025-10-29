@@ -1,0 +1,21 @@
+{
+  "title": "Min profil",
+  "employeeInfo": "Medarbejderoplysninger",
+  "storeInfo": "Butiksoplysninger",
+  "fields": {
+    "employeeNumber": "Medarbejdernummer",
+    "position": "Stilling",
+    "storeNumber": "Butiksnummer"
+  },
+  "positions": {
+    "ServiceAssistant": "Servicemedarbejder",
+    "StoreManager": "Butikschef"
+  },
+  "details": {
+    "employeeNumber": "Medarbejdernr.",
+    "storeNumber": "Butik"
+  },
+  "fallbacks": {
+    "noEmployeeFound": "Ingen medarbejderinformation"
+  }
+}

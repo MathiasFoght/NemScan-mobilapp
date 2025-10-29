@@ -4,8 +4,8 @@ import * as Localization from 'expo-localization';
 import { en, da } from './locales';
 
 const resources = {
-    en: { translation: en },
-    da: { translation: da },
+    en,
+    da
 };
 
 const deviceLocales = Localization.getLocales();
