@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import { SearchBar } from "@/src/components/searchBar/searchBar";
 import { ProductRow } from "@/src/components/productRow/productRow";
 import BottomButton from "@/src/components/bottomButton/bottomButton";
+import { SuccessModal } from "@/src/components/successModal/successModal";
 
 export default function ProductNotFoundScreen() {
     const { t } = useTranslation();
@@ -23,6 +24,7 @@ export default function ProductNotFoundScreen() {
     const [products, setProducts] = useState<ProductBasic[]>([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -64,20 +66,26 @@ export default function ProductNotFoundScreen() {
                     userRole: userType || "",
                 };
                 
-                const response = await createReport(reportData);
+                await createReport(reportData);
                 
-                router.back();
+                setSubmitting(false);
+                setShowSuccess(true);
             } catch (err) {
                 console.error("Failed to create report:", err);
-            } finally {
                 setSubmitting(false);
             }
         }
     };
 
+    const handleSuccessComplete = () => {
+        setShowSuccess(false);
+        router.back();
+    };
+
     return (
           <View style={styles.container}>
             <Toast type="loading" message={t('common.loading')} visible={loading} />
+            <SuccessModal visible={showSuccess} onComplete={handleSuccessComplete} />
                <View style={styles.headerBar}>
                     <Button
                         onPress={router.back}
