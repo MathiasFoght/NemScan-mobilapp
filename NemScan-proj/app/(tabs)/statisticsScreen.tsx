@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, RefreshControl, Text, SafeAreaView, LayoutChangeEvent } from 'react-native';
+import {
+    View,
+    ScrollView,
+    RefreshControl,
+    Text,
+    SafeAreaView,
+    LayoutChangeEvent,
+    Platform,
+    StatusBar
+} from 'react-native';
 import "@/i18n/i18n.config";
 import { useTranslation } from 'react-i18next';
 import { Toast } from '@/src/components/toast/toast';
@@ -74,7 +83,7 @@ export default function StatisticsScreen() {
             <Toast type="error" message={error || ''} visible={!!error} />
 
             <SafeAreaView style={styles.headerContainer} onLayout={handleHeaderLayout}>
-                <View style={styles.header}>
+                <View style={[styles.header, Platform.OS === 'android' && { paddingTop: (StatusBar.currentHeight || 0) + 24 }]}>
                     <Text style={styles.headerTitle}>{t("screens:statistics.title")}</Text>
                     <Text style={styles.headerSubtitle}>{t("screens:statistics.subtitle")}</Text>
                 </View>

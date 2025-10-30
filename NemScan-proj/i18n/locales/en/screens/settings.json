@@ -6,9 +6,9 @@
   },
   "preferences": {
     "title": "Preferences",
-    "languageTitle": "Danish",
+    "languageTitle": "English",
     "languageSubtitleDa": "Switch to English",
-    "languageSubtitleEn": "Switch to English",
+    "languageSubtitleEn": "Switch to Danish",
     "scannerSoundTitle": "Sound",
     "scannerSoundSubtitle": "Sound on scan",
     "changeProfileImageTitle": "Change profile picture",
@@ -29,6 +29,6 @@
     "errorDeletingImage": "Could not remove profile picture"
   },
   "logout": {
-    "button": "Log out"
+    "button": "Logout"
   }
 }
