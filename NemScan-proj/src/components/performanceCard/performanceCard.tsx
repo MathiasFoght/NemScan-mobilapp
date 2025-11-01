@@ -48,12 +48,11 @@ export const PerformanceCard: React.FC = () => {
                     <Text style={styles.title}>{t("screens:dashboard.performanceCard.title")}</Text>
                 </View>
 
-                {/* Content */}
                 {loading ? (
                     <ActivityIndicator color="#fff" />
                 ) : (
                     <>
-                        {successRate !== null ? (
+                        {successRate !== null && successRate > 0 ? (
                             <CountUp
                                 value={successRate}
                                 duration={2000}
@@ -62,22 +61,36 @@ export const PerformanceCard: React.FC = () => {
                                 style={styles.value}
                             />
                         ) : (
-                            <Text style={styles.value}>--</Text>
+                            <View style={{ alignItems: 'center' }}>
+                                <Text style={[styles.value, { opacity: 0.8 }]}>--</Text>
+                                <Text
+                                    style={{
+                                        color: 'rgba(255,255,255,0.85)',
+                                        fontSize: 13,
+                                        textAlign: 'center',
+                                        marginTop: 4,
+                                    }}
+                                >
+                                    {t("screens:dashboard.performanceCard.noDataThisMonth")}
+                                </Text>
+                            </View>
                         )}
 
                         <View style={styles.footer}>
-                            <Text style={styles.subtitle}>{t("screens:dashboard.performanceCard.trend")}</Text>
-                            {trendValue !== null && (
+                            <Text style={styles.subtitle}>
+                                {t("screens:dashboard.performanceCard.trend")}
+                            </Text>
+                            {trendValue !== null && trendValue !== 0 ? (
                                 <View
                                     style={[
                                         styles.trendContainer,
-                                        {
-                                            backgroundColor: '#FFFFFF',
-                                            borderColor: '#FFFFFF',
-                                        },
+                                        { backgroundColor: '#FFFFFF', borderColor: '#FFFFFF' },
                                     ]}
                                 >
-                                    <TrendIcon size={14} color={isPositive ? '#10B981' : '#EF4444'} />
+                                    <TrendIcon
+                                        size={14}
+                                        color={isPositive ? '#10B981' : '#EF4444'}
+                                    />
                                     <Text
                                         style={[
                                             styles.trendText,
@@ -87,6 +100,16 @@ export const PerformanceCard: React.FC = () => {
                                         {Math.abs(trendValue)}%
                                     </Text>
                                 </View>
+                            ) : (
+                                <Text
+                                    style={{
+                                        color: 'rgba(255,255,255,0.85)',
+                                        fontSize: 12,
+                                        marginLeft: 8,
+                                    }}
+                                >
+                                    {t("screens:dashboard.performanceCard.noTrend")}
+                                </Text>
                             )}
                         </View>
                     </>

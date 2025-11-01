@@ -34,7 +34,9 @@
   },
   "performanceCard": {
     "title": "Efficiency\nthis month",
-    "trend": "Trend"
+    "trend": "Trend",
+    "noDataThisMonth": "No scans\nthis month",
+    "noTrend": "Awaiting trend"
   },
   "mostReportedProductsCard": {
     "title": "Most\nreported",

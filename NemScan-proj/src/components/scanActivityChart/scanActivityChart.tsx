@@ -243,7 +243,7 @@ export const ScanActivityChartComponent: React.FC = () => {
 
             setMaxValue(Math.ceil(roundedMax * scaleBoost));
 
-            const showEveryNth = Math.ceil(trendData.length / 7);
+            const showEveryNth = trendData.length <= 10 ? 1 : Math.ceil(trendData.length / 7);
 
             setChartData(
                 trendData.map((item, index) => {
@@ -252,28 +252,38 @@ export const ScanActivityChartComponent: React.FC = () => {
                     const isHighValue = value >= peak * 0.7;
                     const text = isPeak || isHighValue ? String(Math.round(value)) : undefined;
 
-                    const shouldShowLabel = index % showEveryNth === 0 || index === trendData.length - 1;
+                    const shouldShowLabel = trendData.length <= 10 || index % showEveryNth === 0 || index === trendData.length - 1;
 
                     let dayLabel = '';
                     if (shouldShowLabel) {
-                        const dateStr = String(item.dayOrDate);
+                        const dateStr = String(item.dayOrDate).trim();
 
                         if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
                             const [year, month, day] = dateStr.split('-');
+                            const locale = i18n.language === 'en' ? 'en-US' : 'da-DK';
                             const monthName = new Date(Number(year), Number(month) - 1)
-                                .toLocaleString('da-DK', { month: 'short' });
+                                .toLocaleString(locale, { month: 'short' });
                             dayLabel = `${Number(day)} ${monthName}`;
                         }
+
+                        else if (/^\d{1,2}\s*[a-zA-ZæøåÆØÅ]{3,}\.?$/.test(dateStr)) {
+                            dayLabel = dateStr.replace('.', '').replace(/\s+/g, ' ').trim();
+                        }
+
                         else if (/^\d{1,2}[\/\.]\d{1,2}$/.test(dateStr)) {
                             const [day, month] = dateStr.split(/[\/\.]/);
+                            const locale = i18n.language === 'en' ? 'en-US' : 'da-DK';
                             const monthName = new Date(2025, Number(month) - 1)
-                                .toLocaleString('da-DK', { month: 'short' });
+                                .toLocaleString(locale, { month: 'short' });
                             dayLabel = `${Number(day)} ${monthName}`;
                         }
+
                         else {
                             dayLabel = dateStr;
                         }
                     }
+
+
 
                     const textShiftX =
                         text && text.length === 1 ? 0 :
@@ -289,9 +299,13 @@ export const ScanActivityChartComponent: React.FC = () => {
                             fontWeight: '600',
                             transform: [{ rotate: '-30deg' }],
                             width: 50,
-                            textAlign: 'right',
+                            textAlign:
+                                index === 0
+                                    ? 'left'
+                                    : index === trendData.length - 1
+                                        ? 'right'
+                                        : 'center',
                             alignSelf: 'flex-end',
-                            marginRight: index === trendData.length - 1 ? 10 : 0,
                         },
                         dataPointText: text,
                         textColor: '#5B8DEF',
@@ -402,10 +416,13 @@ export const ScanActivityChartComponent: React.FC = () => {
                         ]}
                         onPress={() => {
                             if (periodType !== 'week') {
-                                setPeriodType('week');
-                                setSelectedPeriod(t('screens:dashboard.scanActivityChart.period.all'));
                                 animatePeriodTypeChange('week');
-                                setTimeout(() => setPeriodType('week'), 150);
+                                setTimeout(() => {
+                                    setPeriodType('week');
+                                    setSelectedPeriod(
+                                        t('screens:dashboard.scanActivityChart.period.all')
+                                    );
+                                }, 150);
                             }
                         }}
                     >
@@ -415,7 +432,7 @@ export const ScanActivityChartComponent: React.FC = () => {
                                 periodType === 'week' && styles.switchTextActive,
                             ]}
                         >
-                            {t("screens:dashboard.scanActivityChart.dataView.week")}
+                            {t('screens:dashboard.scanActivityChart.dataView.week')}
                         </Text>
                     </TouchableOpacity>
 
@@ -426,7 +443,6 @@ export const ScanActivityChartComponent: React.FC = () => {
                         ]}
                         onPress={() => {
                             if (periodType !== 'month') {
-                                setPeriodType('month');
                                 animatePeriodTypeChange('month');
                                 setTimeout(() => setPeriodType('month'), 150);
                             }
@@ -438,7 +454,7 @@ export const ScanActivityChartComponent: React.FC = () => {
                                 periodType === 'month' && styles.switchTextActive,
                             ]}
                         >
-                            {t("screens:dashboard.scanActivityChart.dataView.month")}
+                            {t('screens:dashboard.scanActivityChart.dataView.month')}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -495,6 +511,8 @@ export const ScanActivityChartComponent: React.FC = () => {
                         transform: [{ scale: scaleAnim }],
                         opacity: opacityAnim,
                         minHeight: 240,
+                        justifyContent: 'center',
+                        alignItems: 'center',
                     },
                 ]}
                 pointerEvents="box-none"
@@ -503,10 +521,43 @@ export const ScanActivityChartComponent: React.FC = () => {
                     <Text style={styles.dateRange}>
                         {t('screens:dashboard.scanActivityChart.noData')}
                     </Text>
+                ) : chartData.length === 1 ? (
+                    <View
+                        style={{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            height: 220,
+                        }}
+                    >
+                        <View
+                            style={{
+                                width: 14,
+                                height: 14,
+                                borderRadius: 7,
+                                backgroundColor: '#5B8DEF',
+                                marginBottom: 8,
+                            }}
+                        />
+                        <Text
+                            style={{
+                                color: '#5B8DEF',
+                                fontSize: 16,
+                                fontWeight: '600',
+                                marginBottom: 4,
+                            }}
+                        >
+                            {`${chartData[0].value} scans`}
+                        </Text>
+                        <Text style={{ color: '#9CA3AF', fontSize: 12 }}>
+                            {chartData[0].label}
+                        </Text>
+                    </View>
                 ) : (
                     <>
                         {loading && (
-                            <Text style={[styles.dateRange, { opacity: 0.6, marginBottom: 8 }]}>
+                            <Text
+                                style={[styles.dateRange, { opacity: 0.6, marginBottom: 8 }]}
+                            >
                                 {t('screens:dashboard.scanActivityChart.fetchingData')}
                             </Text>
                         )}
@@ -516,7 +567,11 @@ export const ScanActivityChartComponent: React.FC = () => {
                             width={screenWidth - 80}
                             height={220}
                             maxValue={maxValue}
-                            spacing={(screenWidth - 120) / (chartData.length - 1)}
+                            spacing={
+                                chartData.length > 1
+                                    ? (screenWidth - 120) / (chartData.length - 1)
+                                    : 40
+                            }
                             initialSpacing={20}
                             endSpacing={20}
                             color="#7C9FFF"
@@ -562,10 +617,15 @@ export const ScanActivityChartComponent: React.FC = () => {
                                                 ]}
                                             >
                                                 <Text style={styles.pointerDay}>
-                                                    {t('screens:dashboard.scanActivityChart.pointer.day', { day: items[0].label })}
+                                                    {t('screens:dashboard.scanActivityChart.pointer.day', {
+                                                        day: items[0].label,
+                                                    })}
                                                 </Text>
                                                 <Text style={styles.pointerValue}>
-                                                    {t('screens:dashboard.scanActivityChart.pointer.value', { value: items[0].value })}
+                                                    {t(
+                                                        'screens:dashboard.scanActivityChart.pointer.value',
+                                                        { value: items[0].value }
+                                                    )}
                                                 </Text>
                                             </View>
                                         ),
