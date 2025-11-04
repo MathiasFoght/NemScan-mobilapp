@@ -29,6 +29,7 @@ export default function ScannerScreen() {
     useFocusEffect(
         useCallback(() => {
             setScanning(false);
+            setErrorMessage(null);
         }, [])
     );
 
@@ -71,8 +72,8 @@ export default function ScannerScreen() {
     };
 
     const navigateToProductNotFound = () => {
+        setErrorMessage(null);
         router.push("/productNotFoundScreen");
-        handleClosePopup();
     };
 
     const handleOpenManualEntry = () => {
