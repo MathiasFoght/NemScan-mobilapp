@@ -125,13 +125,13 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: false
 
-      - name: Clean CocoaPods
+      - name: Clean CocoaPods properly
         run: |
           cd ios
           rm -rf Pods
+          rm -rf Podfile.lock
           rm -rf ~/Library/Caches/CocoaPods
-          rm -rf ../node_modules/react-native/third-party-podspecs/fast_float.podspec
-          rm -rf ../node_modules/react-native/third-party-podspecs/fast_float.podspec.json
+          rm -rf ../node_modules/react-native/third-party-podspecs
           pod cache clean --all
           pod repo update
       
