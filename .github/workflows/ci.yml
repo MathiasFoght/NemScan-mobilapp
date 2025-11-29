@@ -124,6 +124,14 @@ jobs:
         with:
           ruby-version: '3.2'
           bundler-cache: false
+
+      - name: Clean CocoaPods
+        run: |
+          cd ios
+          rm -rf Pods
+          rm -rf ~/Library/Caches/CocoaPods
+          rm -rf ../node_modules/react-native/third-party-podspecs/fast_float.podspec.json
+          pod repo update
       
       - name: Install CocoaPods dependencies
         run: |
