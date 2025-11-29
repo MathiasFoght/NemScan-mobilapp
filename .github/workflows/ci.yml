@@ -130,7 +130,9 @@ jobs:
           cd ios
           rm -rf Pods
           rm -rf ~/Library/Caches/CocoaPods
+          rm -rf ../node_modules/react-native/third-party-podspecs/fast_float.podspec
           rm -rf ../node_modules/react-native/third-party-podspecs/fast_float.podspec.json
+          pod cache clean --all
           pod repo update
       
       - name: Install CocoaPods dependencies
