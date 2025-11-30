@@ -125,21 +125,6 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: false
 
-      - name: Clean CocoaPods properly
-        run: |
-          cd ios
-          rm -rf Pods
-          rm -rf Podfile.lock
-          rm -rf ~/Library/Caches/CocoaPods
-          rm -rf ../node_modules/react-native/third-party-podspecs
-          pod cache clean --all
-          pod repo update
-
-      - name: Install CocoaPods dependencies
-        run: |
-          cd ios
-          pod install --repo-update
-
       - name: Cache CocoaPods
         uses: actions/cache@v4
         with:
@@ -149,6 +134,18 @@ jobs:
           key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-pods-
+
+      - name: Clean CocoaPods properly
+        run: |
+          cd ios
+          rm -rf Pods
+          rm -rf Podfile.lock
+          pod cache clean --all || true
+
+      - name: Install CocoaPods dependencies
+        run: |
+          cd ios
+          pod install --repo-update
 
       - name: Build iOS (simulator)
         run: |
@@ -170,4 +167,3 @@ jobs:
           name: ios-build
           path: NemScan-proj/ios/build
           retention-days: 7
-
